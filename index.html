@@ -1,53 +1,51 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TarochLee 的文件管理系统</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
+    <title>作业收发系统</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-100 text-gray-900">
-    <header class="bg-blue-600 text-white p-6 text-center">
-        <h1 class="text-3xl font-bold">TarochLee 的文件管理系统</h1>
-        <p class="text-lg">交互式文件管理系统，支持动态展开/折叠文件夹</p>
-    </header>
-    
-    <main class="container mx-auto p-8" x-data="{ folders: { '文档': false, '图片': false, '项目代码': false } }">
-        <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-semibold">📁 文件夹结构</h2>
-            <div class="mt-4 bg-gray-200 p-4 rounded-lg">
-                <ul class="list-none">
-                    <template x-for="(open, folder) in folders" :key="folder">
-                        <li class="mb-2">
-                            <button @click="folders[folder] = !folders[folder]" class="text-blue-500 font-bold">
-                                <span x-text="folders[folder] ? '▼' : '▶'" class="mr-2"></span>
-                                <span x-text="folder"></span>
-                            </button>
-                            <ul class="list-disc pl-6 mt-2" x-show="folders[folder]" x-transition>
-                                <template x-if="folder === '文档'">
-                                    <li>📄 说明文档.md</li>
-                                    <li>📄 使用指南.pdf</li>
-                                </template>
-                                <template x-if="folder === '图片'">
-                                    <li>🖼️ 图片1.png</li>
-                                    <li>🖼️ 图片2.jpg</li>
-                                </template>
-                                <template x-if="folder === '项目代码'">
-                                    <li>📄 main.py</li>
-                                    <li>📄 index.html</li>
-                                    <li>📄 styles.css</li>
-                                </template>
-                            </ul>
-                        </li>
-                    </template>
-                </ul>
+<body>
+
+    <div class="container">
+        <h1>作业收发系统</h1>
+
+        <div id="auth">
+            <h2>注册 / 登录</h2>
+            <input type="text" id="username" placeholder="姓名">
+            <select id="role">
+                <option value="student">学生</option>
+                <option value="teacher">老师</option>
+            </select>
+            <button onclick="register()">登录</button>
+        </div>
+
+        <div id="studentPanel" class="hidden">
+            <h2>学生端</h2>
+            <button onclick="showSubmitPanel()">提交作业</button>
+            <button onclick="viewAssignments()">查看作业</button>
+            <button onclick="logout()">退出</button>
+
+            <div id="submitPanel" class="hidden">
+                <input type="text" id="title" placeholder="作业标题">
+                <textarea id="description" placeholder="作业描述"></textarea>
+                <input type="file" id="fileUpload">
+                <button onclick="submitAssignment()">提交作业</button>
             </div>
-        </section>
-    </main>
-    
-    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
-        <p>&copy; 2024 TarochLee | <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a></p>
-    </footer>
+
+            <div id="assignmentsList"></div>
+        </div>
+
+        <div id="teacherPanel" class="hidden">
+            <h2>老师端</h2>
+            <button onclick="viewAllAssignments()">查看提交的作业</button>
+            <button onclick="logout()">退出</button>
+
+            <div id="teacherAssignmentsList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
