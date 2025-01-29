@@ -1,51 +1,130 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>作业收发系统</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>作业收发系统</title>
+
+  <!-- 引入 Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="bg-gray-100">
 
-    <div class="container">
-        <h1>作业收发系统</h1>
+  <!-- 顶部导航栏 -->
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <div class="text-2xl font-bold text-blue-600">作业收发系统</div>
+    <!-- 右上角 Setting 图标 + 用户名 -->
+    <div id="navUser" class="flex items-center space-x-4 hidden">
+      <span id="navUserName" class="font-medium"></span>
+      <button id="btnSettings" class="text-gray-600 hover:text-blue-500" onclick="openSettings()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-current" viewBox="0 0 24 24"><path d="M...Z"/></svg>
+      </button>
+      <button id="btnLogout" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300" onclick="logout()">退出</button>
+    </div>
+  </nav>
 
-        <div id="auth">
-            <h2>注册 / 登录</h2>
-            <input type="text" id="username" placeholder="姓名">
-            <select id="role">
-                <option value="student">学生</option>
-                <option value="teacher">老师</option>
-            </select>
-            <button onclick="register()">登录</button>
+  <!-- 主容器 -->
+  <div class="max-w-4xl mx-auto mt-8 p-4 bg-white shadow-lg rounded">
+
+    <!-- 注册 / 登录 模块 -->
+    <div id="authSection">
+      <h2 class="text-xl font-bold mb-4">欢迎使用作业收发系统</h2>
+      <p class="mb-2">请选择：注册 或 登录</p>
+      <div class="flex space-x-4">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="showRegister()">注册</button>
+        <button class="bg-green-500 text-white px-4 py-2 rounded" onclick="showLogin()">登录</button>
+      </div>
+
+      <!-- 注册表单 -->
+      <div id="registerForm" class="mt-6 hidden">
+        <h3 class="text-lg font-semibold mb-2">注册账号</h3>
+        <div class="space-y-2">
+          <input type="text" id="regName" placeholder="姓名" class="input" />
+          <input type="text" id="regStudentId" placeholder="学号" class="input" />
+          <input type="text" id="regMajor" placeholder="专业" class="input" />
+          <input type="text" id="regClass" placeholder="班级" class="input" />
+          <input type="text" id="regPhone" placeholder="手机号码" class="input" />
+          <input type="password" id="regPassword" placeholder="密码" class="input" />
+          <select id="regRole" class="input">
+            <option value="student">学生</option>
+            <option value="teacher">老师</option>
+          </select>
+          <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="registerUser()">提交注册</button>
         </div>
+      </div>
 
-        <div id="studentPanel" class="hidden">
-            <h2>学生端</h2>
-            <button onclick="showSubmitPanel()">提交作业</button>
-            <button onclick="viewAssignments()">查看作业</button>
-            <button onclick="logout()">退出</button>
-
-            <div id="submitPanel" class="hidden">
-                <input type="text" id="title" placeholder="作业标题">
-                <textarea id="description" placeholder="作业描述"></textarea>
-                <input type="file" id="fileUpload">
-                <button onclick="submitAssignment()">提交作业</button>
-            </div>
-
-            <div id="assignmentsList"></div>
+      <!-- 登录表单 -->
+      <div id="loginForm" class="mt-6 hidden">
+        <h3 class="text-lg font-semibold mb-2">登录账号</h3>
+        <div class="space-y-2">
+          <input type="text" id="loginPhone" placeholder="手机号码" class="input" />
+          <input type="password" id="loginPassword" placeholder="密码" class="input" />
+          <button class="bg-green-500 text-white px-4 py-2 rounded" onclick="loginUser()">登录</button>
         </div>
-
-        <div id="teacherPanel" class="hidden">
-            <h2>老师端</h2>
-            <button onclick="viewAllAssignments()">查看提交的作业</button>
-            <button onclick="logout()">退出</button>
-
-            <div id="teacherAssignmentsList"></div>
-        </div>
+      </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- 学生端主页面 -->
+    <div id="studentSection" class="hidden">
+      <h2 class="text-xl font-bold mb-4">学生功能</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 提交作业按钮 -->
+        <button class="card-btn" onclick="toggleAssignmentForm()">提交作业</button>
+        <!-- 给老师发消息（示例） -->
+        <button class="card-btn" onclick="sendMessageToTeacher()">发送消息给老师</button>
+      </div>
+
+      <!-- 提交作业表单 -->
+      <div id="assignmentForm" class="mt-4 p-4 bg-gray-50 rounded hidden">
+        <h3 class="text-lg font-semibold mb-2">提交作业</h3>
+        <div class="space-y-2">
+          <input type="text" id="assignTitle" placeholder="作业主题" class="input" />
+          <textarea id="assignDesc" placeholder="作业内容描述" class="input"></textarea>
+          <input type="file" id="assignFile" class="input" />
+          <button class="bg-blue-600 text-white px-4 py-2 rounded" onclick="submitAssignment()">提交</button>
+        </div>
+      </div>
+
+      <!-- 查看已提交作业列表 -->
+      <div id="studentAssignments" class="mt-6">
+        <!-- 动态填充 -->
+      </div>
+    </div>
+
+    <!-- 老师端主页面 -->
+    <div id="teacherSection" class="hidden">
+      <h2 class="text-xl font-bold mb-4">老师功能</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 查看提交的作业 -->
+        <button class="card-btn" onclick="viewAllAssignments()">查看提交的作业</button>
+      </div>
+
+      <!-- 显示学生提交的作业列表 -->
+      <div id="teacherAssignments" class="mt-6">
+        <!-- 动态填充 -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 设置(个人信息修改) 弹窗/模态框 -->
+  <div id="settingsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-4 rounded w-80">
+      <h3 class="text-lg font-semibold mb-2">个人信息修改</h3>
+      <div class="space-y-2">
+        <input type="text" id="setName" placeholder="姓名" class="input" />
+        <input type="text" id="setStudentId" placeholder="学号" class="input" disabled/>
+        <input type="text" id="setMajor" placeholder="专业" class="input" />
+        <input type="text" id="setClass" placeholder="班级" class="input" />
+        <input type="text" id="setPhone" placeholder="手机号码" class="input" disabled/>
+        <input type="password" id="setPassword" placeholder="新密码(留空则不改)" class="input" />
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" onclick="saveSettings()">保存修改</button>
+      </div>
+      <button class="mt-4 text-red-500" onclick="closeSettings()">取消</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
