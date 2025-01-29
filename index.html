@@ -80,8 +80,31 @@
 
     <!-- 确保 footer 始终固定在页面底部 -->
     <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
-        <p class="font-normal">&copy; 2025 TarochLee | <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a></p>
+        <p class="font-normal">
+            &copy; 2025 TarochLee | 
+            <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
+            <button onclick="openModal()" class="text-blue-400 underline">打赏</button>
+        </p>
     </footer>
+
+    <!-- 这个是打赏弹窗 -->
+    <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+            <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+            <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('rewardModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('rewardModal').classList.add('hidden');
+        }
+    </script>
 
 </body>
 </html>
