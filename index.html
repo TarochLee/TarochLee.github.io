@@ -5,41 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TarochLee 的文件管理系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <header class="bg-blue-600 text-white p-6 text-center">
         <h1 class="text-3xl font-bold">TarochLee 的文件管理系统</h1>
-        <p class="text-lg">欢迎来到我的 GitHub Pages 站点！</p>
+        <p class="text-lg">交互式文件管理系统，支持动态展开/折叠文件夹</p>
     </header>
     
-    <main class="container mx-auto p-8">
+    <main class="container mx-auto p-8" x-data="{ folders: { '文档': false, '图片': false, '项目代码': false } }">
         <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-semibold">文件夹结构</h2>
+            <h2 class="text-2xl font-semibold">📁 文件夹结构</h2>
             <div class="mt-4 bg-gray-200 p-4 rounded-lg">
-                <ul class="list-disc pl-6">
-                    <li class="mb-2"><strong>根目录/</strong>
-                        <ul class="list-disc pl-6">
-                            <li class="mb-2">📁 <strong>文档/</strong>
-                                <ul class="list-disc pl-6">
+                <ul class="list-none">
+                    <template x-for="(open, folder) in folders" :key="folder">
+                        <li class="mb-2">
+                            <button @click="folders[folder] = !folders[folder]" class="text-blue-500 font-bold">
+                                <span x-text="folders[folder] ? '▼' : '▶'" class="mr-2"></span>
+                                <span x-text="folder"></span>
+                            </button>
+                            <ul class="list-disc pl-6 mt-2" x-show="folders[folder]" x-transition>
+                                <template x-if="folder === '文档'">
                                     <li>📄 说明文档.md</li>
                                     <li>📄 使用指南.pdf</li>
-                                </ul>
-                            </li>
-                            <li class="mb-2">📁 <strong>图片/</strong>
-                                <ul class="list-disc pl-6">
+                                </template>
+                                <template x-if="folder === '图片'">
                                     <li>🖼️ 图片1.png</li>
                                     <li>🖼️ 图片2.jpg</li>
-                                </ul>
-                            </li>
-                            <li class="mb-2">📁 <strong>项目代码/</strong>
-                                <ul class="list-disc pl-6">
+                                </template>
+                                <template x-if="folder === '项目代码'">
                                     <li>📄 main.py</li>
                                     <li>📄 index.html</li>
                                     <li>📄 styles.css</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
+                                </template>
+                            </ul>
+                        </li>
+                    </template>
                 </ul>
             </div>
         </section>
