@@ -1,25 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <title>视频演示</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TarochLee 的个人主页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>自动播放视频示例</h1>
-  
-  <!-- 视频播放器 -->
-  <video 
-    src="video/boy.mp4"         <!-- 指向你的视频路径 -->
-    width="640" 
-    height="360"
-    autoplay                   <!-- 自动播放 -->
-    controls                   <!-- 显示播放控制栏 -->
-    loop                       <!-- 循环播放 -->
-    muted                      <!-- 静音（许多浏览器必须静音才能自动播放） -->
-    playsinline                <!-- 在移动端内联播放（去除全屏） -->
-  >
-    您的浏览器不支持 video 标签。
-  </video>
+<body class="bg-gray-100 text-gray-900">
+    <header class="bg-blue-600 text-white p-6 text-center">
+        <h1 class="text-3xl font-bold">TarochLee 的个人主页</h1>
+        <p class="text-lg">欢迎来到我的 GitHub Pages 站点！？</p>
+    </header>
+    
+    <main class="container mx-auto p-8">
+        <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <h2 class="text-2xl font-semibold">关于我</h2>
+            <p class="mt-2">你好！我是 TarochLee，一名热爱编程和技术的开发者。这是我的个人主页，我会在这里分享我的项目和技术文章。</p>
+        </section>
 
+        <section class="bg-white shadow-lg rounded-lg p-6">
+            <h2 class="text-2xl font-semibold">我的项目</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                <div class="bg-gray-200 p-4 rounded-lg">
+                    <h3 class="text-xl font-bold">项目名称 1</h3>
+                    <p class="mt-2">这是一个有趣的项目，展示了我的开发能力。</p>
+                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+                </div>
+                <div class="bg-gray-200 p-4 rounded-lg">
+                    <h3 class="text-xl font-bold">项目名称 2</h3>
+                    <p class="mt-2">另一个有趣的项目，欢迎查看！</p>
+                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>&copy; 2024 TarochLee | <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a></p>
+    </footer>
 </body>
 </html>
