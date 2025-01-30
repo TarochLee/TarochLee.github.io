@@ -40,14 +40,14 @@
     左侧“卡片”式个人信息面板 
     - 宽度 w-80 = 20rem
     - 四角圆弧 rounded-3xl
-    - 初始状态下，向左平移 -translate-x-78 (18rem)
+    - 初始状态下，向左平移 -translate-x-72 (18rem)
       这样面板只剩下 2rem(= 20rem-18rem) 显示在屏幕里
     - 点击任意区域即可展开，点击面板顶部箭头收回
   -->
   <div 
     id="infoPanel"
     class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
-           transform -translate-x-78 transition-transform duration-300 z-40
+           transform -translate-x-72 transition-transform duration-300 z-40
            rounded-3xl overflow-hidden cursor-pointer"
     onclick="openPanel()"
   >
@@ -190,8 +190,8 @@
     function openPanel() {
       if (!panelOpen) {
         const panel = document.getElementById('infoPanel');
-        // 移除 -translate-x-78，变成 translate-x-0
-        panel.classList.remove('-translate-x-78');
+        // 移除 -translate-x-72，变成 translate-x-0
+        panel.classList.remove('-translate-x-72');
         panel.classList.add('translate-x-0');
         panelOpen = true;
       }
@@ -203,7 +203,7 @@
       if (panelOpen) {
         const panel = document.getElementById('infoPanel');
         panel.classList.remove('translate-x-0');
-        panel.classList.add('-translate-x-78');
+        panel.classList.add('-translate-x-72');
         panelOpen = false;
       }
     }
