@@ -1,179 +1,202 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BAATER 的个人主页</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAATER 的个人主页</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <style>
-        /* 定义中文字体，仅用于中文字符 */
-        @font-face {
-            font-family: 'STZhongsong';
-            src: url('fonts/STZhongsong.ttf') format('truetype');
-            /* unicode-range: U+4E00-9FFF; // 如果想严格限制中文范围，可开启此行 */
-            font-weight: normal;
-            font-style: normal;
-        }
+  <style>
+    /* 定义中文字体，仅用于中文字符 */
+    @font-face {
+        font-family: 'STZhongsong';
+        src: url('fonts/STZhongsong.ttf') format('truetype');
+        /* 如果要严格限定范围，可开启：
+           unicode-range: U+4E00-9FFF; */
+        font-weight: normal;
+        font-style: normal;
+    }
 
-        /* 让西文使用 Times New Roman，中文优先使用 STZhongsong */
-        body {
-            font-family: "Times New Roman", serif;
-        }
-        p, h1, h2, h3, h4, h5, h6, a, span, button {
-            font-family: 'STZhongsong', "Times New Roman", serif;
-        }
+    /* 让西文使用 Times New Roman，中文优先使用 STZhongsong */
+    body {
+        font-family: "Times New Roman", serif;
+    }
+    p, h1, h2, h3, h4, h5, h6, a, span, button {
+        font-family: 'STZhongsong', "Times New Roman", serif;
+    }
 
-        /* 让整个页面填充整个屏幕，并确保 footer 固定在底部 */
-        html, body {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+    /* 让整个页面填充整个屏幕，并确保 footer 固定在底部 */
+    html, body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
-        main {
-            flex: 1; /* 让 main 占据剩余空间 */
-        }
-    </style>
+    main {
+        flex: 1; /* 让 main 占据剩余空间 */
+    }
+  </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <!-- 左上角的按钮，初始为“🤡” -->
-    <button 
-      id="togglePanelBtn" 
-      class="fixed top-4 left-4 z-50 text-2xl bg-white p-2 rounded-full shadow-lg focus:outline-none"
-      onclick="togglePanel()">
-      🤡
-    </button>
+  <!-- 左上角的按钮 (🤡)，用于展开面板；默认可见 -->
+  <button 
+    id="togglePanelBtn" 
+    class="fixed top-4 left-4 z-50 text-2xl bg-white p-2 rounded-full shadow-lg focus:outline-none"
+    onclick="openPanel()">
+    🤡
+  </button>
 
-    <!-- 左侧滑出的个人信息面板，默认隐藏在屏幕左边外 -->
-    <div 
-      id="infoPanel" 
-      class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-40">
-      <!-- 面板内容 -->
-      <div class="p-6">
-        <h2 class="text-2xl font-normal mb-4">个人信息</h2>
-        <p class="mb-2 font-normal">姓名：Baater</p>
-        <p class="mb-2 font-normal">职业：开发者</p>
-        <p class="mb-2 font-normal">爱好：编程、技术、分享</p>
-        <p class="mb-2 font-normal">邮件：baater@example.com</p>
+  <!-- 左侧滑出的个人信息面板，默认隐藏在屏幕左边外 (-translate-x-full) -->
+  <div 
+    id="infoPanel" 
+    class="fixed top-0 left-0 h-full w-80 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-40">
+
+    <!-- 面板顶部：灰色背景 + 圆形左箭头按钮 -->
+    <div class="bg-gray-200 p-2 flex justify-end">
+      <button 
+        id="closePanelBtn" 
+        class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none"
+        onclick="closePanel()">
+        <!-- 左箭头图标 (SVG) -->
+        <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M12.293 4.293a1 1 0 010 1.414L8.414 9.586l3.879 3.879a1 1 0 11-1.414 1.414l-4.586-4.586a1 1 0 010-1.414l4.586-4.586a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- 面板主体内容 -->
+    <div class="p-6 flex flex-col items-center">
+      <!-- 头像：pictures/avatar.png，圆形 -->
+      <img src="pictures/avatar.png" alt="头像"
+           class="w-24 h-24 rounded-full mb-4 shadow" />
+
+      <!-- 姓名 -->
+      <h2 class="text-xl font-normal mb-2">Baater</h2>
+
+      <!-- 个性签名 -->
+      <p class="text-sm font-normal text-gray-600 mb-2">
+        个性签名：热爱编程，乐于分享
+      </p>
+
+      <!-- 邮箱 -->
+      <p class="text-sm font-normal text-gray-600">
+        邮箱：baater@example.com
+      </p>
+    </div>
+  </div>
+
+  <header class="bg-blue-600 text-white p-6 text-center">
+      <h1 class="text-3xl font-normal"> 📣 BAATER 的个人主页</h1>
+      <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
+  </header>
+  
+  <main class="container mx-auto p-8">
+      <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
+          <h2 class="text-2xl font-normal">About Me</h2>
+          <p class="mt-2 font-normal">
+            你好！我是 Baater，一名热爱编程和技术的开发者。
+            这是我的个人主页，我会在这里分享我的项目和技术文章。
+          </p>
+      </section>
+
+      <section class="bg-white shadow-lg rounded-lg p-6">
+          <h2 class="text-2xl font-normal">我的项目</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+              
+              <!-- 项目 1 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
+                  <p class="mt-2 font-normal">
+                    关于 Ubuntu 系统中的 pip 和软件源的换源。
+                  </p>
+                  <a href="https://blog.csdn.net/Sea_wind0_/article/details/145385915" 
+                     class="text-blue-500 mt-2 inline-block" 
+                     target="_blank">查看详情</a>
+              </div>
+
+              <!-- 项目 2 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
+                  <p class="mt-2 font-normal">
+                    在 Macos 本地部署 Deepseek 模型的详细指南。
+                  </p>
+                  <a href="https://blog.csdn.net/Sea_wind0_/article/details/145392973" 
+                     class="text-blue-500 mt-2 inline-block" 
+                     target="_blank">查看详情</a>
+              </div>
+
+              <!-- 项目 3 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
+                  <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
+                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+              </div>
+
+              <!-- 项目 4 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
+                  <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
+                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+              </div>
+
+              <!-- 项目 5 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">💡 机器学习基础</h3>
+                  <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
+                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+              </div>
+
+              <!-- 项目 6 -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                  <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
+                  <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
+                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+              </div>
+          </div>
+      </section>
+  </main>
+
+  <!-- 确保 footer 始终固定在页面底部 -->
+  <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+      <p class="font-normal">
+          &copy; 2025 TarochLee | 
+          <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
+          <button onclick="openModal()" class="text-blue-400">打赏</button>
+      </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+          <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+          <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
       </div>
-    </div>
+  </div>
 
-    <header class="bg-blue-600 text-white p-6 text-center">
-        <h1 class="text-3xl font-normal"> 📣 BAATER 的个人主页</h1>
-        <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
-    </header>
-    
-    <main class="container mx-auto p-8">
-        <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
-            <h2 class="text-2xl font-normal">About Me</h2>
-            <p class="mt-2 font-normal">你好！我是 Baater，一名热爱编程和技术的开发者。这是我的个人主页，我会在这里分享我的项目和技术文章。</p>
-        </section>
+  <script>
+    /* 打赏弹窗功能 */
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
 
-        <section class="bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-2xl font-normal">我的项目</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-                
-                <!-- 项目 1 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
-                    <p class="mt-2 font-normal">关于 Ubuntu 系统中的 pip 和软件源的换源。</p>
-                    <a href="https://blog.csdn.net/Sea_wind0_/article/details/145385915" 
-                       class="text-blue-500 mt-2 inline-block" 
-                       target="_blank">查看详情</a>
-                </div>
+    /* 展开面板 */
+    function openPanel() {
+      document.getElementById('infoPanel').classList.remove('-translate-x-full');
+      // 隐藏“🤡”按钮
+      document.getElementById('togglePanelBtn').classList.add('hidden');
+    }
 
-                <!-- 项目 2 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
-                    <p class="mt-2 font-normal">在 Macos 本地部署 Deepseek 模型的详细指南。</p>
-                    <a href="https://blog.csdn.net/Sea_wind0_/article/details/145392973" 
-                       class="text-blue-500 mt-2 inline-block" 
-                       target="_blank">查看详情</a>
-                </div>
-
-                <!-- 项目 3 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
-                    <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
-                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-                </div>
-
-                <!-- 项目 4 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
-                    <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
-                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-                </div>
-
-                <!-- 项目 5 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">💡 机器学习基础</h3>
-                    <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
-                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-                </div>
-
-                <!-- 项目 6 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
-                    <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
-                    <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
-                    <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-                </div>
-
-            </div>
-        </section>
-    </main>
-
-    <!-- 确保 footer 始终固定在页面底部 -->
-    <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
-        <p class="font-normal">
-            &copy; 2025 TarochLee | 
-            <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
-            <button onclick="openModal()" class="text-blue-400">打赏</button>
-        </p>
-    </footer>
-
-    <!-- 打赏弹窗 -->
-    <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
-        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
-            <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
-            <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
-        </div>
-    </div>
-
-    <script>
-        /* 打赏弹窗功能 */
-        function openModal() {
-            document.getElementById('rewardModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('rewardModal').classList.add('hidden');
-        }
-
-        /* 侧边面板展开/收起功能 */
-        let panelOpen = false;
-        function togglePanel() {
-            const panel = document.getElementById('infoPanel');
-            const toggleBtn = document.getElementById('togglePanelBtn');
-            
-            // 切换状态
-            panelOpen = !panelOpen;
-
-            if (panelOpen) {
-                // 展开面板
-                panel.classList.remove('-translate-x-full');
-                // 按钮文字改为箭头
-                toggleBtn.textContent = '←';
-            } else {
-                // 收起面板
-                panel.classList.add('-translate-x-full');
-                // 按钮文字改为🤡
-                toggleBtn.textContent = '🤡';
-            }
-        }
-    </script>
+    /* 收起面板 */
+    function closePanel() {
+      document.getElementById('infoPanel').classList.add('-translate-x-full');
+      // 显示“🤡”按钮
+      document.getElementById('togglePanelBtn').classList.remove('hidden');
+    }
+  </script>
 </body>
 </html>
