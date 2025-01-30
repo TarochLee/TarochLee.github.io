@@ -37,27 +37,23 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-  <!-- 左上角的按钮 (🤡)，用于展开面板；默认可见 -->
-  <!-- 使用渐变和圆形，让按钮看起来更美观 -->
+  <!-- “🤡”按钮（与收起按钮同尺寸、同样式），用于展开面板 -->
   <button 
     id="togglePanelBtn" 
-    class="fixed top-4 left-4 z-50 text-2xl text-white 
-           px-4 py-3 rounded-full shadow-lg focus:outline-none
-           bg-gradient-to-r from-purple-500 to-pink-500
-           hover:scale-105 transition-transform"
+    class="fixed top-4 left-4 z-50 w-10 h-10 rounded-full bg-white
+           flex items-center justify-center shadow focus:outline-none"
     onclick="openPanel()">
     🤡
   </button>
 
-  <!-- 左侧滑出的个人信息面板，设置圆角 (右侧) -->
-  <!-- w-80 是宽度，rounded-r-3xl 为右侧大圆角 -->
+  <!-- 左侧滑出的个人信息面板：四角圆弧形 (rounded-3xl) -->
   <div 
     id="infoPanel" 
     class="fixed top-0 left-0 h-full w-80 bg-white shadow-lg 
            transform -translate-x-full transition-transform duration-300 z-40
-           rounded-r-3xl">
+           rounded-3xl">
 
-    <!-- 面板顶部：灰色背景 + 圆形左箭头按钮 (放在左边) -->
+    <!-- 面板顶部区域，灰色背景，左箭头按钮位于左侧 -->
     <div class="bg-gray-200 p-2 flex items-center">
       <button 
         id="closePanelBtn" 
@@ -189,13 +185,13 @@
       document.getElementById('rewardModal').classList.add('hidden');
     }
 
-    /* 展开面板：显示面板，隐藏🤡按钮 */
+    /* 展开面板：显示面板并隐藏 “🤡”按钮 */
     function openPanel() {
       document.getElementById('infoPanel').classList.remove('-translate-x-full');
       document.getElementById('togglePanelBtn').classList.add('hidden');
     }
 
-    /* 收起面板：隐藏面板，显示🤡按钮 */
+    /* 收起面板：隐藏面板并显示 “🤡”按钮 */
     function closePanel() {
       document.getElementById('infoPanel').classList.add('-translate-x-full');
       document.getElementById('togglePanelBtn').classList.remove('hidden');
