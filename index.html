@@ -40,14 +40,14 @@
     左侧“卡片”式个人信息面板 
     - 宽度 w-80 = 20rem
     - 四角圆弧 rounded-3xl
-    - 初始状态下，向左平移 -translate-x-64 (16rem)
-      这样面板只剩下 4rem(= 20rem-16rem) 显示在屏幕里，形成半隐藏卡片
+    - 初始状态下，向左平移 -translate-x-78 (18rem)
+      这样面板只剩下 2rem(= 20rem-18rem) 显示在屏幕里
     - 点击任意区域即可展开，点击面板顶部箭头收回
   -->
   <div 
     id="infoPanel"
     class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
-           transform -translate-x-64 transition-transform duration-300 z-40
+           transform -translate-x-78 transition-transform duration-300 z-40
            rounded-3xl overflow-hidden cursor-pointer"
     onclick="openPanel()"
   >
@@ -75,14 +75,14 @@
 
       <!-- 姓名 -->
       <h2 class="text-xl font-normal mb-2 text-blue-800">Baater</h2>
-    <!-- 个性签名 -->
-    <p class="text-sm font-normal text-gray-600 mb-4">
-      你没有被邀请。
-    </p>
-    <!-- 邮箱 -->
-    <p class="text-base font-normal text-gray-800 mb-4"></p>
-      邮箱：baater@example.com
-    </p>
+      <!-- 个性签名 -->
+      <p class="text-sm font-normal text-gray-600 mb-4">
+        你没有被邀请。
+      </p>
+      <!-- 邮箱 -->
+      <p class="text-base font-normal text-gray-800 mb-4">
+        邮箱：baater@example.com
+      </p>
     </div>
   </div>
 
@@ -184,28 +184,26 @@
       document.getElementById('rewardModal').classList.add('hidden');
     }
 
-    /* 面板当前是否已展开 */
     let panelOpen = false;
 
     /* 点击卡片展开 */
     function openPanel() {
-      // 阻止重复展开
       if (!panelOpen) {
         const panel = document.getElementById('infoPanel');
-        // 移除 -translate-x-64，变为 translate-x-0
-        panel.classList.remove('-translate-x-64');
+        // 移除 -translate-x-78，变成 translate-x-0
+        panel.classList.remove('-translate-x-78');
         panel.classList.add('translate-x-0');
         panelOpen = true;
       }
     }
 
-    /* 点击左箭头收起 */
+    /* 点击箭头收起 */
     function closePanel(e) {
-      e.stopPropagation(); // 防止触发父元素的 onclick 导致立刻又展开
+      e.stopPropagation(); // 防止点击箭头后又触发父元素事件
       if (panelOpen) {
         const panel = document.getElementById('infoPanel');
         panel.classList.remove('translate-x-0');
-        panel.classList.add('-translate-x-64');
+        panel.classList.add('-translate-x-78');
         panelOpen = false;
       }
     }
