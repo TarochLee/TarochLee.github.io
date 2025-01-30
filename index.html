@@ -23,7 +23,7 @@
         font-family: 'STZhongsong', "Times New Roman", serif;
     }
 
-    /* 页面填充全屏，footer 固定在底部 */
+    /* 页面全屏+固定footer */
     html, body {
         height: 100%;
         display: flex;
@@ -36,139 +36,130 @@
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-  <!-- 
-    左侧个人信息面板，四角圆弧 (rounded-3xl)
-    初始时大部分隐藏在左侧：-translate-x-[90%] 
-    仅保留大约 10% 宽度在屏幕内作为“卡片”
-    点击卡片任意区域即可展开 
-  -->
+  <!-- 左侧个人信息面板：初始部分隐藏 (10% 可见)，点击卡片任何区域展开 -->
   <div 
     id="infoPanel"
     onclick="handlePanelClick()"
     class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
            transform -translate-x-[90%] transition-transform duration-300 z-40
            rounded-3xl overflow-hidden cursor-pointer">
-
-    <!-- 面板顶部：灰色背景，左箭头按钮在左侧；点击收起 -->
+    
+    <!-- 顶部：灰色背景 + 左箭头按钮 -->
     <div class="bg-gray-200 p-2 flex items-center">
       <button 
-        id="closePanelBtn"
-        onclick="closePanel()"
+        onclick="closePanel(event)"  <!-- 传入 event -->
         class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none ml-2
                hover:scale-105 transition-transform">
-        <!-- 左箭头图标 (SVG) -->
+        <!-- 箭头图标 -->
         <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M12.293 4.293a1 1 0 010 1.414L8.414 9.586l3.879 3.879a1 1 0 11-1.414 1.414l-4.586-4.586a1 1 0 010-1.414l4.586-4.586a1 1 0 011.414 0z" clip-rule="evenodd"/>
         </svg>
       </button>
     </div>
 
-    <!-- 面板主体内容 -->
+    <!-- 面板主体：头像、姓名、签名、邮箱 -->
     <div class="p-6 flex flex-col items-center">
-      <!-- 头像：pictures/avatar.png，圆形 -->
       <img src="pictures/avatar.png" alt="头像"
            class="w-24 h-24 rounded-full mb-4 shadow" />
-
-      <!-- 姓名 -->
       <h2 class="text-xl font-normal mb-2">Baater</h2>
-      <!-- 个性签名 -->
       <p class="text-sm font-normal text-gray-600 mb-2">
         个性签名：热爱编程，乐于分享
       </p>
-      <!-- 邮箱 -->
       <p class="text-sm font-normal text-gray-600">
         邮箱：baater@example.com
       </p>
     </div>
   </div>
 
+  <!-- 页面头部 -->
   <header class="bg-blue-600 text-white p-6 text-center">
-      <h1 class="text-3xl font-normal">📣 BAATER 的个人主页</h1>
-      <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
+    <h1 class="text-3xl font-normal">📣 BAATER 的个人主页</h1>
+    <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
   </header>
   
+  <!-- 主体内容 -->
   <main class="container mx-auto p-8">
-      <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
-          <h2 class="text-2xl font-normal">About Me</h2>
-          <p class="mt-2 font-normal">
-            你好！我是 Baater，一名热爱编程和技术的开发者。
-            这是我的个人主页，我会在这里分享我的项目和技术文章。
-          </p>
-      </section>
+    <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-normal">About Me</h2>
+      <p class="mt-2 font-normal">
+        你好！我是 Baater，一名热爱编程和技术的开发者。
+        这是我的个人主页，我会在这里分享我的项目和技术文章。
+      </p>
+    </section>
 
-      <section class="bg-white shadow-lg rounded-lg p-6">
-          <h2 class="text-2xl font-normal">我的项目</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-              
-              <!-- 项目 1 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
-                  <p class="mt-2 font-normal">
-                    关于 Ubuntu 系统中的 pip 和软件源的换源。
-                  </p>
-                  <a href="https://blog.csdn.net/Sea_wind0_/article/details/145385915" 
-                     class="text-blue-500 mt-2 inline-block" 
-                     target="_blank">查看详情</a>
-              </div>
-
-              <!-- 项目 2 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
-                  <p class="mt-2 font-normal">
-                    在 Macos 本地部署 Deepseek 模型的详细指南。
-                  </p>
-                  <a href="https://blog.csdn.net/Sea_wind0_/article/details/145392973" 
-                     class="text-blue-500 mt-2 inline-block" 
-                     target="_blank">查看详情</a>
-              </div>
-
-              <!-- 项目 3 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
-                  <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-
-              <!-- 项目 4 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
-                  <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-
-              <!-- 项目 5 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">💡 机器学习基础</h3>
-                  <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-
-              <!-- 项目 6 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
-                  <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
-                  <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
+    <section class="bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-2xl font-normal">我的项目</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+          
+          <!-- 项目 1 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
+              <p class="mt-2 font-normal">
+                关于 Ubuntu 系统中的 pip 和软件源的换源。
+              </p>
+              <a href="https://blog.csdn.net/Sea_wind0_/article/details/145385915" 
+                 class="text-blue-500 mt-2 inline-block" 
+                 target="_blank">查看详情</a>
           </div>
-      </section>
+
+          <!-- 项目 2 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
+              <p class="mt-2 font-normal">
+                在 Macos 本地部署 Deepseek 模型的详细指南。
+              </p>
+              <a href="https://blog.csdn.net/Sea_wind0_/article/details/145392973" 
+                 class="text-blue-500 mt-2 inline-block" 
+                 target="_blank">查看详情</a>
+          </div>
+
+          <!-- 项目 3 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
+              <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
+              <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+          </div>
+
+          <!-- 项目 4 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
+              <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
+              <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+          </div>
+
+          <!-- 项目 5 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">💡 机器学习基础</h3>
+              <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
+              <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+          </div>
+
+          <!-- 项目 6 -->
+          <div class="bg-gray-200 p-4 rounded-lg">
+              <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
+              <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
+              <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+          </div>
+      </div>
+    </section>
   </main>
 
-  <!-- 固定底部的 footer -->
+  <!-- 固定底部 footer -->
   <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
-      <p class="font-normal">
-          &copy; 2025 TarochLee | 
-          <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
-          <button onclick="openModal()" class="text-blue-400">打赏</button>
-      </p>
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400">打赏</button>
+    </p>
   </footer>
 
   <!-- 打赏弹窗 -->
   <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
-          <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
-          <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
-      </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
+    </div>
   </div>
 
   <script>
@@ -180,10 +171,9 @@
       document.getElementById('rewardModal').classList.add('hidden');
     }
 
-    /* 面板展开/收起状态，防止重复点击冲突 */
     let panelOpen = false;
 
-    /* 用户点击“卡片”任意区域，若面板尚未展开，则展开 */
+    // 点击卡片的空白处，若尚未展开则展开
     function handlePanelClick() {
       if (!panelOpen) {
         openPanel();
@@ -192,12 +182,14 @@
 
     function openPanel() {
       const panel = document.getElementById('infoPanel');
-      panel.classList.remove('-translate-x-[90%]'); // 去掉半隐藏
-      panel.classList.add('translate-x-0');         // 完全展开
+      panel.classList.remove('-translate-x-[90%]');
+      panel.classList.add('translate-x-0');
       panelOpen = true;
     }
 
-    function closePanel() {
+    // 【关键】箭头按钮点击时先阻止冒泡，再收起面板
+    function closePanel(event) {
+      event.stopPropagation(); // 阻止点击事件冒泡
       const panel = document.getElementById('infoPanel');
       panel.classList.remove('translate-x-0');
       panel.classList.add('-translate-x-[90%]');
