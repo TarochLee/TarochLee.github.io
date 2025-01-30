@@ -15,7 +15,7 @@
         font-style: normal;
     }
 
-    /* 西文优先使用 Times New Roman，中文优先使用 STZhongsong */
+    /* 西文使用 Times New Roman，中文使用 STZhongsong */
     body {
         font-family: "Times New Roman", serif;
     }
@@ -23,46 +23,39 @@
         font-family: 'STZhongsong', "Times New Roman", serif;
     }
 
-    /* 让整个页面填充整个屏幕，并确保 footer 固定在底部 */
+    /* 页面填充全屏，footer 固定在底部 */
     html, body {
         height: 100%;
         display: flex;
         flex-direction: column;
     }
-
     main {
-        flex: 1; /* 让 main 占据剩余空间 */
+        flex: 1;
     }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-  <!-- “🤡”按钮（与收起按钮同尺寸、同样式），用于展开面板 -->
-  <button 
-    id="togglePanelBtn" 
-    class="fixed top-4 left-4 z-50 w-10 h-10 rounded-full bg-white
-           flex items-center justify-center shadow focus:outline-none
-           hover:scale-105 transition-transform"
-    onclick="openPanel()">
-    🤡
-  </button>
-
-  <!-- 左侧个人信息面板，四个角都是圆角 (rounded-3xl) -->
-  <!-- 设置 top-4 left-4，离边缘各 1rem，h-[calc(100%-2rem)] 让面板上下也留 1rem 空隙 -->
-  <!-- 这样即可看到所有角的圆弧效果 -->
+  <!-- 
+    左侧个人信息面板，四角圆弧 (rounded-3xl)
+    初始时大部分隐藏在左侧：-translate-x-[90%] 
+    仅保留大约 10% 宽度在屏幕内作为“卡片”
+    点击卡片任意区域即可展开 
+  -->
   <div 
-    id="infoPanel" 
-    class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg 
-           transform -translate-x-full transition-transform duration-300 z-40
-           rounded-3xl overflow-hidden">
+    id="infoPanel"
+    onclick="handlePanelClick()"
+    class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
+           transform -translate-x-[90%] transition-transform duration-300 z-40
+           rounded-3xl overflow-hidden cursor-pointer">
 
-    <!-- 面板顶部：灰色背景，左箭头按钮位于左边 -->
+    <!-- 面板顶部：灰色背景，左箭头按钮在左侧；点击收起 -->
     <div class="bg-gray-200 p-2 flex items-center">
       <button 
-        id="closePanelBtn" 
+        id="closePanelBtn"
+        onclick="closePanel()"
         class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none ml-2
-               hover:scale-105 transition-transform"
-        onclick="closePanel()">
+               hover:scale-105 transition-transform">
         <!-- 左箭头图标 (SVG) -->
         <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M12.293 4.293a1 1 0 010 1.414L8.414 9.586l3.879 3.879a1 1 0 11-1.414 1.414l-4.586-4.586a1 1 0 010-1.414l4.586-4.586a1 1 0 011.414 0z" clip-rule="evenodd"/>
@@ -78,12 +71,10 @@
 
       <!-- 姓名 -->
       <h2 class="text-xl font-normal mb-2">Baater</h2>
-
       <!-- 个性签名 -->
       <p class="text-sm font-normal text-gray-600 mb-2">
         个性签名：热爱编程，乐于分享
       </p>
-
       <!-- 邮箱 -->
       <p class="text-sm font-normal text-gray-600">
         邮箱：baater@example.com
@@ -92,7 +83,7 @@
   </div>
 
   <header class="bg-blue-600 text-white p-6 text-center">
-      <h1 class="text-3xl font-normal"> 📣 BAATER 的个人主页</h1>
+      <h1 class="text-3xl font-normal">📣 BAATER 的个人主页</h1>
       <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
   </header>
   
@@ -162,7 +153,7 @@
       </section>
   </main>
 
-  <!-- 确保 footer 始终固定在页面底部 -->
+  <!-- 固定底部的 footer -->
   <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
       <p class="font-normal">
           &copy; 2025 TarochLee | 
@@ -189,16 +180,28 @@
       document.getElementById('rewardModal').classList.add('hidden');
     }
 
-    /* 展开面板：显示面板并隐藏 “🤡”按钮 */
-    function openPanel() {
-      document.getElementById('infoPanel').classList.remove('-translate-x-full');
-      document.getElementById('togglePanelBtn').classList.add('hidden');
+    /* 面板展开/收起状态，防止重复点击冲突 */
+    let panelOpen = false;
+
+    /* 用户点击“卡片”任意区域，若面板尚未展开，则展开 */
+    function handlePanelClick() {
+      if (!panelOpen) {
+        openPanel();
+      }
     }
 
-    /* 收起面板：隐藏面板并显示 “🤡”按钮 */
+    function openPanel() {
+      const panel = document.getElementById('infoPanel');
+      panel.classList.remove('-translate-x-[90%]'); // 去掉半隐藏
+      panel.classList.add('translate-x-0');         // 完全展开
+      panelOpen = true;
+    }
+
     function closePanel() {
-      document.getElementById('infoPanel').classList.add('-translate-x-full');
-      document.getElementById('togglePanelBtn').classList.remove('hidden');
+      const panel = document.getElementById('infoPanel');
+      panel.classList.remove('translate-x-0');
+      panel.classList.add('-translate-x-[90%]');
+      panelOpen = false;
     }
   </script>
 </body>
