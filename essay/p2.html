@@ -97,6 +97,28 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* 表格样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f3f4f6;
+      text-align: center;
+    }
+    td {
+      text-align: center;
+    }
+
+    /* 响应式表格容器 */
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
   </style>
 </head>
 <body class="text-gray-900">
@@ -197,7 +219,155 @@ ollama --version</pre>
         </ul>
 
         <p class="mt-2 font-semibold text-gray-800">📌 可用的模型</p>
-        <!-- 表格已省略演示 -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full border mt-2 mb-4 text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th class="px-3 py-2">模型名称</th>
+                <th class="px-3 py-2">训练基础</th>
+                <th class="px-3 py-2">规模</th>
+                <th class="px-3 py-2">大小</th>
+                <th class="px-3 py-2">适用场景</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Qwen-1.5B</td>
+                <td class="px-3 py-2">Qwen-2.5</td>
+                <td class="px-3 py-2">1.5B</td>
+                <td class="px-3 py-2">1.1GB</td>
+                <td class="px-3 py-2">适合移动设备、低算力，基本NLP任务</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Qwen-7B</td>
+                <td class="px-3 py-2">Qwen-2.5</td>
+                <td class="px-3 py-2">7B</td>
+                <td class="px-3 py-2">4.7GB</td>
+                <td class="px-3 py-2">适合本地推理，适用于代码推理聊天</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Llama-8B</td>
+                <td class="px-3 py-2">Llama3.1</td>
+                <td class="px-3 py-2">8B</td>
+                <td class="px-3 py-2">4.9GB</td>
+                <td class="px-3 py-2">适合 NLP、代码生成，支持复杂推理</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Qwen-14B</td>
+                <td class="px-3 py-2">Qwen-2.5</td>
+                <td class="px-3 py-2">14B</td>
+                <td class="px-3 py-2">9GB</td>
+                <td class="px-3 py-2">平衡性能和算力需求，适用复杂任务</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Qwen-32B</td>
+                <td class="px-3 py-2">Qwen-2.5</td>
+                <td class="px-3 py-2">32B</td>
+                <td class="px-3 py-2">20GB</td>
+                <td class="px-3 py-2">强推理能力，适用于深度文本分析</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">DeepSeek-R1-Distill-Llama-70B</td>
+                <td class="px-3 py-2">Llama3.3</td>
+                <td class="px-3 py-2">70B</td>
+                <td class="px-3 py-2">43GB</td>
+                <td class="px-3 py-2">适合复杂多轮对话、大规模数据处理</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2">DeepSeek-R1-671B</td>
+                <td class="px-3 py-2">深度训练</td>
+                <td class="px-3 py-2">671B</td>
+                <td class="px-3 py-2">404GB</td>
+                <td class="px-3 py-2">超大规模 LLM用于研究高端推理任务</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="text-xl font-semibold mt-4 text-gray-800">2️⃣ 如何选择合适的模型？</h4>
+        <p class="mt-2 font-semibold text-gray-700">💻 本地部署（Mac/PC）</p>
+        <div class="overflow-x-auto mb-4">
+          <table class="min-w-full border text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th class="px-3 py-2">设备配置</th>
+                <th class="px-3 py-2">推荐模型</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="px-3 py-2">8GB RAM, 无独显</td>
+                <td class="px-3 py-2">1.5B（最轻量）</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">16GB RAM, M1/M2/M3 芯片</td>
+                <td class="px-3 py-2">7B, 8B（适合代码、对话）</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">32GB RAM, 高性能 Mac</td>
+                <td class="px-3 py-2">14B, 32B（高质量推理）</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2">高端 PC，RTX 4090+</td>
+                <td class="px-3 py-2">70B（强大推理能力）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-2 font-semibold text-gray-700">🖥️ 服务器/云端（GPU）</p>
+        <div class="overflow-x-auto mb-4">
+          <table class="min-w-full border text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th class="px-3 py-2">GPU 规格</th>
+                <th class="px-3 py-2">推荐模型</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="px-3 py-2">RTX 3090 / 4090 / A100</td>
+                <td class="px-3 py-2">32B, 70B</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2">H100 / TPU v4+</td>
+                <td class="px-3 py-2">671B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="mt-2">
+          <strong>📌 按任务选择</strong>
+        </p>
+        <div class="overflow-x-auto mb-6">
+          <table class="min-w-full border text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th class="px-3 py-2">任务类型</th>
+                <th class="px-3 py-2">推荐模型</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td class="px-3 py-2">日常聊天 / 轻量 NLP</td>
+                <td class="px-3 py-2">1.5B, 7B</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">代码生成 / 编程助手</td>
+                <td class="px-3 py-2">7B, 8B, 14B</td>
+              </tr>
+              <tr class="border-b">
+                <td class="px-3 py-2">复杂推理 / 逻辑思考</td>
+                <td class="px-3 py-2">14B, 32B, 70B</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2">科学计算 / AI 研究</td>
+                <td class="px-3 py-2">70B, 671B</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <h4 class="text-xl font-semibold mt-4 text-gray-800">3️⃣ 如何运行模型？</h4>
         <p class="mt-2">
@@ -260,7 +430,7 @@ ollama --version</pre>
           </svg>
           复制
         </button>
-<pre id="cmd4">docker run -d -p 3000:8080 \
+        <pre id="cmd4">docker run -d -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -v open-webui:/app/backend/data \
   --name open-webui \
