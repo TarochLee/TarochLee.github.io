@@ -16,15 +16,28 @@
       font-style: normal;
     }
 
+    /* 定义英文字体（Times New Roman），仅用于英文字符 */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
     /* 默认让 body 中的英文使用 Times New Roman */
     body {
-      font-family: "Times New Roman", serif;
+      font-family: "TimesNewRoman", serif;
       background: #f5f7fa; /* 柔和浅灰背景 */
     }
 
     /* 让中文文本优先使用 STZhongsong */
     p, h1, h2, h3, h4, h5, h6, a, span, button, pre, code, blockquote {
-      font-family: "STZhongsong", "Times New Roman", serif;
+      font-family: "STZhongsong", "TimesNewRoman", serif;
+    }
+
+    /* 保持代码块等宽字体 */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace;
     }
 
     /* 页面填充全屏，footer 固定在底部 */
