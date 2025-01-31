@@ -842,6 +842,188 @@ deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe m
         </p>
       </div>
       <!-- 文章主体结束 -->
+       <!-- 在总结卡片之后添加评论区 -->
+<!-- 评论区容器 -->
+<div class="comments-section mt-12 bg-white rounded-2xl shadow-xl p-6">
+    <h3 class="text-2xl font-bold mb-6 text-gray-800">💬 读者评论（<span id="commentCount">0</span>）</h3>
+  
+    <!-- 评论表单 -->
+    <div class="comment-form mb-8">
+      <div class="grid grid-cols-1 gap-4">
+        <div>
+          <input type="text" id="commentAuthor" 
+                 class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                 placeholder="您的昵称（必填）" required>
+        </div>
+        <div>
+          <input type="email" id="commentEmail"
+                 class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                 placeholder="电子邮箱（可选，用于接收回复）">
+        </div>
+        <div>
+          <textarea id="commentContent" rows="4"
+                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                    placeholder="写下您的评论...（支持Markdown语法）" required></textarea>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="text-sm text-gray-500">
+            支持Markdown格式 • 评论审核后显示
+          </div>
+          <button onclick="submitComment()" 
+                  class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500 transition-all">
+            发布评论
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- 评论列表 -->
+    <div id="commentsList" class="space-y-6">
+      <!-- 评论示例结构 -->
+      <div class="comment-item bg-gray-50 p-4 rounded-lg shadow-sm">
+        <div class="flex items-center mb-2">
+          <div class="flex-1">
+            <span class="font-semibold text-blue-600">Baater</span>
+            <span class="text-sm text-gray-500 ml-2">2小时前</span>
+          </div>
+          <button class="text-gray-400 hover:text-blue-600" onclick="toggleReply(this)">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+            </svg>
+          </button>
+        </div>
+        <div class="comment-content text-gray-700 mb-2">
+          非常详细的教程！对我配置开发环境帮助很大 👍
+        </div>
+        <!-- 回复表单 -->
+        <div class="reply-form hidden ml-6 mt-2">
+          <textarea class="w-full p-2 border rounded" rows="2" placeholder="写下您的回复..."></textarea>
+          <div class="mt-2 text-right">
+            <button class="px-4 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200">回复</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 本地存储操作
+    const STORAGE_KEY = 'blog_comments';
+    
+    // 初始化评论
+    function loadComments() {
+      const comments = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      renderComments(comments);
+      updateCommentCount(comments.length);
+    }
+  
+    // 提交评论
+    function submitComment() {
+      const author = document.getElementById('commentAuthor').value.trim();
+      const content = document.getElementById('commentContent').value.trim();
+      
+      if (!author || !content) {
+        showToast('请填写昵称和评论内容');
+        return;
+      }
+  
+      const newComment = {
+        id: Date.now(),
+        author,
+        email: document.getElementById('commentEmail').value.trim(),
+        content,
+        timestamp: new Date().toISOString(),
+        replies: []
+      };
+  
+      const comments = [...getComments(), newComment];
+      saveComments(comments);
+      renderComments(comments);
+      clearForm();
+      showToast('评论已提交，审核通过后显示');
+    }
+  
+    // 辅助函数
+    function getComments() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    }
+  
+    function saveComments(comments) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+      updateCommentCount(comments.length);
+    }
+  
+    function renderComments(comments) {
+      const container = document.getElementById('commentsList');
+      container.innerHTML = comments.map(comment => `
+        <div class="comment-item bg-gray-50 p-4 rounded-lg shadow-sm">
+          <div class="flex items-center mb-2">
+            <div class="flex-1">
+              <span class="font-semibold text-blue-600">${comment.author}</span>
+              <span class="text-sm text-gray-500 ml-2">${formatTime(comment.timestamp)}</span>
+            </div>
+            <button class="text-gray-400 hover:text-blue-600" onclick="toggleReply(this)">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+              </svg>
+            </button>
+          </div>
+          <div class="comment-content text-gray-700 mb-2">
+            ${marked.parse(comment.content)}
+          </div>
+          ${comment.replies.length > 0 ? renderReplies(comment.replies) : ''}
+          <div class="reply-form hidden ml-6 mt-2">
+            <textarea class="w-full p-2 border rounded" rows="2" placeholder="写下您的回复..."></textarea>
+            <div class="mt-2 text-right">
+              <button class="px-4 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"
+                      onclick="submitReply(this, ${comment.id})">回复</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  
+    function renderReplies(replies) {
+      return replies.map(reply => `
+        <div class="reply-item ml-6 mt-2 pl-2 border-l-2 border-blue-200">
+          <div class="flex items-center text-sm">
+            <span class="font-medium text-blue-500">${reply.author}</span>
+            <span class="text-gray-500 ml-2">${formatTime(reply.timestamp)}</span>
+          </div>
+          <div class="text-gray-600">${marked.parse(reply.content)}</div>
+        </div>
+      `).join('');
+    }
+  
+    // 其他功能函数
+    function toggleReply(button) {
+      const form = button.closest('.comment-item').querySelector('.reply-form');
+      form.classList.toggle('hidden');
+    }
+  
+    function formatTime(isoString) {
+      const date = new Date(isoString);
+      return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    }
+  
+    function clearForm() {
+      document.getElementById('commentAuthor').value = '';
+      document.getElementById('commentEmail').value = '';
+      document.getElementById('commentContent').value = '';
+    }
+  
+    function updateCommentCount(count) {
+      document.getElementById('commentCount').textContent = count;
+    }
+  
+    // 初始化
+    document.addEventListener('DOMContentLoaded', loadComments);
+  </script>
+  
+  <!-- 引入Markdown解析库 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     </article>
 
