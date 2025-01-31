@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* 定义中文字体（华文中宋），仅用于中文字符 */
+    /* 定义中文字体（华文中宋） */
     @font-face {
       font-family: "STZhongsong";
       src: url("/fonts/STZhongsong.ttf") format("truetype");
@@ -16,7 +16,7 @@
       font-style: normal;
     }
 
-    /* 定义英文字体（Times New Roman），仅用于英文字符 */
+    /* 定义英文字体（Times New Roman） */
     @font-face {
       font-family: "TimesNewRoman";
       src: url("/fonts/TimesNewRoman.ttf") format("truetype");
@@ -24,22 +24,18 @@
       font-style: normal;
     }
 
-    /* 默认让 body 中的英文使用 Times New Roman */
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
     body {
-      font-family: "TimesNewRoman", serif;
-      background: #f5f7fa; /* 柔和浅灰背景 */
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
     }
 
-    /* 让中文文本优先使用 STZhongsong */
-    p, h1, h2, h3, h4, h5, h6, a, span, button, pre, code, blockquote {
-      font-family: "STZhongsong", "TimesNewRoman", serif;
-    }
-
-    /* 保持代码块等宽字体 */
+    /* 保持代码块等宽字体（覆盖全局设置） */
     pre, code {
-      font-family: Consolas, "Courier New", monospace;
+      font-family: Consolas, "Courier New", monospace !important;
     }
 
+    /* 以下原有样式保持不变 */
     /* 页面填充全屏，footer 固定在底部 */
     html, body {
       height: 100%;
@@ -48,7 +44,7 @@
     }
     main {
       flex: 1;
-    }
+    }    
 
     /* 深色“终端卡片”样式 + 复制按钮(仅在Hover时出现) */
     .terminal-card {
