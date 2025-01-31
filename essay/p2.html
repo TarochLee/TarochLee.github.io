@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Macos本地部署Deepseek模型 - Baater 的个人主页</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* 定义中文字体（华文中宋），仅用于中文字符 */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 默认让 body 中的英文使用 Times New Roman */
+    body {
+      font-family: "Times New Roman", serif;
+      background: #f5f7fa; /* 柔和浅灰背景 */
+    }
+
+    /* 让中文文本优先使用 STZhongsong */
+    p, h1, h2, h3, h4, h5, h6, a, span, button, pre, code, blockquote {
+      font-family: "STZhongsong", "Times New Roman", serif;
+    }
+
+    /* 页面填充全屏，footer 固定在底部 */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* 深色“终端卡片”样式 + 复制按钮(仅在Hover时出现) */
+    .terminal-card {
+      position: relative;       /* 让复制按钮绝对定位 */
+      background: #1e1e1e;     /* 终端式深色背景 */
+      color: #c7c7c7;          /* 浅灰文字 */
+      padding: 1rem;
+      border-radius: 0.5rem;   /* 更圆润 */
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;       /* 稍微小点像终端 */
+      font-family: Consolas, "Courier New", monospace;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .terminal-card pre {
+      white-space: pre-wrap;   /* 允许换行 */
+      margin: 0;
+    }
+
+    /* 复制按钮默认隐藏，只在 terminal-card hover 时显示 */
+    .copy-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 0.75rem;
+      background: #3f3f46;     /* 深灰按钮背景 */
+      color: #f9f9f9;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none; /* 默认隐藏 */
+      align-items: center; /* 方便对齐 icon */
+      gap: 0.25rem;
+    }
+    .terminal-card:hover .copy-btn {
+      display: flex; /* hover时显示 */
+    }
+    .copy-btn:hover {
+      background: #52525b;
+    }
+
+    /* Toast 提示样式 */
+    #toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #333;
+      color: #f0f0f0;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    /* Toast可见时加 .show */
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="text-gray-900">
+
+  <!-- Toast 提示容器，初始隐藏 -->
+  <div id="toast"></div>
+
+  <!-- 顶部标题区域，渐变背景 + 白色文字 + 阴影 -->
+  <header class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-8 text-center shadow-lg">
+    <h1 class="text-3xl font-normal tracking-widest">Macos本地部署Deepseek模型</h1>
+  </header>
+
+  <!-- 主体内容容器 -->
+  <main class="container mx-auto px-6 py-8">
+
+    <!-- 文章主体：白色背景、大圆角、大阴影、加大字体和行距 (leading-loose) -->
+    <!-- 使用 p-[3em] 实现正文上下左右 3 个中文字符的页边距 -->
+    <article class="bg-white shadow-2xl rounded-3xl p-[3em] mb-6 text-xl leading-loose">
+
+      <!-- 标题信息，可选 -->
+      <div class="mb-4 text-center">
+        <p class="text-gray-600 text-base">
+          <strong>作者：</strong>帅帅侠 | <strong>发布时间：</strong>2025-01-29 14:07:32
+        </p>
+      </div>
+
+      <!-- 正文内容开始 -->
+      <p class="mt-4">
+      　　随着大语言模型（LLM）的发展，越来越多的开源模型如 DeepSeek 可用于本地推理。本文将详细介绍如何在 MacOS 上部署 DeepSeek 大模型，并结合 Ollama 和 Open WebUI，打造一个类似 ChatGPT 的离线 AI 助手。
+      </p>
+
+      <!-- (2) 在上段文字后加一个小卡片，作为目录链接卡片 -->
+      <div class="my-6 p-4 bg-blue-50 border-l-4 border-blue-300 rounded-lg">
+        <h2 class="text-xl font-semibold text-blue-700 mb-2">目录</h2>
+        <ul class="list-inside list-disc text-lg text-gray-700">
+          <li><a href="#prep" class="text-blue-600">🛠️ （一）准备工作</a></li>
+          <li><a href="#download" class="text-blue-600">🚀 （二）下载并运行 DeepSeek 模型</a></li>
+          <li><a href="#openwebui" class="text-blue-600">🌐 （三）配置 Web 界面（Open WebUI）</a></li>
+          <li><a href="#summary" class="text-blue-600">总结</a></li>
+        </ul>
+      </div>
+
+      <h3 id="prep" class="text-2xl font-semibold mt-6 text-blue-700">🛠️ （一）准备工作</h3>
+      <p class="mt-2">
+      　　工欲善其事，必先利其器，一些基本的系统配置不在此赘述，我们只介绍与我们的内容相关的软件的安装与配置。我们首先需要在本地安装 <strong>Docker</strong> 和 <strong>Ollama</strong>，然后检查这些软件是否可以正常使用。
+      </p>
+
+      <!-- 终端卡片：docker version / ollama --version -->
+      <div class="terminal-card">
+        <!-- 复制按钮：SVG 图标 + 文字 -->
+        <button class="copy-btn" onclick="copyCode('cmd1')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          复制
+        </button>
+        <pre id="cmd1">docker version
+ollama --version</pre>
+      </div>
+
+      <img src="pictures/essay2/1.png" alt="DeepSeek 模型部署示意图" class="my-4 mx-auto rounded-lg shadow-lg">
+      <p>
+      　　然后我们可以使用 <strong>ollama</strong> 来部署我们的 Deepseek 模型了。
+      </p>
+
+      <h3 id="download" class="text-2xl font-semibold mt-6 text-blue-700">🚀 （二）下载并运行 DeepSeek 模型</h3>
+      <p class="mt-2">
+    　　我们可以在 <a href="https://www.ollama.com/library/deepseek-r1" class="text-blue-600 hover:underline">ollama 的网站</a> 中查询到关于一些 <strong>DeepSeek-R1</strong> 的相关信息：
+      </p>
+
+      <blockquote class="border-l-4 border-blue-300 pl-4 my-4 text-gray-700 bg-blue-50 p-2 rounded">
+        DeepSeek's first-generation of reasoning models with comparable performance to OpenAI-o1, including six dense models distilled from DeepSeek-R1 based on Llama and Qwen.
+        <br/>
+        DeepSeek 的第一代推理模型，其性能可与 OpenAI-o1 相媲美，包括六个基于 Llama 和 Qwen 训练的稠密模型，这些模型均由 DeepSeek-R1 蒸馏而来。
+      </blockquote>
+
+      <p>
+      　　同时，网页中也展示了我们所需模型的选择方法，我们可以根据自己的电脑配置进行选择。在这里，我将当前网页中展示的 README 部分使用 AI 进行总结，生成一份 “DeepSeek-R1 模型选择指南”。
+      </p>
+
+      <!-- (3) “💡 DeepSeek-R1 模型选择指南” ~ “替换 7b ... 14b” 区域 -->
+      <div class="my-6 p-6 bg-gray-50 border-l-4 border-red-400 rounded-lg">
+        <h3 class="text-2xl font-semibold text-red-600 text-center mb-4">💡 DeepSeek-R1 模型选择指南</h3>
+        <p>
+        　　DeepSeek-R1 系列包含多个大小不同的模型，适用于各种推理、数学、代码和语言任务。选择合适的模型需要综合考虑 计算资源、任务需求和性能。
+        </p>
+
+        <h4 class="text-xl font-semibold mt-4 text-gray-800">1️⃣ DeepSeek-R1 模型概述</h4>
+        <p>
+          DeepSeek 提供 6 种蒸馏（Distilled）版本 和 1 个超大模型（671B），主要分为：
+        </p>
+        <ul class="list-disc list-inside my-2">
+          <li>小型模型（1.5B - 8B）：适用于轻量级任务，响应快，占用资源少。</li>
+          <li>中型模型（14B - 32B）：适用于平衡性能与计算资源需求的场景。</li>
+          <li>大型模型（70B - 671B）：高推理能力，但需要大量 GPU/TPU 资源。</li>
+        </ul>
+
+        <p class="mt-2 font-semibold text-gray-800">📌 可用的模型</p>
+        <!-- 表格已省略演示 -->
+
+        <h4 class="text-xl font-semibold mt-4 text-gray-800">3️⃣ 如何运行模型？</h4>
+        <p class="mt-2">
+          <strong>✅ 运行 DeepSeek</strong><br/>
+          在终端执行：
+        </p>
+
+        <!-- 终端卡片：ollama run deepseek-r1:7b -->
+        <div class="terminal-card">
+          <button class="copy-btn" onclick="copyCode('cmd2')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+            </svg>
+            复制
+          </button>
+          <pre id="cmd2">ollama run deepseek-r1:7b</pre>
+        </div>
+
+        <p>替换 <strong>7b</strong> 为你需要的模型，例如 <strong>14b</strong>：</p>
+        <!-- 终端卡片：ollama run deepseek-r1:14b -->
+        <div class="terminal-card">
+          <button class="copy-btn" onclick="copyCode('cmd3')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                 stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+            </svg>
+            复制
+          </button>
+          <pre id="cmd3">ollama run deepseek-r1:14b</pre>
+        </div>
+      </div>
+
+      <p class="mt-2">
+      　　回到正题，我们使用官方提供的命令进行模型本地拉取之后，便可以直接使用模型了。在这里我使用的是 7B 模型，我们可以使用 <code>ollama list</code> 来查看本地模型。
+      </p>
+      <img src="pictures/essay2/2.png" alt="DeepSeek 模型选择指南" class="my-4 mx-auto rounded-lg shadow-lg">
+      <p class="mt-2">
+      　　然后我们开始启动该模型，便可以正常使用了！
+      </p>
+      <img src="pictures/essay2/3.png" alt="DeepSeek 模型运行示意图" class="my-4 mx-auto rounded-lg shadow-lg">
+
+      <h3 id="openwebui" class="text-2xl font-semibold mt-6 text-blue-700">🌐 （三）配置 Web 界面（Open WebUI）</h3>
+      <p class="mt-2">
+      　　我们这个时候已经实现了终端对话，当然我们如果希望拥有类似 ChatGPT 的网页交互界面（支持聊天、文件上传、PDF 解析等），可以使用 <strong>Open WebUI</strong>。
+      </p>
+
+      <h4 class="text-xl font-semibold mt-4 text-gray-800">1. 安装 Open WebUI</h4>
+      <p class="mt-2">运行以下命令安装：</p>
+
+      <!-- 终端卡片：docker run -d ... open-webui -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd4')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          复制
+        </button>
+<pre id="cmd4">docker run -d -p 3000:8080 \
+  --add-host=host.docker.internal:host-gateway \
+  -v open-webui:/app/backend/data \
+  --name open-webui \
+  --restart always \
+  ghcr.io/open-webui/open-webui:main
+</pre>
+      </div>
+
+      <p>
+        这个 <code>docker run</code> 命令用于启动 Open WebUI 并使其在本地 <code>http://localhost:3000</code> 访问。
+      </p>
+
+      <!-- 美化常见命令为一个绿色卡片 -->
+      <div class="my-6 p-4 bg-green-50 border-l-4 border-green-300 rounded-lg">
+        <h2 class="text-lg font-semibold text-blue-700 mb-2 text-center">常见的操作命令</h2>
+        <p>启动 WebUI: <code>docker start open-webui</code></p>
+        <p>停止 WebUI: <code>docker stop open-webui</code></p>
+        <p>重启 WebUI: <code>docker restart open-webui</code></p>
+        <p>删除 WebUI 容器: <code>docker stop open-webui && docker rm open-webui</code></p>
+        <p>查看 WebUI 日志: <code>docker logs open-webui --tail 50</code></p>
+        <p>更新 WebUI 镜像: <code>docker pull ghcr.io/open-webui/open-webui:main</code></p>
+      </div>
+
+      <h4 class="text-xl font-semibold mt-4 text-gray-800">2. 使用教程</h4>
+      <ol class="list-decimal list-inside my-2 pl-4">
+        <li>启动 Docker 和 ollama</li>
+        <li>启动 Open WebUI【<code>docker start open-webui</code>】</li>
+        <li>在浏览器打开 <a href="http://localhost:3000" class="text-blue-600 hover:underline">http://localhost:3000</a></li>
+      </ol>
+      <img src="pictures/essay2/4.png" alt="Open WebUI 界面示意图" class="my-4 mx-auto rounded-lg shadow-lg">
+
+      <h4 class="text-xl font-semibold mt-4 text-gray-800">3. 创建一个简单的 Mac App</h4>
+      <p class="mt-2">
+        <strong>第一步</strong>：首先打开macOS Automator，选取应用程序<br/>
+        <img src="pictures/essay2/5.png" alt="Automator 创建应用程序" class="my-4 mx-auto rounded-lg shadow-lg">
+        <strong>第二步</strong>：搜索“运行Shell脚本”；<br/>
+        <img src="pictures/essay2/6.png" alt="Automator 添加 Shell 脚本" class="my-4 mx-auto rounded-lg shadow-lg">
+        <strong>第三步</strong>：然后把相关代码粘贴进去；<br/>
+        <img src="pictures/essay2/7.png" alt="Automator 添加代码" class="my-4 mx-auto rounded-lg shadow-lg">
+        <strong>第四步</strong>：导出 APP；<br/>
+        <img src="pictures/essay2/8.png" alt="Automator 导出 APP" class="my-4 mx-auto rounded-lg shadow-lg">
+        <img src="pictures/essay2/9.png" alt="Automator 保存 APP" class="my-4 mx-auto rounded-lg shadow-lg">
+        <strong>第五步</strong>：执行 APP；<br/>
+      </p>
+
+      <!-- 总结小卡片 -->
+      <div id="summary" class="my-6 p-6 bg-yellow-50 border-l-4 border-yellow-300 rounded-lg shadow">
+        <h3 class="text-2xl font-semibold mb-4 text-yellow-700">总结</h3>
+        <p>
+        　　通过安装并运行 DeepSeek 7B 模型的 Ollama CLI 工具，启动本地 Ollama 服务，并配置 Docker 容器启动 Open WebUI 后，即可在 Web 界面和 Mac 应用程序中使用该模型。
+          访问
+          <a href="http://localhost:3000" class="text-blue-600 hover:underline">http://localhost:3000</a>
+          即可打开 Web 界面，进一步通过相关命令或配置文件完成在 Mac 上的应用部署。
+        </p>
+      </div>
+      <!-- 文章主体结束 -->
+
+    </article>
+
+  </main>
+
+  <!-- 底部：可做淡入淡出的渐变背景 -->
+  <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:text-blue-300">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:text-blue-300">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500">
+        关闭
+      </button>
+    </div>
+  </div>
+
+  <!-- JS 脚本区 -->
+  <script>
+    /* 打赏弹窗功能 */
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
+
+    /**
+     * 复制代码功能:
+     * @param {string} id - pre 容器的 id
+     */
+    function copyCode(id) {
+      const codeText = document.getElementById(id).innerText;
+
+      navigator.clipboard.writeText(codeText).then(() => {
+        showToast('复制成功！');
+      }, () => {
+        showToast('复制失败，请手动复制');
+      });
+    }
+
+    /**
+     * Toast 提示
+     * - 内容自动显示，2s 后消失
+     */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      // 2 秒后自动隐藏
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+
+  <!-- 这里是Toast容器，默认隐藏 -->
+  <div id="toast"></div>
+
+</body>
+</html>
