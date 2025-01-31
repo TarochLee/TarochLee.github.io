@@ -98,10 +98,40 @@
     </div>
   </div>
 
-  <header class="bg-blue-600 text-white p-6 text-center">
-      <h1 class="text-3xl font-normal"> 📣 BAATER 的个人主页</h1>
-      <p class="text-lg font-normal">欢迎来到我的 GitHub Pages 站点！</p>
+  <header class="bg-blue-600 p-6 text-center min-h-[200px] flex flex-col justify-center">
+    <h1 class="mx-auto text-4xl font-bold rainbow-dark-text">
+      📣 BAATER 的个人主页
+    </h1>
+    
+    <p class="mt-4 text-xl rainbow-dark-text">
+      欢迎来到我的 GitHub Pages 站点！
+    </p>
   </header>
+  
+  <style>
+  .rainbow-dark-text {
+    background: linear-gradient(
+      90deg,
+      hsl(0, 100%, 35%) 0%,    /* 暗红 */
+      hsl(30, 100%, 35%) 20%,  /* 暗橙 */
+      hsl(60, 100%, 35%) 40%,  /* 暗金 */
+      hsl(120, 100%, 35%) 60%, /* 暗绿 */
+      hsl(240, 100%, 35%) 80%, /* 暗蓝 */
+      hsl(300, 100%, 35%) 100% /* 暗紫 */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 200% auto;
+    animation: dark-rainbow 5s linear infinite;
+  }
+  
+  @keyframes dark-rainbow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  </style>
   
   <main class="container mx-auto p-8">
       <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
