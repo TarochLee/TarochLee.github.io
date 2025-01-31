@@ -150,7 +150,7 @@
       <!-- 标题信息，可选 -->
       <div class="mb-4 text-center">
         <p class="text-gray-600 text-base">
-          <strong>作者：</strong>帅帅侠 | <strong>发布时间：</strong>2025-01-29 14:07:32
+          作者：帅帅侠 | 发布时间：2025-01-29 14:07:32
         </p>
       </div>
 
@@ -172,7 +172,7 @@
 
       <h3 id="prep" class="text-2xl font-semibold mt-6 text-blue-700">🛠️ （一）准备工作</h3>
       <p class="mt-2">
-      　　工欲善其事，必先利其器，一些基本的系统配置不在此赘述，我们只介绍与我们的内容相关的软件的安装与配置。我们首先需要在本地安装 <strong>Docker</strong> 和 <strong>Ollama</strong>，然后检查这些软件是否可以正常使用。
+      　　工欲善其事，必先利其器，一些基本的系统配置不在此赘述，我们只介绍与我们的内容相关的软件的安装与配置。我们首先需要在本地安装 <>Docker</> 和 <>Ollama</>，然后检查这些软件是否可以正常使用。
       </p>
 
       <!-- 终端卡片：docker version / ollama --version -->
@@ -192,12 +192,12 @@ ollama --version</pre>
 
       <img src="/pictures/essay2/1.png" alt="DeepSeek 模型部署示意图" class="my-4 mx-auto rounded-lg shadow-lg">
       <p>
-      　　然后我们可以使用 <strong>ollama</strong> 来部署我们的 Deepseek 模型了。
+      　　然后我们可以使用 <>ollama</> 来部署我们的 Deepseek 模型了。
       </p>
 
       <h3 id="download" class="text-2xl font-semibold mt-6 text-blue-700">🚀 （二）下载并运行 DeepSeek 模型</h3>
       <p class="mt-2">
-    　　我们可以在 <a href="https://www.ollama.com/library/deepseek-r1" class="text-blue-600 hover:underline">ollama 的网站</a> 中查询到关于一些 <strong>DeepSeek-R1</strong> 的相关信息：
+    　　我们可以在 <a href="https://www.ollama.com/library/deepseek-r1" class="text-blue-600 hover:underline">ollama 的网站</a> 中查询到关于一些 <>DeepSeek-R1</> 的相关信息：
       </p>
 
       <blockquote class="border-l-4 border-blue-300 pl-4 my-4 text-gray-700 bg-blue-50 p-2 rounded">
@@ -347,7 +347,7 @@ ollama --version</pre>
         </div>
 
         <p class="mt-2">
-          <strong>📌 按任务选择</strong>
+          <>📌 按任务选择</>
         </p>
         <div class="overflow-x-auto mb-6">
           <table class="min-w-full border text-center">
@@ -380,7 +380,7 @@ ollama --version</pre>
 
         <h4 class="text-xl font-semibold mt-4 text-gray-800">3️⃣ 如何运行模型？</h4>
         <p class="mt-2">
-          <strong>✅ 运行 DeepSeek</strong><br/>
+          <>✅ 运行 DeepSeek</><br/>
           在终端执行：
         </p>
 
@@ -397,7 +397,7 @@ ollama --version</pre>
           <pre id="cmd2">ollama run deepseek-r1:7b</pre>
         </div>
 
-        <p>替换 <strong>7b</strong> 为你需要的模型，例如 <strong>14b</strong>：</p>
+        <p>替换 <>7b</> 为你需要的模型，例如 <>14b</>：</p>
         <!-- 终端卡片：ollama run deepseek-r1:14b -->
         <div class="terminal-card">
           <button class="copy-btn" onclick="copyCode('cmd3')">
@@ -423,7 +423,7 @@ ollama --version</pre>
 
       <h3 id="openwebui" class="text-2xl font-semibold mt-6 text-blue-700">🌐 （三）配置 Web 界面（Open WebUI）</h3>
       <p class="mt-2">
-      　　我们这个时候已经实现了终端对话，当然我们如果希望拥有类似 ChatGPT 的网页交互界面（支持聊天、文件上传、PDF 解析等），可以使用 <strong>Open WebUI</strong>。
+      　　我们这个时候已经实现了终端对话，当然我们如果希望拥有类似 ChatGPT 的网页交互界面（支持聊天、文件上传、PDF 解析等），可以使用 <>Open WebUI</>。
       </p>
 
       <h4 class="text-xl font-semibold mt-4 text-gray-800">1. 安装 Open WebUI</h4>
@@ -473,16 +473,16 @@ ollama --version</pre>
 
       <h4 class="text-xl font-semibold mt-4 text-gray-800">3. 创建一个简单的 Mac App</h4>
       <p class="mt-2">
-        <strong>第一步</strong>：首先打开macOS Automator，选取应用程序<br/>
+        <>第一步</>：首先打开macOS Automator，选取应用程序<br/>
         <img src="/pictures/essay2/5.png" alt="Automator 创建应用程序" class="my-4 mx-auto rounded-lg shadow-lg">
-        <strong>第二步</strong>：搜索“运行Shell脚本”；<br/>
+        <>第二步</>：搜索“运行Shell脚本”；<br/>
         <img src="/pictures/essay2/6.png" alt="Automator 添加 Shell 脚本" class="my-4 mx-auto rounded-lg shadow-lg">
-        <strong>第三步</strong>：然后把相关代码粘贴进去；<br/>
+        <>第三步</>：然后把相关代码粘贴进去；<br/>
         <img src="/pictures/essay2/7.png" alt="Automator 添加代码" class="my-4 mx-auto rounded-lg shadow-lg">
-        <strong>第四步</strong>：导出 APP；<br/>
+        <>第四步</>：导出 APP；<br/>
         <img src="/pictures/essay2/8.png" alt="Automator 导出 APP" class="my-4 mx-auto rounded-lg shadow-lg">
         <img src="/pictures/essay2/9.png" alt="Automator 保存 APP" class="my-4 mx-auto rounded-lg shadow-lg">
-        <strong>第五步</strong>：执行 APP；<br/>
+        <>第五步</>：执行 APP；<br/>
       </p>
 
       <!-- 总结小卡片 -->
