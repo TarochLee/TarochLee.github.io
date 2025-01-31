@@ -7,21 +7,33 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* 定义中文字体，仅用于中文字符 */
+    /* 定义中文字体（华文中宋） */
     @font-face {
-        font-family: 'STZhongsong';
-        src: url('fonts/STZhongsong.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
     }
 
-    /* 西文优先使用 Times New Roman，中文优先使用 STZhongsong */
+    /* 定义英文字体（Times New Roman） */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
     body {
-        font-family: "Times New Roman", serif;
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
     }
-    p, h1, h2, h3, h4, h5, h6, a, span, button {
-        font-family: 'STZhongsong', "Times New Roman", serif;
+
+    /* 保持代码块等宽字体（覆盖全局设置） */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
     }
+
 
     /* 页面填充全屏，footer 固定在底部 */
     html, body {
