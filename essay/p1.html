@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ubuntu系统配置入门——系统中各种源的使用 - Baater 的个人主页</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* 定义中文字体（华文中宋） */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 定义英文字体（Times New Roman） */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
+      margin: 0; /* 移除默认外边距 */
+    }
+
+    /* 仅为段落添加缩进 */
+    p {
+      text-indent: 2em; /* 段落开头空两个格子 */
+    }
+
+    /* 保持代码块等宽字体（覆盖全局设置） */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+
+    /* 页面填充全屏，footer 固定在底部 */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* 深色“终端卡片”样式 + 复制按钮(仅在Hover时出现) */
+    .terminal-card {
+      position: relative;       /* 让复制按钮绝对定位 */
+      background: #1e1e1e;      /* 终端式深色背景 */
+      color: #c7c7c7;           /* 浅灰文字 */
+      padding: 1rem;
+      border-radius: 0.5rem;    /* 更圆润 */
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;        /* 稍微小点像终端 */
+      font-family: Consolas, "Courier New", monospace;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .terminal-card pre {
+      white-space: pre-wrap;    /* 允许换行 */
+      margin: 0;
+    }
+
+    /* 复制按钮默认隐藏，只在 terminal-card hover 时显示 */
+    .copy-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 0.75rem;
+      background: #3f3f46;      /* 深灰按钮背景 */
+      color: #f9f9f9;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;             /* 默认隐藏 */
+      align-items: center;       /* 方便对齐 icon */
+      gap: 0.25rem;
+    }
+    .terminal-card:hover .copy-btn {
+      display: flex;             /* hover时显示 */
+    }
+    .copy-btn:hover {
+      background: #52525b;
+    }
+
+    /* Toast 提示样式 */
+    #toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #333;
+      color: #f0f0f0;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    /* Toast可见时加 .show */
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 表格样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f3f4f6;
+      text-align: center;
+    }
+    td {
+      text-align: center;
+    }
+
+    /* 响应式表格容器 */
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+
+    /* 目录卡片样式 */
+    .toc-card {
+      background: #f0fdfa;      /* 浅绿色背景 */
+      border-left: 4px solid #34d399; /* 绿色边框 */
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .toc-card h2 {
+      font-size: 1.25rem;
+      color: #059669;           /* 深绿色标题 */
+      margin-bottom: 0.5rem;
+    }
+    .toc-card ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .toc-card li {
+      margin-bottom: 0.5rem;
+    }
+    .toc-card a {
+      color: #10b981;           /* 绿色链接 */
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .toc-card a:hover {
+      color: #047857;           /* 深绿色链接 */
+      text-decoration: underline;
+    }
+
+    /* 引言小卡片样式 */
+    .intro-card {
+      background: #fef3c7;      /* 浅黄色背景 */
+      border-left: 4px solid #f59e0b; /* 橙色边框 */
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .intro-card h2 {
+      font-size: 1.5rem;
+      color: #d97706;           /* 橙色标题 */
+      margin-bottom: 0.5rem;
+    }
+
+    /* 说明卡片样式 */
+    .info-card {
+      background: #bfdbfe;      /* 浅蓝色背景 */
+      border-left: 4px solid #60a5fa; /* 蓝色边框 */
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      color: #1e3a8a;           /* 深蓝色文字 */
+    }
+
+    /* 标题不缩进 */
+    h1, h2, h3, h4, h5, h6 {
+      text-indent: 0;
+      margin-top: 1.5rem; /* 添加适当的上边距 */
+      margin-bottom: 0.5rem; /* 添加适当的下边距 */
+    }
+
+    /* 调整标题在容器中的对齐 */
+    .container h1,
+    .container h2,
+    .container h3,
+    .container h4,
+    .container h5,
+    .container h6 {
+      margin-left: 0;
+    }
+  </style>
+</head>
+<body class="text-gray-900">
+
+  <!-- Toast 提示容器，初始隐藏 -->
+  <div id="toast"></div>
+
+  <!-- 顶部标题区域，渐变背景 + 白色文字 + 阴影 -->
+  <header class="relative bg-gradient-to-r from-blue-500 to-blue-600 text-white p-8 text-center shadow-lg">
+    <!-- 主页按钮 (👨‍🎓 现代设计, 固定在顶部) -->
+    <a href="/index.html" class="absolute left-6 top-4 flex items-center justify-center 
+            w-12 h-12 bg-white bg-opacity-20 rounded-full backdrop-blur-lg shadow-lg text-3xl transition 
+            hover:bg-opacity-30 hover:scale-110 hover:shadow-2xl active:scale-95 focus:outline-none focus:ring-2 focus:ring-white">
+      👨‍🎓
+    </a>
+
+    <!-- 标题 -->
+    <h1 class="text-3xl font-normal tracking-tight mt-4">🐧 Ubuntu系统配置入门——系统中各种源的使用</h1>
+  </header>
+  <p class="bg-gray-200 text-gray-700 text-center py-2">
+    本文章已经同步至本人
+    <a href="https://blog.csdn.net/Sea_wind0_/article/details/145385915?spm=1001.2014.3001.5502" class="text-blue-600 no-underline">
+      CSDN 账号
+    </a>，感谢阅读！
+  </p>
+
+  <!-- 主体内容容器 -->
+  <main class="container mx-auto px-6 py-8">
+
+    <!-- 文章主体：白色背景、大圆角、大阴影、加大字体和行距 (leading-loose) -->
+    <!-- 使用 p-[3em] 实现正文上下左右 3 个中文字符的页边距 -->
+    <article class="bg-white shadow-2xl rounded-3xl p-[3em] mb-6 text-xl leading-loose">
+
+      <!-- 标题信息，可选 -->
+      <div class="mb-4 text-center">
+        <p class="text-gray-600 text-base">
+          作者：Baater | 发布时间：2025-01-31 10:00:00
+        </p>
+      </div>
+
+      <!-- 目录卡片开始 -->
+      <div class="toc-card">
+        <h2>目录</h2>
+        <ul>
+          <li><a href="#python-source" class="no-underline">（一）关于Python的源</a></li>
+          <li><a href="#ubuntu-sources" class="no-underline">（二）关于Ubuntu系统的软件源</a></li>
+        </ul>
+      </div>
+      <!-- 目录卡片结束 -->
+
+      <!-- 引言小卡片开始 -->
+      <div class="intro-card">
+        <h2>引言</h2>
+        <p>
+          在 Linux 系统中，软件源（Repository）是软件包管理和安装的核心组成部分。无论是安装系统工具、开发环境，还是第三方应用程序，软件源都扮演着至关重要的角色。通过配置合适的源，用户可以快速、安全地获取和安装所需的软件包，同时还能享受更快的下载速度和更稳定的服务。
+          对于国内用户来说，由于网络环境的限制，直接访问官方源可能下载速度缓慢甚至失败。因此，合理配置和使用国内的镜像源，是提升 Linux 系统使用体验的重要一步。
+        </p>
+        <p>
+          本文将详细介绍 Linux 系统中常见的源配置，包括以下两部分内容：
+        </p>
+        <ol class="list-decimal list-inside my-2 pl-4">
+          <li>Python 的源：用于通过 pip 安装和管理 Python 包。</li>
+          <li>系统的源：用于通过包管理工具（如“apt”、“pacman”等）安装和管理系统软件包。</li>
+        </ol>
+        <p>
+          通过本文的指导，您将学会如何配置和使用这些源，从而更高效地完成软件安装和管理任务。
+        </p>
+      </div>
+      <!-- 引言小卡片结束 -->
+
+      <!-- 正文内容开始 -->
+      <h3 id="python-source" class="text-2xl font-bold mt-6" style="color: #3b82f6;">（一）关于Python的源</h3>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #6366f1;">1. 什么是pip？</h4>
+      <p>
+        在 Python 中，我们常常会使用一些第三方库来扩展 Python 的功能，例如数据处理库“pandas”、机器学习库“scikit-learn”以及最常见的图像处理库“opencv-python”等。这些库并不是 Python 标准库的一部分，因此需要额外安装。而pip就是Python的官方包管理工具，用于安装和管理这些第三方库。
+      </p>
+
+    <!-- 安装pip卡片开始 -->
+    <div class="info-card">
+      <p>
+        在 Ubuntu 系统中，pip 是 Python 的包管理工具，用于安装和管理 Python 包。
+      </p>
+    <h5 class="text-lg font-semibold mt-4" style="color: #3b82f6;">方法一：使用get-pip.py安装pip</h5>
+      <p>首先下载安装脚本：</p>
+      <!-- 终端卡片：curl -O https://bootstrap.pypa.io/get-pip.py -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd1')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+        </svg>
+        <!-- 复制 -->
+        </button>
+        <pre id="cmd1">curl -O https://bootstrap.pypa.io/get-pip.py</pre>
+      </div>
+      <p>运行python安装pip：</p>
+      <!-- 终端卡片：python get-pip.py -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd2')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+        </svg>
+        <!-- 复制 -->
+        </button>
+        <pre id="cmd2">python get-pip.py</pre>
+      </div>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #3b82f6;">方法二：apt安装pip</h5>
+      <p>使用 apt 安装 pip：</p>
+      <!-- 终端卡片：sudo apt install python3-pip -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd3')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+        </svg>
+        <!-- 复制 -->
+        </button>
+        <pre id="cmd3">sudo apt install python3-pip</pre>
+      </div>
+    </div>
+    <!-- 安装pip卡片结束 -->
+    </div>
+    <p style="color: red;">
+    那么如何使用pip来安装这些库呢？
+    </p>
+      <p>
+        以安装opencv-python库为例，可以使用以下命令：
+      </p>
+      <!-- 终端卡片：pip install opencv-python -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd3')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd3">pip install opencv-python</pre>
+      </div>
+      <p>
+        当然，除了使用pip，某些 Python 库也可以通过系统的包管理器（如“apt”）安装。例如，在Ubuntu 系统中，可以使用以下命令安装“opencv-python”：
+      </p>
+      <p>
+        <div class="terminal-card">
+            <button class="copy-btn" onclick="copyCode('cmd4')">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                         stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+                </svg>
+                <!-- 复制 -->
+            </button>
+            <pre id="cmd4">sudo apt install python3-opencv</pre>
+        </div></button>
+      </p>
+      <p>
+        不过，系统包管理器安装的库通常是针对系统环境的，可能不是最新版本，因此更推荐使用 pip 来安装 Python 库。
+      </p>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #6366f1;">2. pip有什么作用？</h4>
+      <ul class="list-disc list-inside my-2">
+        <li>安装库：从 Python 包索引（PyPI，Python Package Index）下载并安装第三方库。</li>
+        <li>卸载库：卸载已安装的库。</li>
+        <li>更新库：将已安装的库更新到最新版本。</li>
+        <li>查看已安装的库：列出当前环境中安装的所有库及其版本。</li>
+      </ul>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #6366f1;">如何升级pip？</h4>
+      <p>
+        在系统终端中升级pip的命令如下：
+      </p>
+      <!-- 终端卡片：python -m pip install --upgrade pip -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd4')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd4">python -m pip install --upgrade pip</pre>
+      </div>
+      <p>
+        如果您到 pip 默认源的网络连接较差，可以临时使用清华源来升级 pip：
+      </p>
+      <!-- 终端卡片：python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --upgrade pip -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd5')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd5">python -m pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple --upgrade pip</pre>
+      </div>
+      <p>
+        如果需要卸载 <code>opencv-python</code>，可以使用：
+      </p>
+      <!-- 终端卡片：pip uninstall opencv-python -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd6')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd6">pip uninstall opencv-python</pre>
+      </div>
+      <p>
+        如果需要更新 <code>opencv-python</code>，可以使用：
+      </p>
+      <!-- 终端卡片：pip install --upgrade opencv-python -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd7')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd7">pip install --upgrade opencv-python</pre>
+      </div>
+      <p>
+        若要指定某个版本的库的安装，可以直接在库名称后面直接添加“== 版本号”来指定版本。
+      </p>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #6366f1;">3. 什么是pip源？</h4>
+      <p>
+        在使用pip安装库时，默认情况下，pip会从官方的 PyPI（Python Package Index）源下载库文件。然而，由于网络原因，国内用户访问 PyPI 可能会非常缓慢，甚至无法连接。为了解决这个问题，我们可以使用国内的镜像源。
+      </p>
+
+      <p>
+        以下是一些常用的国内 Python 镜像源：
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>清华大学源：<a href="https://pypi.tuna.tsinghua.edu.cn/simple/" class="text-blue-600 hover:underline">https://pypi.tuna.tsinghua.edu.cn/simple/</a></li>
+        <li>中国科技大学源：<a href="https://pypi.mirrors.ustc.edu.cn/simple/" class="text-blue-600 hover:underline">https://pypi.mirrors.ustc.edu.cn/simple/</a></li>
+      </ul>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #6366f1;">如何使用镜像源？</h4>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">一、临时使用：在安装库时，可以通过 -i 参数指定镜像源。例如：</h5>
+      <!-- 终端卡片：pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple/ -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd8')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd8">pip install opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple/</pre>
+      </div>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">二、永久配置：</h5>
+    <!-- 永久配置卡片开始 -->
+    <div class="info-card">
+      <p>
+        永久配置方法推荐：鱼香肉丝一键安装
+      </p>
+      <!-- 终端卡片：wget http://fishros.com/install -O fishros && . fishros -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd9')">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+              d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+        </svg>
+        <!-- 复制 -->
+        </button>
+        <pre id="cmd9">wget http://fishros.com/install -O fishros && . fishros</pre>
+      </div>
+    </div>
+    <!-- 永久配置卡片结束 -->
+      <p>
+        方法一：可以通过修改 pip 的配置文件来永久设置镜像源。
+      </p>
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">方法一省流版本：</h5>
+      <!-- 终端卡片：mkdir -p ~/.pip && echo -e "[global]\nindex-url = https://pypi.tuna.tsinghua.edu.cn/simple" > ~/.pip/pip.conf -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd10')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd10">mkdir -p ~/.pip && echo -e "[global]
+    index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+    [install]
+    trusted-host = pypi.tuna.tsinghua.edu.cn" > ~/.pip/pip.conf</pre>
+      </div>
+      <p>
+        1. 创建或编辑配置文件：在Linux 或 macOS创建 <code>~/.pip/pip.conf</code> 文件
+      </p>
+      <p>
+        2. 添加以下内容：
+      </p>
+      <!-- pip.conf 内容已经通过终端命令设置，无需再重复 -->
+      <p>
+        3. 验证配置：运行 <code>pip config list</code> 查看配置是否生效。
+      </p>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">方法二：使用命令pip config来设置镜像源。</h5>
+      <p>
+        你也可以使用命令来快速设置镜像源，而无需手动编辑配置文件。
+      </p>
+      <h6 class="text-lg font-semibold mt-4" style="color: #22c55e;">1. 设置镜像源：在终端或命令提示符中运行以下命令，将镜像源设置为清华源：</h6>
+      <!-- 终端卡片：pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd11')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd11">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</pre>
+      </div>
+      <h6 class="text-lg font-semibold mt-4" style="color: #22c55e;">2. 验证配置：运行以下命令，查看当前的 pip 配置，确认镜像源是否已成功设置</h6>
+      <!-- 终端卡片：pip config list -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd12')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd12">pip config list</pre>
+      </div>
+      <p>
+        如果输出中包含以下内容，说明配置成功：
+    </p>
+    <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple</pre>
+      <h6 class="text-lg font-semibold mt-4" style="color: #22c55e;">3. 恢复默认源：如果你想恢复默认的 PyPI 源，可以运行以下命令：</h6>
+      <!-- 终端卡片：pip config unset global.index-url -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd13')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd13">pip config unset global.index-url</pre>
+      </div>
+      <p>
+        在Windows下，你需要在当前用户目录下（<code>C:\Users\xx\pip</code>，xx 表示当前使用的用户）创建一个 <code>pip.ini</code>，并在 <code>pip.ini</code> 文件中输入以下内容：
+      </p>
+      <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+[install]
+trusted-host = pypi.tuna.tsinghua.edu.cn
+</pre>
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">如何设置特殊的情况下的config呢？</h5>
+      <p>
+        首先我们讲解的是 pip.conf 文件的写法：
+      </p>
+      <!-- 插入图片/pictures/essay1/1.png -->
+        <img src="/pictures/essay1/1.png" alt="pip.conf文件的写法" class="w-full rounded-lg shadow-lg my-4">
+    <!-- 黄色小卡片 -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-300 p-4 rounded-lg shadow my-4">
+        <p>
+            我们先使用 <code>pip -h</code> 命令来查看 pip 的使用帮助，我们发现每个选项都有完整版本（前面有两个 - 号的）和简略版本（前面只有一个 - 号的）。在执行 pip 时，命令行里为这些选项赋值，如果选项太多，写在命令行里明显不方便，而且也不便于重复调用，因此我们使用 pip 的配置文件 <code>pip.conf</code> 来规定 pip 的行为。
+        </p>
+        <p>
+            配置文件的作用相当于为命令行选项指定了默认值。我们如果在配置文件中设置了 <code>index-url = https://pypi.org/simple</code>，在执行安装命令时，<code>pip install package</code> 将自动使用指定的 <code>index-url</code>；我们如果在 <code>[install]</code> 中设置了 <code>no-cache-dir = true</code>，则无需每次执行命令时都手动添加 <code>--no-cache-dir</code>。
+        </p>
+        <p>
+            pip 的配置文件的等效作用就是为命令行选项赋值，我们在配置文件中采用完整版本的选项名称，<code>pip.conf</code> 文件的位置根据操作系统不同而有所区别：
+        </p>
+        <ul class="list-disc list-inside my-2">
+            <li>Linux/macOS：配置文件通常位于 <code>~/.pip/pip.conf</code> 或 <code>/etc/pip.conf</code>。</li>
+            <li>Windows：配置文件位于 <code>%APPDATA%\pip\pip.ini</code>。</li>
+            <li>用户级别的配置文件路径在 <code>~/.pip/pip.conf</code>，而系统级别配置文件则位于 <code>/etc/pip.conf</code>。</li>
+        </ul>
+    </div>
+      <p>
+        在了解了基本原理之后，我们尝试去编写ubuntu的pip配置文件，pip.conf 文件的格式为标准的 INI 格式，由多个 [section] 组成。每个 [section] 包含了一组选项和值。
+      </p>
+      <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+[global]
+# 设置全局选项
+timeout = 60                  # 设置超时时间为 60 秒
+index-url = https://pypi.org/simple  # 设置 PyPI 源
+[install]
+# 安装时的默认选项
+no-cache-dir = true           # 禁用缓存
+target = /custom/python/libs  # 自定义安装目录
+[list]
+# 列出包时的选项
+format = columns              # 设置输出格式为列状
+</pre>
+      <p>
+        我们对这个文件的组成做出以下提示：
+      </p>
+
+      <h6 class="text-lg font-semibold mt-4" style="color: #16a34a;">[global] 部分</h6>
+      <p>
+        全局选项会影响所有的 pip 命令，常见的选项有：
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>timeout：设置超时时间（单位：秒）。</li>
+        <li>index-url：设置 PyPI 源。</li>
+        <li>extra-index-url：为 PyPI 之外的源添加额外的索引地址。</li>
+        <li>trusted-host：设置受信任的主机地址，绕过 SSL 验证。</li>
+      </ul>
+
+      <h6 class="text-lg font-semibold mt-4" style="color: #16a34a;">[install] 部分</h6>
+      <p>
+        该部分专门影响 pip install 命令，常用选项包括：
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>no-cache-dir：禁用缓存。</li>
+        <li>target：设置安装的目标目录。</li>
+        <li>requirement：指定默认的依赖文件路径（相当于命令行的 -r）。</li>
+      </ul>
+
+      <h6 class="text-lg font-semibold mt-4" style="color: #16a34a;">[list] 部分</h6>
+      <p>
+        该部分影响 pip list 命令：
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>format：设置显示格式（legacy、columns 等）。</li>
+      </ul>
+
+      <p>
+        除此之外，pip的设置中的优先级也是需要我们注意的，pip配置的优先级从高到低依次为：
+      </p>
+      <ol class="list-decimal list-inside my-2 pl-4">
+        <li>命令行选项（最高优先级）</li>
+        <li>用户级别的配置文件（~/.pip/pip.conf 或 %APPDATA%\pip\pip.ini）</li>
+        <li>系统级别的配置文件（/etc/pip.conf）。</li>
+      </ol>
+      <p>
+        如果某个选项在多个地方设置，则优先级高的设置会覆盖低优先级的设置。
+      </p>
+
+      <h6 class="text-lg font-semibold mt-4" style="color: #16a34a;">如何同时配置两个源？（例如清华源为主，中科大源为辅）</h6>
+      <p>
+        在 pip.conf 文件中，可以通过设置 <code>index-url</code> 和 <code>extra-index-url</code> 来实现主辅源配置。
+      </p>
+      <!-- 将trusted-host配置转换为终端命令 -->
+      <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+[global]
+index-url=https://pypi.tuna.tsinghua.edu.cn/simple  # 主源（清华源）
+extra-index-url=https://pypi.mirrors.ustc.edu.cn/simple  # 辅源（中科大源）
+trusted-host=pypi.tuna.tsinghua.edu.cn pypi.mirrors.ustc.edu.cn
+</pre>
+      <p>
+        我们使用 <code>index-url</code> 设置主源地址，pip 将优先从这个源中查找包；而 <code>extra-index-url</code> 设置辅源地址，如果主源中找不到某些包，会从辅源中查找（<code>trusted-host</code> 用于指定受信任的主机，绕过 SSL 验证）。在这里我们需要注意的是：我们应当将 <code>trusted-host</code> 配置合并为一行，主机地址用空格分隔，否则会出现如下提示：
+      </p>
+      <pre class="bg-gray-100 p-4 rounded-lg overflow-x-auto">
+root@ubuntu:/# pip config list
+Configuration file could not be loaded.
+While reading from '/root/.pip/pip.conf' [line  8]: option 'trusted-host' in section 'global' already exists
+</pre>
+
+      <h3 id="ubuntu-sources" class="text-2xl font-bold mt-6" style="color: #ec4899;">（二）关于Ubuntu系统的软件源</h3>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #db2777;">1. 为什么需要源？</h4>
+      <p>
+        Ubuntu 源，也叫软件源，是存储系统更新和软件包的服务器，Ubuntu 系统的软件安装、更新以及依赖管理都依赖于它。软件源的主要作用包括快速安装软件、获取系统更新（如安全补丁和功能更新），以及自动解决依赖关系以确保软件正常运行。
+      </p>
+      <p>
+        最初，Ubuntu 官方提供了一个全球通用的源，但由于地域差异和网络原因，访问官方源可能较慢，因此许多大学和云服务商（如阿里云、清华大学等）创建了镜像源以提升下载速度。Ubuntu 源根据软件的维护和支持方式分为以下几种：Main（官方支持的免费开源软件）、Restricted（官方支持的非开源软件）、Universe（社区维护的免费开源软件）和 Multiverse（非自由授权软件）。
+      </p>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #db2777;">2. 软件源的作用？</h4>
+      <p>
+        软件源是 Ubuntu 系统中安装、更新和管理软件的重要工具，其作用主要包括快速安装软件、系统更新和依赖关系的解决。软件源是一个存储大量软件包的服务器，所有官方的软件包都集中存储在这里，用户可以通过命令（如 <code>apt install</code>）快速安装所需的软件。此外，软件源还提供系统更新服务，包括安全补丁、功能更新和依赖调整，确保系统始终保持最新、安全的状态。软件源也可以自动解析和解决软件之间的依赖关系，确保安装和运行的顺畅，同时提供官方测试的稳定版本，避免因使用未经验证的软件而引发问题。
+      </p>
+      <p>
+        在 Ubuntu 系统中，apt 是一种非常重要的包管理工具，用于从软件源中安装、更新和管理软件。常见的 apt 命令包括 <code>apt update</code>，用于同步最新的软件包信息；<code>apt upgrade</code>，用于升级系统中所有可以更新的软件包；以及 <code>apt install</code>，用于快速安装指定的软件。通过 <code>apt remove</code> 可以卸载软件，而 <code>apt purge</code> 则可以连同配置文件一起删除软件。如果需要查找软件，可以使用 <code>apt search &lt;关键字&gt;</code>；而使用 <code>apt list --installed</code> 则可以列出当前系统中已安装的软件包。此外，apt 提供了清理工具，比如 <code>apt autoremove</code> 用于删除系统中不再需要的依赖包，<code>apt clean</code> 用于清理缓存文件。这些命令使得软件管理变得高效且简单。
+      </p>
+      <p>
+        在Ubuntu系统中，软件源的配置文件主要存储在 <code>/etc/apt/</code> 目录中，<code>/etc/apt/sources.list</code> 是主要配置文件，定义了系统从哪些服务器获取软件包和更新，文件中每一行表示一个软件源，包括软件包的类型、服务器地址、系统版本代号和组件；而 <code>/etc/apt/sources.list.d/</code> 是附加软件源的目录，存储额外软件源的配置文件，其中的每个文件通常与特定的软件或 PPA（Personal Package Archive）相关；<code>/etc/apt/trusted.gpg</code> 和 <code>/etc/apt/trusted.gpg.d/</code> 用于存储 GPG 公钥，用于验证软件包的真实性和完整性：<code>trusted.gpg</code> 是主公钥存储文件，而 <code>trusted.gpg.d/</code> 目录存储的是分散的公钥文件，当添加一个新源（例如 PPA）时，通常需要导入相应的公钥以确保安全性。
+      </p>
+      <p>
+        为了确保从软件源中下载的软件包是安全的，Ubuntu 使用了一种基于公钥和私钥的验证机制。公钥（Public Key） 是一个公开的验证工具，用于确认软件包来源的可信性。Ubuntu 的软件包由开发者用私钥签名，而用户在安装软件时通过公钥验证软件包是否被篡改或损坏。如果没有正确的公钥，系统会提示“无法验证软件包来源”，此时需要手动添加相关软件源的公钥，从而完成安全验证。这种机制保证了软件包的完整性，同时也防止了潜在的恶意软件通过不受信任的源传播。
+      </p>
+
+      <h4 class="text-xl font-semibold mt-4" style="color: #db2777;">3. 如何配置软件源？</h4>
+      <p>
+        Ubuntu 的软件源配置主要有两种方式：修改官方或镜像源（sources.list） 和 添加 PPA（Personal Package Archive，个人包档案）。
+      </p>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">如何修改官方或镜像源？</h5>
+      <p>
+        我们仍然可以使用上面提供的鱼香肉丝来设置系统软件源。
+        首先，软件源文件需要根据你的 Ubuntu 版本代号进行配置。
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>Ubuntu 22.04 -> jammy</li>
+        <li>Ubuntu 20.04 -> focal</li>
+        <li>Ubuntu 18.04 -> bionic</li>
+      </ul>
+      <p>
+        其次，我们需要备份现有配置文件。为了防止意外，可以先备份 <code>/etc/apt/sources.list</code> 文件：
+      </p>
+      <!-- 终端卡片：sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd14')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd14">sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak</pre>
+      </div>
+      <p>
+        备份好以后我们就可以开始编辑源文件，我们打开 <code>sources.list</code> 文件，根据版本代号选择合适的镜像源写入即可。我们以清华源为例，做出详细介绍：
+      </p>
+      <!-- 插入图片2 -->
+        <img src="/pictures/essay1/2.png" alt="清华源的地址" class="w-full rounded-lg shadow-lg my-4">
+      <p>
+            首先，我们需要找到清华源的地址，清华源的地址为：<a href="https://mirrors.tuna.tsinghua.edu.cn/ubuntu/" class="text-blue-600 hover:underline">https://mirrors.tuna.tsinghua.edu.cn/ubuntu/</a>。
+      <p>
+        我们在清华园官方网站找到软件源页面，然后选择对应的系统架构，再选择对应的系统版本号，复制即可。
+      </p>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">最后，保存文件后运行以下命令以更新源列表：</h5>
+      <!-- 终端卡片：sudo apt-get update -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd15')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd15">sudo apt-get update</pre>
+      </div>
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">省流命令：</h5>
+      <p>
+        在ubuntu 22.04中我们可以使用下面的单行命令，将内容一次性写入到 <code>/etc/apt/sources.list</code> 文件中：
+      </p>
+      <!-- 终端卡片：sudo sh -c 'echo "...sources.list内容..." > /etc/apt/sources.list' -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd16')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd16">sudo sh -c 'echo "# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-backports main restricted universe multiverse
+# 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换
+deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+# deb-src http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe multiverse
+# 预发布软件源，不建议启用
+# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse
+# # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ jammy-proposed main restricted universe multiverse" > /etc/apt/sources.list'</pre>
+      </div>
+
+      <h5 class="text-lg font-semibold mt-4" style="color: #10b981;">如何添加 PPA？</h5>
+      <p>
+        PPA 是由个人或组织提供的第三方软件仓库，通常用于安装官方仓库中没有的软件或较新的版本。我们以Ubuntu 22.04上安装Python 3.10为例进行介绍：
+      </p>
+      <p>
+        首先，我们需要添加一个PPA（Personal Package Archive）。
+      </p>
+      <!-- 终端卡片：sudo add-apt-repository ppa:deadsnakes/ppa -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd17')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd17">sudo add-apt-repository ppa:deadsnakes/ppa</pre>
+      </div>
+      <!-- 终端卡片：sudo apt update -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd18')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4" />
+          </svg>
+          <!-- 复制 -->
+        </button>
+        <pre id="cmd18">sudo apt update</pre>
+      </div>
+      <p>
+        其次使用 <code>sudo apt install python3.10</code> 安装即可。
+      </p>
+
+      <!-- 说明卡片 -->
+      <div class="info-card">
+        <p>
+          说明：本内容旨在提供简要介绍，以便诸位快速了解关于系统源的相关信息。文中部分命令仅供参考使用，实际操作可能需结合具体场景进行调整；如需更详细的信息或专业支持，请根据实际需求查阅相关文档或联系专业人员。
+        </p>
+      </div>
+
+      <!-- 总结小卡片 -->
+      <div id="summary" class="my-6 p-6 bg-yellow-50 border-l-4 border-yellow-300 rounded-lg shadow">
+        <h3 class="text-2xl font-semibold mb-4 text-yellow-700">总结</h3>
+        <p>
+          通过本文的指导，您已经了解了如何配置和使用 Ubuntu 系统中的各种软件源，包括 Python 的 pip 源和系统的 apt 源。合理配置软件源不仅可以提高软件安装和更新的效率，还能确保软件包的安全性和稳定性。希望这些信息能帮助您更高效地管理和维护您的 Ubuntu 系统。
+        </p>
+      </div>
+      <!-- 文章主体结束 -->
+
+    </article>
+
+  </main>
+
+  <!-- 底部：可做淡入淡出的渐变背景 -->
+  <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white text-center p-4 mt-auto shadow-inner">
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:text-blue-300">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:text-blue-300">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500">
+        关闭
+      </button>
+    </div>
+  </div>
+
+  <!-- JS 脚本区 -->
+  <script>
+    /* 打赏弹窗功能 */
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
+
+    /**
+     * 复制代码功能:
+     * @param {string} id - pre 容器的 id
+     */
+    function copyCode(id) {
+      const codeText = document.getElementById(id).innerText;
+
+      navigator.clipboard.writeText(codeText).then(() => {
+        showToast('复制成功！');
+      }, () => {
+        showToast('复制失败，请手动复制');
+      });
+    }
+
+    /**
+     * Toast 提示
+     * - 内容自动显示，2s 后消失
+     */
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('show');
+      // 2 秒后自动隐藏
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+
+  <!-- 这里是Toast容器，默认隐藏 -->
+  <div id="toast"></div>
+
+</body>
+</html>
