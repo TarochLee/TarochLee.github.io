@@ -97,12 +97,12 @@
       
       <!-- 底部图标容器：使用 mt-auto 将容器推至底部，并用 flex 水平排列图标 -->
       <div class="mt-auto flex space-x-4">
-          <!-- 游戏图标，添加 onclick 阻止事件冒泡 -->
-          <a href="/games/pacman/index.html" onclick="event.stopPropagation()">
+          <!-- 游戏图标 -->
+          <a href="/games/pacman/index.html">
             <span class="text-3xl">🎮</span>
           </a>
-          <!-- 视频图标，同理 -->
-          <a href="/video/index.html" onclick="event.stopPropagation()">
+          <!-- 视频图标 -->
+          <a href="/video/index.html">
             <span class="text-3xl">📹</span>
           </a>
       </div>
@@ -225,17 +225,6 @@
   </div>
 
   <script>
-    /* 显示提示信息的函数 */
-    function showToast(message) {
-      const toast = document.createElement('div');
-      toast.innerText = message;
-      toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded';
-      document.body.appendChild(toast);
-      setTimeout(() => {
-        toast.remove();
-      }, 2000);
-    }
-
     /* 打赏弹窗功能 */
     function openModal() {
       document.getElementById('rewardModal').classList.remove('hidden');
@@ -267,17 +256,12 @@
         panelOpen = false;
       }
     }
-
+  </script>
+  <script>
     // 禁用右键菜单
     document.addEventListener('contextmenu', function(event) {
       event.preventDefault();
       showToast('右键已禁用');
-    });
-    
-    // 禁止复制
-    document.addEventListener('copy', function(event) {
-      event.preventDefault();
-      showToast('复制已禁用');
     });
   
     // 禁用特定的键盘快捷键
