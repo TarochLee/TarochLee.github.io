@@ -91,21 +91,119 @@
     </footer>
     
     <!-- 右下角悬浮提示球 -->
-	<div class="fixed bottom-6 right-6 group">
-		<div class="relative w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 text-white 
-					flex items-center justify-center rounded-full shadow-xl cursor-pointer 
-					transition-transform transform hover:scale-110 active:scale-95">
-			💡
-		</div>
-		<div class="absolute bottom-20 right-0 w-64 p-4 bg-white text-gray-900 shadow-lg 
-					rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-			<h3 class="font-semibold text-lg text-blue-600">📜 版权声明</h3>
-			<p class="text-sm mt-2">本游戏由 
-				<a href="https://passer-by.com/" class="text-blue-500 underline">passer-by.com</a> 
-				制作，请尊重作者，引用请注明来源。
-			</p>
+	<!-- 右下角悬浮提示球 -->
+	<div id="floating-ball" class="floating-ball">
+		💡
+		<div class="tooltip">
+			<div class="tooltip-header">
+				<h3>📜 版权声明</h3>
+			</div>
+			<div class="tooltip-body">
+				<p>本游戏由 
+					<a href="https://passer-by.com/" class="text-blue-500 underline">passer-by.com</a> 
+					制作，请尊重作者，引用请注明来源。
+				</p>
+			</div>
 		</div>
 	</div>
+
+	<style>
+		/* 悬浮球样式 */
+		.floating-ball {
+			position: fixed;
+			bottom: 60px;
+			right: 50px;
+			width: 70px;
+			height: 70px;
+			background: radial-gradient(circle at 30% 30%, #4F46E5, #3B82F6);
+			color: white;
+			font-size: 28px;
+			font-weight: bold;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			cursor: grab;
+			box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25);
+			user-select: none;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.floating-ball:active {
+			cursor: grabbing;
+			transform: scale(1.15);
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+		}
+
+		/* 现代化弹出框 */
+		.tooltip {
+			position: absolute;
+			bottom: 80px;
+			right: -20px;
+			width: 240px;
+			background: white;
+			color: #333;
+			border-radius: 12px;
+			box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+			font-size: 14px;
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.3s ease, transform 0.3s ease;
+			transform: translateY(10px);
+			overflow: hidden;
+		}
+
+		.tooltip-header {
+			background: linear-gradient(to right, #3B82F6, #1E40AF);
+			color: white;
+			padding: 10px;
+			font-size: 16px;
+			font-weight: bold;
+			border-top-left-radius: 12px;
+			border-top-right-radius: 12px;
+		}
+
+		.tooltip-body {
+			padding: 12px;
+			background: #f9fafb;
+			line-height: 1.5;
+			border-bottom-left-radius: 12px;
+			border-bottom-right-radius: 12px;
+		}
+
+		.floating-ball:hover .tooltip {
+			opacity: 1;
+			visibility: visible;
+			transform: translateY(0);
+		}
+	</style>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			let ball = document.getElementById("floating-ball");
+			let isDragging = false, offsetX, offsetY;
+
+			ball.addEventListener("mousedown", function (e) {
+				isDragging = true;
+				offsetX = e.clientX - ball.getBoundingClientRect().left;
+				offsetY = e.clientY - ball.getBoundingClientRect().top;
+				ball.style.cursor = "grabbing";
+			});
+
+			document.addEventListener("mousemove", function (e) {
+				if (!isDragging) return;
+				let x = e.clientX - offsetX;
+				let y = e.clientY - offsetY;
+				ball.style.left = `${x}px`;
+				ball.style.top = `${y}px`;
+			});
+
+			document.addEventListener("mouseup", function () {
+				isDragging = false;
+				ball.style.cursor = "grab";
+			});
+		});
+	</script>
     
     <script src="/games/pacman/static/script/game.js"></script>
     <script src="/games/pacman/static/script/index.js"></script>
