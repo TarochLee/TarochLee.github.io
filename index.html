@@ -34,7 +34,6 @@
       font-family: Consolas, "Courier New", monospace !important;
     }
 
-
     /* 页面填充全屏，footer 固定在底部 */
     html, body {
         height: 100%;
@@ -52,14 +51,14 @@
     左侧“卡片”式个人信息面板 
     - 宽度 w-80 = 20rem
     - 四角圆弧 rounded-3xl
-    - 初始状态下，向左平移 -translate-x-72 (18rem)
+    - 初始状态下，向左平移 -translate-x-72 (18rem) 并旋转 -1deg，
       这样面板只剩下 2rem(= 20rem-18rem) 显示在屏幕里
     - 点击任意区域即可展开，点击面板顶部箭头收回
   -->
   <div 
     id="infoPanel"
     class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
-           transform -translate-x-72 transition-transform duration-300 z-40
+           transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40
            rounded-3xl overflow-hidden cursor-pointer"
     onclick="openPanel()"
   >
@@ -80,7 +79,7 @@
     </div>
 
     <!-- 面板主体内容 -->
-    <div class="p-6 flex flex-col items-center">
+    <div class="p-6 flex flex-col items-center h-full">
       <!-- 头像：pictures/avatar.png，圆形 -->
       <img src="/pictures/avatar.png" alt="头像"
            class="w-24 h-24 rounded-full mb-4 shadow" />
@@ -95,19 +94,22 @@
       <p class="text-base font-normal text-gray-800 mb-4">
         邮箱：wlantuya@outlook.com
       </p>
-      <!-- 游戏 -->
-      <!-- 游戏机图标 -->
-      <a href="/games/pacman/index.html" class="mt-auto">
-        <span class="text-3xl">🎮</span>
-      </a>
-      <!-- 视频图标 -->
-      <a href="/video/index.html" class="mt-4">
-        <span class="text-3xl">📹</span>
-      </a>
+      
+      <!-- 底部图标容器：使用 mt-auto 将容器推至底部，并用 flex 水平排列图标 -->
+      <div class="mt-auto flex space-x-4">
+          <!-- 游戏图标 -->
+          <a href="/games/pacman/index.html">
+            <span class="text-3xl">🎮</span>
+          </a>
+          <!-- 视频图标 -->
+          <a href="/video/index.html">
+            <span class="text-3xl">📹</span>
+          </a>
+      </div>
     </div>
   </div>
 
-  <header class="bg-blue-600 p- text-center min-h-[200px] flex flex-col justify-center">
+  <header class="bg-blue-600 text-center min-h-[200px] flex flex-col justify-center p-4">
     <h1 class="mx-auto text-4xl font-bold rainbow-dark-text">
       📣BAATER的个人主页
     </h1>
@@ -156,17 +158,16 @@
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
               
               <!-- 项目 1 -->
-                <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
                   <p class="mt-2 font-normal">
                   关于 Ubuntu 系统中的 pip 和软件源的换源。
                   </p>
-                  <a href="/essay/p1.html" 
-                   class="text-blue-500 mt-2 inline-block">查看详情</a>
-                </div>
+                  <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
+              </div>
 
               <!-- 项目 2 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                 <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
                 <p class="mt-2 font-normal">
                     在 Macos 本地部署 Deepseek 模型的详细指南。
@@ -175,28 +176,28 @@
               </div>
 
               <!-- 项目 3 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
                   <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
 
               <!-- 项目 4 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
                   <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
 
               <!-- 项目 5 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">💡 机器学习基础</h3>
                   <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
 
               <!-- 项目 6 -->
-              <div class="bg-gray-200 p-4 rounded-lg">
+              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
                   <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
@@ -234,13 +235,13 @@
 
     let panelOpen = false;
 
-    /* 点击卡片展开 */
+    /* 点击卡片展开：同时添加微调的旋转效果 */
     function openPanel() {
       if (!panelOpen) {
         const panel = document.getElementById('infoPanel');
-        // 移除 -translate-x-72，变成 translate-x-0
-        panel.classList.remove('-translate-x-72');
-        panel.classList.add('translate-x-0');
+        // 移除 -translate-x-72 和旋转 -1deg，添加 translate-x-0 和旋转 +1deg
+        panel.classList.remove('-translate-x-72', 'rotate-[-1deg]');
+        panel.classList.add('translate-x-0', 'rotate-[1deg]');
         panelOpen = true;
       }
     }
@@ -250,8 +251,8 @@
       e.stopPropagation(); // 防止点击箭头后又触发父元素事件
       if (panelOpen) {
         const panel = document.getElementById('infoPanel');
-        panel.classList.remove('translate-x-0');
-        panel.classList.add('-translate-x-72');
+        panel.classList.remove('translate-x-0', 'rotate-[1deg]');
+        panel.classList.add('-translate-x-72', 'rotate-[-1deg]');
         panelOpen = false;
       }
     }
