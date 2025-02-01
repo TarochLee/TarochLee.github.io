@@ -48,55 +48,32 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(90deg, #3B82F6, #1E40AF);
+            position: relative;
+            background: linear-gradient(to right, #3B82F6, #1E40AF);
             color: white;
             padding: 16px;
             text-align: center;
             border-radius: 12px 12px 0 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .info p {
             font-size: 1rem;
             color: #1E40AF;
-        }
-        
-        /* 右侧悬浮球 */
-        .floating-ball {
-            position: fixed;
-            right: 20px;
-            bottom: 20px;
-            width: 50px;
-            height: 50px;
-            background: #3B82F6;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        .floating-ball:hover .tooltip {
-            display: block;
-        }
-        .tooltip {
-            display: none;
-            position: absolute;
-            bottom: 60px;
-            right: 0;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            white-space: nowrap;
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-6">
         <div class="game-container">
-            <div class="header">
+            <header class="relative bg-gradient-to-r from-blue-500 to-blue-600 text-white p-8 text-center shadow-lg">
+                <!-- 主页按钮 (👨‍🎓 现代设计, 固定在顶部) -->
+                <a href="/index.html" class="absolute left-6 top-4 flex items-center justify-center 
+                        w-12 h-12 bg-white bg-opacity-20 rounded-full backdrop-blur-lg shadow-lg text-3xl transition 
+                        hover:bg-opacity-30 hover:scale-110 hover:shadow-2xl active:scale-95 focus:outline-none focus:ring-2 focus:ring-white">
+                  👨‍🎓
+                </a>
                 <h1 class="text-3xl font-bold">🎮 吃豆人 ・ Pac-Man</h1>
-            </div>
+            </header>
             <div class="p-6 flex justify-center">
                 <canvas id="canvas" width="960" height="640" class="rounded-lg border border-gray-300"></canvas>
             </div>
@@ -115,7 +92,7 @@
     
     <!-- 右下角悬浮球 -->
     <div class="floating-ball">
-        ℹ️
+        TIPS
         <div class="tooltip">
             <p>版权</p>
             <p>本游戏由 <a href="https://passer-by.com/" class="text-blue-500">passer-by.com</a> 制作，请尊重作者，引用请注明来源。</p>
