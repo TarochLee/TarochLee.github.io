@@ -73,7 +73,7 @@
   <!-- 左侧“卡片”式个人信息面板 -->
   <div 
     id="infoPanel"
-    class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40 rounded-3xl overflow-hidden cursor-pointer"
+    class="fixed top-4 left-4 w-80 h-[calc(100% - 2rem)] bg-white shadow-lg transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40 rounded-3xl overflow-hidden cursor-pointer"
     onclick="openPanel()"
   >
     <!-- 面板顶部：灰色背景 + 左箭头（点击收起） -->
@@ -97,6 +97,11 @@
       </p>
       <p class="text-base font-normal text-gray-800 mb-4">
         邮箱：wlantuya@outlook.com
+      </p>
+      <!-- 在信息面板底部添加游戏和视频按钮，样式仿照页脚 -->
+      <p class="mt-auto font-normal text-center">
+        <a href="/games/pacman/index.html" class="text-blue-400 hover:underline" onclick="event.stopPropagation()">🎮 游戏</a> | 
+        <a href="/video/index.html" class="text-blue-400 hover:underline" onclick="event.stopPropagation()">📹 视频</a>
       </p>
     </div>
   </div>
@@ -221,15 +226,42 @@
     </div>
   </div>
 
+  <!-- 禁止操作的脚本 -->
   <script>
-    /* 打赏弹窗功能 */
-    function openModal() {
-      document.getElementById('rewardModal').classList.remove('hidden');
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.innerText = message;
+      toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 2000);
     }
-    function closeModal() {
-      document.getElementById('rewardModal').classList.add('hidden');
-    }
+    // 禁用右键菜单
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      showToast('右键已禁用');
+    });
+    // 禁用复制操作
+    document.addEventListener('copy', function(event) {
+      event.preventDefault();
+      showToast('复制已禁用');
+    });
+    // 禁用特定键盘快捷键
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U')
+      ) {
+        event.preventDefault();
+        showToast('此操作已禁用');
+      }
+    });
+  </script>
 
+  <!-- 其他脚本，包括悬浮球拖动与切换小卡片功能 -->
+  <script>
     let panelOpen = false;
     /* 点击左侧面板展开：移除平移和旋转效果 */
     function openPanel() {
