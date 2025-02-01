@@ -90,14 +90,22 @@
         <p class="font-normal">&copy; 2025 Baater | 本项目由原作者开源，查看 <a href="https://github.com/mumuy/pacman" class="text-blue-400">原作者 GitHub</a></p>
     </footer>
     
-    <!-- 右下角悬浮球 -->
-    <div class="floating-ball">
-        TIPS
-        <div class="tooltip">
-            <p>版权</p>
-            <p>本游戏由 <a href="https://passer-by.com/" class="text-blue-500">passer-by.com</a> 制作，请尊重作者，引用请注明来源。</p>
-        </div>
-    </div>
+    <!-- 右下角悬浮提示球 -->
+	<div class="fixed bottom-6 right-6 group">
+		<div class="relative w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 text-white 
+					flex items-center justify-center rounded-full shadow-xl cursor-pointer 
+					transition-transform transform hover:scale-110 active:scale-95">
+			💡
+		</div>
+		<div class="absolute bottom-20 right-0 w-64 p-4 bg-white text-gray-900 shadow-lg 
+					rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+			<h3 class="font-semibold text-lg text-blue-600">📜 版权声明</h3>
+			<p class="text-sm mt-2">本游戏由 
+				<a href="https://passer-by.com/" class="text-blue-500 underline">passer-by.com</a> 
+				制作，请尊重作者，引用请注明来源。
+			</p>
+		</div>
+	</div>
     
     <script src="/games/pacman/static/script/game.js"></script>
     <script src="/games/pacman/static/script/index.js"></script>
