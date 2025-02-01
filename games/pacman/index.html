@@ -58,6 +58,37 @@
             font-size: 1rem;
             color: #1E40AF;
         }
+        
+        /* 右侧悬浮球 */
+        .floating-ball {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 50px;
+            height: 50px;
+            background: #3B82F6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .floating-ball:hover .tooltip {
+            display: block;
+        }
+        .tooltip {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
@@ -71,8 +102,8 @@
             </div>
             <div class="p-6 text-center">
                 <div class="info">
-                    <p>按 <strong>[空格键]</strong> 暂停或继续</p>
-                    <p>Press <strong>[space]</strong> to pause or continue</p>
+                    <p>按[空格键]暂停或继续</p>
+                    <p>Press [space] to pause or continue</p>
                 </div>
             </div>
         </div>
@@ -81,6 +112,15 @@
     <footer class="bg-gray-800 text-white text-center p-4 mt-6">
         <p class="font-normal">&copy; 2025 Baater | 本项目由原作者开源，查看 <a href="https://github.com/mumuy/pacman" class="text-blue-400">原作者 GitHub</a></p>
     </footer>
+    
+    <!-- 右下角悬浮球 -->
+    <div class="floating-ball">
+        ℹ️
+        <div class="tooltip">
+            <p>版权</p>
+            <p>本游戏由 <a href="https://passer-by.com/" class="text-blue-500">passer-by.com</a> 制作，请尊重作者，引用请注明来源。</p>
+        </div>
+    </div>
     
     <script src="/games/pacman/static/script/game.js"></script>
     <script src="/games/pacman/static/script/index.js"></script>
