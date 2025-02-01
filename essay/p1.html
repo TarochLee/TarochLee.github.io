@@ -1090,6 +1090,24 @@ deb http://security.ubuntu.com/ubuntu/ jammy-security main restricted universe m
 
   <!-- 这里是Toast容器，默认隐藏 -->
   <div id="toast"></div>
-
+  <script>
+    // 禁用右键菜单
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      alert('右键已禁用');
+    });
+  
+    // 禁用特定的键盘快捷键
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' || // 禁止F12
+        (event.ctrlKey && event.shiftKey && event.key === 'I') || // 禁止 Ctrl+Shift+I
+        (event.ctrlKey && event.key === 'U') // 禁止 Ctrl+U
+      ) {
+        event.preventDefault();
+        alert('此操作已禁用');
+      }
+    });
+  </script>
 </body>
 </html>
