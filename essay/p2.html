@@ -762,7 +762,7 @@ ollama --version</pre>
     // 禁用右键菜单
     document.addEventListener('contextmenu', function(event) {
       event.preventDefault();
-      alert('右键已禁用');
+      showToast('右键已禁用');
     });
   
     // 禁用特定的键盘快捷键
@@ -773,7 +773,7 @@ ollama --version</pre>
         (event.ctrlKey && event.key === 'U') // 禁止 Ctrl+U
       ) {
         event.preventDefault();
-        alert('此操作已禁用');
+        showToast('此操作已禁用');
       }
     });
   </script>
