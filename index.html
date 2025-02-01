@@ -61,11 +61,7 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    /* 悬浮球：鼠标悬停时显示下拉小卡片 */
-    .floating-ball:hover .floating-card {
-      opacity: 1;
-      transform: scale(1);
-    }
+    /* 取消鼠标悬停显示卡片，改为点击显示 */
     /* 禁止用户选择文本（便于拖动） */
     .no-select {
       user-select: none;
@@ -78,9 +74,7 @@
   <!-- 左侧“卡片”式个人信息面板 -->
   <div 
     id="infoPanel"
-    class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
-           transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40
-           rounded-3xl overflow-hidden cursor-pointer"
+    class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40 rounded-3xl overflow-hidden cursor-pointer"
     onclick="openPanel()"
   >
     <!-- 面板顶部：灰色背景 + 左箭头（点击收起） -->
@@ -97,8 +91,7 @@
     </div>
     <!-- 面板主体内容 -->
     <div class="p-6 flex flex-col items-center h-full">
-      <img src="/pictures/avatar.png" alt="头像"
-           class="w-24 h-24 rounded-full mb-4 shadow" />
+      <img src="/pictures/avatar.png" alt="头像" class="w-24 h-24 rounded-full mb-4 shadow" />
       <h2 class="text-xl font-normal mb-2 text-blue-800">Baater</h2>
       <p class="text-sm font-normal text-gray-600 mb-4">
         你没有被邀请。
@@ -112,16 +105,16 @@
   <!-- 右上角悬浮球（可拖动） -->
   <!-- 初始定位使用 inline style，拖动后将更新 left 与 top -->
   <div id="floatingBall" class="fixed z-50 no-select" style="left: calc(100% - 80px); top: 16px;">
-    <div class="relative group">
-      <!-- 悬浮按钮：采用现代渐变配色和全新图标 -->
-      <button class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:from-indigo-600 hover:to-purple-700 focus:outline-none transition-colors duration-300">
-        <!-- 使用三点垂直图标，代表菜单 -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+    <div class="relative">
+      <!-- 悬浮按钮：尺寸变小，采用现代渐变配色和全新图标 -->
+      <button id="floatingBallBtn" class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:from-indigo-600 hover:to-purple-700 focus:outline-none transition-colors duration-300">
+        <!-- 使用三点垂直图标 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
           <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
         </svg>
       </button>
-      <!-- 鼠标悬停时显示的小卡片 -->
-      <div class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-xl floating-card opacity-0 transform scale-95 transition-all duration-300">
+      <!-- 小卡片：默认隐藏 -->
+      <div id="floatingCard" class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-xl hidden transition-all duration-300">
         <a href="/games/pacman/index.html" class="flex items-center space-x-2 mb-2 hover:text-indigo-600">
           <span class="text-2xl">🎮</span>
           <span class="text-sm">游戏</span>
@@ -146,85 +139,85 @@
   
   <!-- 主体内容 -->
   <main class="container mx-auto p-8">
-      <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
-          <h2 class="text-2xl font-normal">About Me</h2>
-          <p class="mt-2 font-normal">
-            你好！我是 Baater。<br>
-            这是我的个人主页，我会在这里分享我的项目和技术文章。
-          </p>
-      </section>
+    <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-normal">About Me</h2>
+      <p class="mt-2 font-normal">
+        你好！我是 Baater。<br>
+        这是我的个人主页，我会在这里分享我的项目和技术文章。
+      </p>
+    </section>
 
-      <section class="bg-white shadow-lg rounded-lg p-6">
-          <h2 class="text-2xl font-normal">我的项目</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
-              <!-- 项目 1 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                  <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
-                  <p class="mt-2 font-normal">
-                    关于 Ubuntu 系统中的 pip 和软件源的换源。
-                  </p>
-                  <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-              <!-- 项目 2 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
-                <p class="mt-2 font-normal">
-                    在 Macos 本地部署 Deepseek 模型的详细指南。
-                </p>
-                <a href="/essay/p2.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-              <!-- 项目 3 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                  <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
-                  <p class="mt-2 font-normal">
-                    快速掌握 Docker 的核心概念和基本使用方法。
-                  </p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-              <!-- 项目 4 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                  <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
-                  <p class="mt-2 font-normal">
-                    使用 Matplotlib 和 Seaborn 进行数据可视化分析。
-                  </p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-              <!-- 项目 5 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                  <h3 class="text-xl font-normal">💡 机器学习基础</h3>
-                  <p class="mt-2 font-normal">
-                    学习机器学习的基本概念和常见算法。
-                  </p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-              <!-- 项目 6 -->
-              <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
-                  <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
-                  <p class="mt-2 font-normal">
-                    学习 HTML、CSS 和 JavaScript 构建现代网站。
-                  </p>
-                  <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
-              </div>
-          </div>
-      </section>
+    <section class="bg-white shadow-lg rounded-lg p-6">
+      <h2 class="text-2xl font-normal">我的项目</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+        <!-- 项目 1 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
+          <p class="mt-2 font-normal">
+            关于 Ubuntu 系统中的 pip 和软件源的换源。
+          </p>
+          <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 2 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
+          <p class="mt-2 font-normal">
+            在 Macos 本地部署 Deepseek 模型的详细指南。
+          </p>
+          <a href="/essay/p2.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 3 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
+          <p class="mt-2 font-normal">
+            快速掌握 Docker 的核心概念和基本使用方法。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 4 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
+          <p class="mt-2 font-normal">
+            使用 Matplotlib 和 Seaborn 进行数据可视化分析。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 5 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">💡 机器学习基础</h3>
+          <p class="mt-2 font-normal">
+            学习机器学习的基本概念和常见算法。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 6 -->
+        <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
+          <p class="mt-2 font-normal">
+            学习 HTML、CSS 和 JavaScript 构建现代网站。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- 页脚 -->
   <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
-      <p class="font-normal">
-          &copy; 2025 TarochLee | 
-          <a href="https://github.com/TarochLee" class="text-blue-400 hover:underline">GitHub</a> | 
-          <button onclick="openModal()" class="text-blue-400 hover:underline">打赏</button>
-      </p>
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:underline">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:underline">打赏</button>
+    </p>
   </footer>
 
   <!-- 打赏弹窗 -->
   <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
-          <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
-          <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
-      </div>
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
+    </div>
   </div>
 
   <script>
@@ -257,14 +250,21 @@
       }
     }
 
-    // 悬浮球拖动功能（支持鼠标和触摸事件）
+    // 悬浮球拖动与点击切换小卡片功能（支持鼠标和触摸事件）
     (function() {
       const floatingBall = document.getElementById('floatingBall');
+      const floatingBallBtn = document.getElementById('floatingBallBtn');
+      const floatingCard = document.getElementById('floatingCard');
       let isDragging = false;
-      let offsetX = 0, offsetY = 0;
+      let dragged = false;
+      let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
       
+      // 鼠标事件
       floatingBall.addEventListener('mousedown', (e) => {
         isDragging = true;
+        dragged = false;
+        startX = e.clientX;
+        startY = e.clientY;
         floatingBall.style.transition = 'none';
         const rect = floatingBall.getBoundingClientRect();
         offsetX = e.clientX - rect.left;
@@ -273,6 +273,9 @@
       
       document.addEventListener('mousemove', (e) => {
         if (isDragging) {
+          if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
+            dragged = true;
+          }
           e.preventDefault();
           floatingBall.style.left = (e.clientX - offsetX) + 'px';
           floatingBall.style.top = (e.clientY - offsetY) + 'px';
@@ -289,8 +292,11 @@
       // 触摸事件支持
       floatingBall.addEventListener('touchstart', (e) => {
         isDragging = true;
-        floatingBall.style.transition = 'none';
+        dragged = false;
         const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        floatingBall.style.transition = 'none';
         const rect = floatingBall.getBoundingClientRect();
         offsetX = touch.clientX - rect.left;
         offsetY = touch.clientY - rect.top;
@@ -299,6 +305,9 @@
       document.addEventListener('touchmove', (e) => {
         if (isDragging) {
           const touch = e.touches[0];
+          if (Math.abs(touch.clientX - startX) > 5 || Math.abs(touch.clientY - startY) > 5) {
+            dragged = true;
+          }
           floatingBall.style.left = (touch.clientX - offsetX) + 'px';
           floatingBall.style.top = (touch.clientY - offsetY) + 'px';
         }
@@ -308,6 +317,14 @@
         if (isDragging) {
           isDragging = false;
           floatingBall.style.transition = 'left 0.3s, top 0.3s';
+        }
+      });
+      
+      // 点击悬浮球按钮切换显示/隐藏小卡片（仅在未拖拽时触发）
+      floatingBallBtn.addEventListener('click', (e) => {
+        // 如果检测到拖拽则不触发点击
+        if (!dragged) {
+          floatingCard.classList.toggle('hidden');
         }
       });
     })();
