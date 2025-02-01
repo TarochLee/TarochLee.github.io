@@ -6,9 +6,7 @@
   <title>视频播放工具</title>
   <meta name="description" content="基于HTML5的视频播放工具，播放 /video/boy.mp4。">
   <meta name="keywords" content="视频, 播放器, HTML5, 视频工具">
-  <!-- <link rel="shortcut icon" href="/games/pacman/favicon.png"> -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- <link rel="stylesheet" href="/games/pacman/static/style/index.css"> -->
   
   <style>
     /* ========== CSS 变量 ========== */
@@ -19,7 +17,7 @@
       --body-bg: #f0f4f8;
       --container-bg: rgba(255, 255, 255, 0.98);
     }
-
+    
     /* ========== 字体定义 ========== */
     @font-face {
       font-family: "STZhongsong";
@@ -33,6 +31,7 @@
       font-weight: normal;
       font-style: normal;
     }
+    
     body {
       font-family: "TimesNewRoman", "STZhongsong", serif;
       background: var(--body-bg);
@@ -43,8 +42,8 @@
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
     }
-
-    /* ========== 主容器调整 ========== */
+    
+    /* 其他样式保持不变 */
     .video-container {
       max-width: 800px; /* 宽度略窄，更适合多数屏幕 */
       margin: 40px auto;
@@ -54,8 +53,7 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(5px);
     }
-
-    /* ========== 头部 ========== */
+    
     .header {
       position: relative;
       background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
@@ -91,14 +89,12 @@
       transform: scale(1.1);
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
-
-    /* ========== 视频播放器和响应式容器 ========== */
+    
     .video-player-container {
       padding: 20px;
       display: flex;
       justify-content: center;
     }
-    /* 使用 wrapper 来实现响应式缩放 */
     .video-wrapper {
       width: 100%;
       max-width: 960px; /* 视频原始分辨率 */
@@ -115,8 +111,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       background: black;
     }
-
-    /* ========== 信息区域 ========== */
+    
     .info {
       text-align: center;
       padding: 12px 0;
@@ -126,22 +121,20 @@
       font-size: 1rem;
       color: var(--secondary-color);
     }
-
-    /* ========== 页脚 ========== */
+    
+    /* footer 和弹窗样式 */
     footer {
       background: #1F2937;
       color: #f0f0f0;
       text-align: center;
       padding: 16px 8px;
-      margin-top: 40px;
       font-size: 0.9rem;
     }
     footer a {
       color: #60a5fa;
-      text-decoration: underline;
+      text-decoration: none;
     }
-
-    /* ========== 右下角悬浮提示球 ========== */
+    
     .floating-ball {
       position: fixed;
       bottom: 60px;
@@ -225,8 +218,9 @@
     }
   </style>
 </head>
-<body>
-  <div class="container mx-auto p-6">
+<body class="min-h-screen flex flex-col">
+  <!-- 主体内容区域，flex-grow 让内容区域自动撑满剩余空间 -->
+  <div class="container mx-auto p-6 flex-grow">
     <div class="video-container">
       <header class="header">
         <!-- 主页按钮 -->
@@ -248,9 +242,9 @@
       </div>
     </div>
   </div>
-
-<!-- 固定底部的 footer -->
-<footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+  
+  <!-- 固定底部的 footer -->
+  <footer class="bg-gray-800 text-white text-center p-4">
     <p class="font-normal">
       &copy; 2025 TarochLee | 
       <a href="https://github.com/TarochLee" class="text-blue-400 no-underline">GitHub</a> | 
@@ -276,7 +270,7 @@
       document.getElementById('rewardModal').classList.add('hidden');
     }
   </script>
-
+  
   <!-- 右下角悬浮提示球 -->
   <div id="floating-ball" class="floating-ball">
     💡
@@ -285,24 +279,23 @@
         <h3>📜 声明</h3>
       </div>
       <div class="tooltip-body">
-        <p>此视频为仅供学习交流使用。</p>
-        </p>
+        <p>此视频仅供学习交流使用。</p>
       </div>
     </div>
   </div>
-
+  
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const ball = document.getElementById("floating-ball");
       let isDragging = false, offsetX, offsetY;
-
+  
       ball.addEventListener("mousedown", function (e) {
         isDragging = true;
         offsetX = e.clientX - ball.getBoundingClientRect().left;
         offsetY = e.clientY - ball.getBoundingClientRect().top;
         ball.style.cursor = "grabbing";
       });
-
+  
       document.addEventListener("mousemove", function (e) {
         if (!isDragging) return;
         const x = e.clientX - offsetX;
@@ -310,7 +303,7 @@
         ball.style.left = `${x}px`;
         ball.style.top = `${y}px`;
       });
-
+  
       document.addEventListener("mouseup", function () {
         isDragging = false;
         ball.style.cursor = "grab";
