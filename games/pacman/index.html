@@ -11,19 +11,41 @@
     <link rel="stylesheet" href="/games/pacman/static/style/index.css">
     
     <style>
-        body {
-            font-family: "TimesNewRoman", "STZhongsong", serif;
-            background: #f5f7fa;
-            color: #333;
+        /* 定义中文字体（华文中宋） */
+        @font-face {
+          font-family: "STZhongsong";
+          src: url("/fonts/STZhongsong.ttf") format("truetype");
+          font-weight: normal;
+          font-style: normal;
         }
+
+        /* 定义英文字体（Times New Roman） */
+        @font-face {
+          font-family: "TimesNewRoman";
+          src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+          font-weight: normal;
+          font-style: normal;
+        }
+
+        /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
+        body {
+          font-family: "TimesNewRoman", "STZhongsong", serif;
+          background: #f5f7fa;
+          color: #333;
+        }
+
+        /* 保持代码块等宽字体（覆盖全局设置） */
+        pre, code {
+          font-family: Consolas, "Courier New", monospace !important;
+        }
+        
         .game-container {
             max-width: 960px;
             margin: auto;
             padding: 20px;
-            background: #ffffff;
+            background: white;
             border-radius: 16px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border: 4px solid #1E40AF;
         }
         .header {
             background: linear-gradient(90deg, #3B82F6, #1E40AF);
@@ -57,7 +79,7 @@
     </div>
 
     <footer class="bg-gray-800 text-white text-center p-4 mt-6">
-        <p class="font-normal">&copy; 2025 Baater | <a href="https://github.com/mumuy/pacman" class="text-blue-400">GitHub</a></p>
+        <p class="font-normal">&copy; 2025 Baater | 本项目由原作者开源，查看 <a href="https://github.com/mumuy/pacman" class="text-blue-400">原作者 GitHub</a></p>
     </footer>
     
     <script src="/games/pacman/static/script/game.js"></script>
