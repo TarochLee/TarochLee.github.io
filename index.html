@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BAATER 的个人主页</title>
+  <!-- 引入 Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     /* 定义中文字体（华文中宋） */
     @font-face {
@@ -14,7 +14,6 @@
       font-weight: normal;
       font-style: normal;
     }
-
     /* 定义英文字体（Times New Roman） */
     @font-face {
       font-family: "TimesNewRoman";
@@ -22,39 +21,55 @@
       font-weight: normal;
       font-style: normal;
     }
-
     /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
     body {
       font-family: "TimesNewRoman", "STZhongsong", serif;
       background: #f5f7fa;
     }
-
     /* 保持代码块等宽字体（覆盖全局设置） */
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
     }
-
-    /* 页面填充全屏，footer 固定在底部 */
+    /* 页面全屏布局，footer 固定在底部 */
     html, body {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     }
     main {
-        flex: 1;
+      flex: 1;
+    }
+    /* 彩虹文字效果 */
+    .rainbow-dark-text {
+      background: linear-gradient(
+        90deg,
+        hsl(0, 0%, 100%) 0%,    
+        hsl(0, 100%, 90%) 20%,  
+        hsl(0, 100%, 70%) 40%,  
+        hsl(0, 100%, 55%) 60%,  
+        hsl(0, 100%, 45%) 80%,  
+        hsl(0, 100%, 35%) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% auto;
+      animation: dark-rainbow 5s linear infinite;
+    }
+    @keyframes dark-rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* 悬浮球相关：当鼠标悬停时让小卡片平滑显示 */
+    .floating-ball:hover .floating-card {
+      opacity: 1;
+      transform: scale(1);
     }
   </style>
 </head>
 <body class="bg-gray-100 text-gray-900">
-
-  <!-- 
-    左侧“卡片”式个人信息面板 
-    - 宽度 w-80 = 20rem
-    - 四角圆弧 rounded-3xl
-    - 初始状态下，向左平移 -translate-x-72 (18rem) 并旋转 -1deg，
-      这样面板只剩下 2rem(= 20rem-18rem) 显示在屏幕里
-    - 点击任意区域即可展开，点击面板顶部箭头收回
-  -->
+  <!-- 左侧“卡片”式个人信息面板 -->
   <div 
     id="infoPanel"
     class="fixed top-4 left-4 w-80 h-[calc(100%-2rem)] bg-white shadow-lg
@@ -83,7 +98,6 @@
       <!-- 头像：pictures/avatar.png，圆形 -->
       <img src="/pictures/avatar.png" alt="头像"
            class="w-24 h-24 rounded-full mb-4 shadow" />
-
       <!-- 姓名 -->
       <h2 class="text-xl font-normal mb-2 text-blue-800">Baater</h2>
       <!-- 个性签名 -->
@@ -94,61 +108,50 @@
       <p class="text-base font-normal text-gray-800 mb-4">
         邮箱：wlantuya@outlook.com
       </p>
-      
-      <!-- 底部图标容器：使用 mt-auto 将容器推至底部，并用 flex 水平排列图标 -->
-      <div class="mt-auto flex space-x-4">
-          <!-- 游戏图标 -->
-          <a href="/games/pacman/index.html">
-            <span class="text-3xl">🎮</span>
-          </a>
-          <!-- 视频图标 -->
-          <a href="/video/index.html">
-            <span class="text-3xl">📹</span>
-          </a>
+      <!-- 注意：原来这里的图标容器已被移除 -->
+    </div>
+  </div>
+
+  <!-- 右上角悬浮球 -->
+  <div class="fixed top-4 right-4 z-50">
+    <div class="relative group floating-ball">
+      <!-- 圆形悬浮按钮 -->
+      <button class="w-16 h-16 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 focus:outline-none transition-colors duration-300">
+        <!-- 内置 SVG 图标，可自行替换 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <!-- 鼠标悬停显示的小卡片 -->
+      <div class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-lg floating-card opacity-0 transform scale-95 transition-all duration-300">
+        <a href="/games/pacman/index.html" class="flex items-center space-x-2 mb-2 hover:text-blue-600">
+          <span class="text-2xl">🎮</span>
+          <span class="text-sm">游戏</span>
+        </a>
+        <a href="/video/index.html" class="flex items-center space-x-2 hover:text-blue-600">
+          <span class="text-2xl">📹</span>
+          <span class="text-sm">视频</span>
+        </a>
       </div>
     </div>
   </div>
 
+  <!-- 页眉 -->
   <header class="bg-blue-600 text-center min-h-[200px] flex flex-col justify-center p-4">
     <h1 class="mx-auto text-4xl font-bold rainbow-dark-text">
       📣BAATER的个人主页
     </h1>
-    
     <p class="mt-4 text-xl rainbow-dark-text">
       欢迎来到我的 GitHub Pages 站点！
     </p>
   </header>
   
-  <style>
-  .rainbow-dark-text {
-    background: linear-gradient(
-      90deg,
-      hsl(0, 0%, 100%) 0%,    /* 白色 */
-      hsl(0, 100%, 90%) 20%,  /* 淡粉色 */
-      hsl(0, 100%, 70%) 40%,  /* 浅红 */
-      hsl(0, 100%, 55%) 60%,  /* 中红 */
-      hsl(0, 100%, 45%) 80%,  /* 深红 */
-      hsl(0, 100%, 35%) 100%  /* 暗红 */
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    background-size: 200% auto;
-    animation: dark-rainbow 5s linear infinite;
-  }
-  
-  @keyframes dark-rainbow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  </style>
-  
+  <!-- 主体内容 -->
   <main class="container mx-auto p-8">
       <section class="bg-white shadow-lg rounded-lg p-6 mb-6">
           <h2 class="text-2xl font-normal">About Me</h2>
           <p class="mt-2 font-normal">
-            你好！我是 Baater。
+            你好！我是 Baater。<br>
             这是我的个人主页，我会在这里分享我的项目和技术文章。
           </p>
       </section>
@@ -161,7 +164,7 @@
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
                   <p class="mt-2 font-normal">
-                  关于 Ubuntu 系统中的 pip 和软件源的换源。
+                    关于 Ubuntu 系统中的 pip 和软件源的换源。
                   </p>
                   <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
@@ -206,12 +209,12 @@
       </section>
   </main>
 
-  <!-- 固定底部的 footer -->
+  <!-- 页脚 -->
   <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
       <p class="font-normal">
           &copy; 2025 TarochLee | 
-          <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
-          <button onclick="openModal()" class="text-blue-400">打赏</button>
+          <a href="https://github.com/TarochLee" class="text-blue-400 hover:underline">GitHub</a> | 
+          <button onclick="openModal()" class="text-blue-400 hover:underline">打赏</button>
       </p>
   </footer>
 
@@ -220,7 +223,7 @@
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
           <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
           <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
-          <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
+          <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
       </div>
   </div>
 
@@ -234,21 +237,18 @@
     }
 
     let panelOpen = false;
-
-    /* 点击卡片展开：同时添加微调的旋转效果 */
+    /* 点击左侧面板展开：移除平移和旋转效果 */
     function openPanel() {
       if (!panelOpen) {
         const panel = document.getElementById('infoPanel');
-        // 移除 -translate-x-72 和旋转 -1deg，添加 translate-x-0 和旋转 +1deg
         panel.classList.remove('-translate-x-72', 'rotate-[-1deg]');
         panel.classList.add('translate-x-0', 'rotate-[1deg]');
         panelOpen = true;
       }
     }
-
-    /* 点击箭头收起 */
+    /* 点击箭头收起面板 */
     function closePanel(e) {
-      e.stopPropagation(); // 防止点击箭头后又触发父元素事件
+      e.stopPropagation();
       if (panelOpen) {
         const panel = document.getElementById('infoPanel');
         panel.classList.remove('translate-x-0', 'rotate-[1deg]');
@@ -256,23 +256,21 @@
         panelOpen = false;
       }
     }
-  </script>
-  <script>
+
     // 禁用右键菜单
     document.addEventListener('contextmenu', function(event) {
       event.preventDefault();
-      showToast('右键已禁用');
+      // 可在此处添加提示信息，例如使用 toast
     });
-  
+
     // 禁用特定的键盘快捷键
     document.addEventListener('keydown', function(event) {
       if (
-        event.key === 'F12' || // 禁止F12
-        (event.ctrlKey && event.shiftKey && event.key === 'I') || // 禁止 Ctrl+Shift+I
-        (event.ctrlKey && event.key === 'U') // 禁止 Ctrl+U
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U')
       ) {
         event.preventDefault();
-        showToast('此操作已禁用');
       }
     });
   </script>
