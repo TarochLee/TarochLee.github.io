@@ -61,14 +61,20 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    /* 悬浮球相关：当鼠标悬停时让小卡片平滑显示 */
+    /* 悬浮球：鼠标悬停时显示下拉小卡片 */
     .floating-ball:hover .floating-card {
       opacity: 1;
       transform: scale(1);
     }
+    /* 禁止用户选择文本（便于拖动） */
+    .no-select {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+    }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
+<body class="bg-gray-100 text-gray-900 no-select">
   <!-- 左侧“卡片”式个人信息面板 -->
   <div 
     id="infoPanel"
@@ -79,56 +85,48 @@
   >
     <!-- 面板顶部：灰色背景 + 左箭头（点击收起） -->
     <div class="bg-gray-200 p-2 flex items-center">
-      <!-- 左箭头按钮 -->
       <button 
         id="closePanelBtn"
-        class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none ml-2
-               hover:scale-105 transition-transform"
+        class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none ml-2 hover:scale-105 transition-transform"
         onclick="closePanel(event)"
       >
-        <!-- 左箭头图标 (SVG) -->
         <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M12.293 4.293a1 1 0 010 1.414L8.414 9.586l3.879 3.879a1 1 0 11-1.414 1.414l-4.586-4.586a1 1 0 010-1.414l4.586-4.586a1 1 0 011.414 0z" clip-rule="evenodd"/>
         </svg>
       </button>
     </div>
-
     <!-- 面板主体内容 -->
     <div class="p-6 flex flex-col items-center h-full">
-      <!-- 头像：pictures/avatar.png，圆形 -->
       <img src="/pictures/avatar.png" alt="头像"
            class="w-24 h-24 rounded-full mb-4 shadow" />
-      <!-- 姓名 -->
       <h2 class="text-xl font-normal mb-2 text-blue-800">Baater</h2>
-      <!-- 个性签名 -->
       <p class="text-sm font-normal text-gray-600 mb-4">
         你没有被邀请。
       </p>
-      <!-- 邮箱 -->
       <p class="text-base font-normal text-gray-800 mb-4">
         邮箱：wlantuya@outlook.com
       </p>
-      <!-- 注意：原来这里的图标容器已被移除 -->
     </div>
   </div>
 
-  <!-- 右上角悬浮球 -->
-  <div class="fixed top-4 right-4 z-50">
-    <div class="relative group floating-ball">
-      <!-- 圆形悬浮按钮 -->
-      <button class="w-16 h-16 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 focus:outline-none transition-colors duration-300">
-        <!-- 内置 SVG 图标，可自行替换 -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+  <!-- 右上角悬浮球（可拖动） -->
+  <!-- 初始定位使用 inline style，拖动后将更新 left 与 top -->
+  <div id="floatingBall" class="fixed z-50 no-select" style="left: calc(100% - 80px); top: 16px;">
+    <div class="relative group">
+      <!-- 悬浮按钮：采用现代渐变配色和全新图标 -->
+      <button class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:from-indigo-600 hover:to-purple-700 focus:outline-none transition-colors duration-300">
+        <!-- 使用三点垂直图标，代表菜单 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
         </svg>
       </button>
-      <!-- 鼠标悬停显示的小卡片 -->
-      <div class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-lg floating-card opacity-0 transform scale-95 transition-all duration-300">
-        <a href="/games/pacman/index.html" class="flex items-center space-x-2 mb-2 hover:text-blue-600">
+      <!-- 鼠标悬停时显示的小卡片 -->
+      <div class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-xl floating-card opacity-0 transform scale-95 transition-all duration-300">
+        <a href="/games/pacman/index.html" class="flex items-center space-x-2 mb-2 hover:text-indigo-600">
           <span class="text-2xl">🎮</span>
           <span class="text-sm">游戏</span>
         </a>
-        <a href="/video/index.html" class="flex items-center space-x-2 hover:text-blue-600">
+        <a href="/video/index.html" class="flex items-center space-x-2 hover:text-indigo-600">
           <span class="text-2xl">📹</span>
           <span class="text-sm">视频</span>
         </a>
@@ -159,7 +157,6 @@
       <section class="bg-white shadow-lg rounded-lg p-6">
           <h2 class="text-2xl font-normal">我的项目</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
-              
               <!-- 项目 1 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
@@ -168,7 +165,6 @@
                   </p>
                   <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
-
               <!-- 项目 2 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                 <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
@@ -177,32 +173,36 @@
                 </p>
                 <a href="/essay/p2.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
-
               <!-- 项目 3 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
-                  <p class="mt-2 font-normal">快速掌握 Docker 的核心概念和基本使用方法。</p>
+                  <p class="mt-2 font-normal">
+                    快速掌握 Docker 的核心概念和基本使用方法。
+                  </p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
-
               <!-- 项目 4 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
-                  <p class="mt-2 font-normal">使用 Matplotlib 和 Seaborn 进行数据可视化分析。</p>
+                  <p class="mt-2 font-normal">
+                    使用 Matplotlib 和 Seaborn 进行数据可视化分析。
+                  </p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
-
               <!-- 项目 5 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">💡 机器学习基础</h3>
-                  <p class="mt-2 font-normal">学习机器学习的基本概念和常见算法。</p>
+                  <p class="mt-2 font-normal">
+                    学习机器学习的基本概念和常见算法。
+                  </p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
-
               <!-- 项目 6 -->
               <div class="bg-gray-200 p-4 rounded-lg transform hover:scale-105 transition-transform duration-200">
                   <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
-                  <p class="mt-2 font-normal">学习 HTML、CSS 和 JavaScript 构建现代网站。</p>
+                  <p class="mt-2 font-normal">
+                    学习 HTML、CSS 和 JavaScript 构建现代网站。
+                  </p>
                   <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
               </div>
           </div>
@@ -257,22 +257,60 @@
       }
     }
 
-    // 禁用右键菜单
-    document.addEventListener('contextmenu', function(event) {
-      event.preventDefault();
-      // 可在此处添加提示信息，例如使用 toast
-    });
-
-    // 禁用特定的键盘快捷键
-    document.addEventListener('keydown', function(event) {
-      if (
-        event.key === 'F12' ||
-        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
-        (event.ctrlKey && event.key === 'U')
-      ) {
-        event.preventDefault();
-      }
-    });
+    // 悬浮球拖动功能（支持鼠标和触摸事件）
+    (function() {
+      const floatingBall = document.getElementById('floatingBall');
+      let isDragging = false;
+      let offsetX = 0, offsetY = 0;
+      
+      floatingBall.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        floatingBall.style.transition = 'none';
+        const rect = floatingBall.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          e.preventDefault();
+          floatingBall.style.left = (e.clientX - offsetX) + 'px';
+          floatingBall.style.top = (e.clientY - offsetY) + 'px';
+        }
+      });
+      
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          floatingBall.style.transition = 'left 0.3s, top 0.3s';
+        }
+      });
+      
+      // 触摸事件支持
+      floatingBall.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        floatingBall.style.transition = 'none';
+        const touch = e.touches[0];
+        const rect = floatingBall.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+      });
+      
+      document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+          const touch = e.touches[0];
+          floatingBall.style.left = (touch.clientX - offsetX) + 'px';
+          floatingBall.style.top = (touch.clientY - offsetY) + 'px';
+        }
+      });
+      
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          floatingBall.style.transition = 'left 0.3s, top 0.3s';
+        }
+      });
+    })();
   </script>
 </body>
 </html>
