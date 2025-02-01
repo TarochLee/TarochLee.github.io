@@ -61,7 +61,6 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-    /* 取消鼠标悬停显示卡片，改为点击显示 */
     /* 禁止用户选择文本（便于拖动） */
     .no-select {
       user-select: none;
@@ -113,16 +112,18 @@
           <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
         </svg>
       </button>
-      <!-- 小卡片：默认隐藏 -->
-      <div id="floatingCard" class="absolute right-0 mt-2 w-48 p-4 bg-white rounded-lg shadow-xl hidden transition-all duration-300">
-        <a href="/games/pacman/index.html" class="flex items-center space-x-2 mb-2 hover:text-indigo-600">
-          <span class="text-2xl">🎮</span>
-          <span class="text-sm">游戏</span>
-        </a>
-        <a href="/video/index.html" class="flex items-center space-x-2 hover:text-indigo-600">
-          <span class="text-2xl">📹</span>
-          <span class="text-sm">视频</span>
-        </a>
+      <!-- 改进后的小卡片：采用边框、圆角和内部分组布局 -->
+      <div id="floatingCard" class="absolute right-0 mt-2 w-48 p-3 bg-white border border-gray-200 rounded-xl shadow-lg hidden transition transform duration-300">
+        <div class="space-y-2">
+          <a href="/games/pacman/index.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">🎮</span>
+            <span class="text-sm font-medium text-gray-700">游戏</span>
+          </a>
+          <a href="/video/index.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">📹</span>
+            <span class="text-sm font-medium text-gray-700">视频</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -322,7 +323,6 @@
       
       // 点击悬浮球按钮切换显示/隐藏小卡片（仅在未拖拽时触发）
       floatingBallBtn.addEventListener('click', (e) => {
-        // 如果检测到拖拽则不触发点击
         if (!dragged) {
           floatingCard.classList.toggle('hidden');
         }
