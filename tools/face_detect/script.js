@@ -27,7 +27,10 @@ async function detectGender() {
         // 获取摄像头画面
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctx.save();  // 保存当前画布状态
+        ctx.scale(-1, 1);  // 水平镜像
+        ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+        ctx.restore();  // 还原画布状态
         
         // 裁剪人脸区域
         const faceImageData = ctx.getImageData(
