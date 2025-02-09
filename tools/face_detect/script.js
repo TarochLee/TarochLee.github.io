@@ -27,10 +27,12 @@ async function detectGender() {
         // 获取摄像头画面
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        ctx.save();  // 保存当前画布状态
-        ctx.scale(-1, 1);  // 水平镜像
+        
+        // 实现镜像效果
+        ctx.save();                 // 保存当前画布状态
+        ctx.scale(-1, 1);           // 水平镜像
         ctx.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
-        ctx.restore();  // 还原画布状态
+        ctx.restore();              // 还原画布状态
         
         // 裁剪人脸区域
         const faceImageData = ctx.getImageData(
@@ -40,7 +42,10 @@ async function detectGender() {
         );
 
         // 进行性别分类
-        const tensor = tf.browser.fromPixels(faceImageData).resizeNearestNeighbor([224, 224]).toFloat().expandDims();
+        const tensor = tf.browser.fromPixels(faceImageData)
+            .resizeNearestNeighbor([224, 224])
+            .toFloat()
+            .expandDims();
         const prediction = await window.genderModel.classify(tensor);
 
         // 识别性别
