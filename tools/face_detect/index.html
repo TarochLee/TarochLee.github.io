@@ -1,19 +1,94 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时性别检测 - Face Detect</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实时性别检测 - Face Detect</title>
+  <meta name="description" content="基于 TensorFlow.js 的实时性别检测工具。">
+  <meta name="keywords" content="性别检测, 人脸识别, AI, TensorFlow.js">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+  <script defer src="script.js"></script>
+  <style>
+    /* 继承你的视频播放页面的风格 */
+    :root {
+      --primary-color: #3B82F6;
+      --secondary-color: #1E40AF;
+      --accent-color: #4f46e5;
+      --body-bg: #f0f4f8;
+      --container-bg: rgba(255, 255, 255, 0.98);
+    }
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: var(--body-bg);
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+    }
+    .header {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 24px;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    }
+    .header a.home-btn {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      backdrop-filter: blur(5px);
+    }
+    .video-wrapper {
+      width: 100%;
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      justify-content: center;
+    }
+    video {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 12px;
+      border: 2px solid #ddd;
+    }
+    #gender-result {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--secondary-color);
+      margin-top: 10px;
+    }
+  </style>
 </head>
-<body>
-    <h1>实时性别检测</h1>
-    <video id="video" autoplay playsinline></video>
+<body class="min-h-screen flex flex-col">
+  <div class="container mx-auto p-6 flex-grow">
+    <header class="header">
+      <a href="/index.html" class="home-btn" title="返回主页">👨‍🎓</a>
+      <h1>实时性别检测</h1>
+    </header>
+    <div class="video-wrapper">
+      <video id="video" autoplay playsinline></video>
+    </div>
     <p id="gender-result">检测中...</p>
-    <canvas id="canvas"></canvas>
+  </div>
+  <footer class="bg-gray-800 text-white text-center p-4">
+    <p>&copy; 2025 TarochLee | <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a></p>
+  </footer>
 </body>
 </html>
