@@ -236,10 +236,14 @@
         <h1>实时性别检测</h1>
       </header>
       <div class="video-player-container">
-        <!-- video-wrapper 控制视频区域尺寸 -->
-        <div class="video-wrapper">
+        <!-- video-wrapper 控制视频区域尺寸，并设置为相对定位 -->
+        <div class="video-wrapper relative">
           <!-- 此处 video 元素用于显示摄像头画面 -->
           <video id="video" autoplay playsinline></video>
+          <!-- 固定显示的“男娘”标签 -->
+          <div id="gender-label" class="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded">
+            男娘
+          </div>
         </div>
       </div>
       <div class="info">
