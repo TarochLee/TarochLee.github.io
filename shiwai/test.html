@@ -14,9 +14,10 @@
       --primary-color: #3B82F6;
       --secondary-color: #1E40AF;
       --accent-color: #4f46e5;
-      --body-bg: #f0f4f8;
+      --body-bg: #f4f7fb;
       --container-bg: rgba(255, 255, 255, 0.98);
       --border-color: #e4e4e4;
+      --hover-color: #667eea;
     }
 
     /* ========== 字体设置 ========== */
@@ -49,11 +50,55 @@
       width: 80%;
       max-width: 900px;
       margin: 40px auto;
-      padding: 20px;
+      padding: 30px;
       background-color: var(--container-bg);
       border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .query-container input {
+      width: 100%;
+      max-width: 400px;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .query-container input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .query-container button {
+      padding: 14px 30px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .query-container button:hover {
+      background-color: var(--hover-color);
+      transform: scale(1.05);
     }
 
     /* 评语展示区域 */
@@ -61,7 +106,7 @@
       margin-top: 30px;
       padding: 20px;
       background-color: #e9f0ff;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
       display: none;
     }
@@ -120,6 +165,29 @@
       }
     }
 
+    /* 温馨提示卡片样式 */
+    .tooltip {
+      position: absolute;
+      bottom: 100px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 10px 20px;
+      border-radius: 8px;
+      width: 180px;
+      text-align: center;
+      color: #333;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+      font-size: 1rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .floating-ball:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
     /* 底部信息样式 */
     footer {
       background: #1F2937;
@@ -166,6 +234,9 @@
   <!-- 悬浮球 -->
   <div id="floating-ball" class="floating-ball">
     💡
+    <div class="tooltip">
+      温馨提示：如有疑问火速联系食堂三楼洗碗阿姨
+    </div>
   </div>
 
   <!-- 底部版权信息 -->
@@ -179,7 +250,7 @@
 
   <script>
     const comments = {
-      "贺天熙": {
+      "帅帅侠": {
         "作业一": "B - 图片保存路径问题，头文件缺失，命名规范建议改为 test.launch.py。",
         "作业二": "A",
         "作业三": "A",
