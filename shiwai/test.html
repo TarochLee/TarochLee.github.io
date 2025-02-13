@@ -142,19 +142,38 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .result {
-      margin-top: 40px;
-      padding: 20px;
-      background-color: #e9f0ff;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-      display: none;
+    /* ========== 评语表格样式 ========== */
+    #result table {
+      border: 1px solid #e4e4e4;
+      border-radius: 8px;
+      overflow: hidden;
+      width: 100%;
+      table-layout: auto;
     }
 
-    .result p {
-      font-size: 1.1rem;
-      line-height: 1.6;
+    #result th,
+    #result td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #e4e4e4;
+    }
+
+    #result th {
+      background-color: #f4f9ff;
       color: #333;
+    }
+
+    #result td {
+      background-color: #f9fafb;
+      color: #555;
+    }
+
+    #result tr:hover {
+      background-color: #f1f5f9;
+    }
+
+    #result p {
+      color: #333;
+      font-size: 1rem;
     }
 
     /* 悬浮球样式 */
@@ -247,7 +266,6 @@
       color: #60a5fa;
       text-decoration: none;
     }
-
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -262,6 +280,17 @@
       </div>
     <div id="result" class="result">
       <!-- 评语展示区域 -->
+      <table class="w-full table-auto border-collapse text-left mt-4">
+        <thead>
+          <tr>
+            <th class="px-4 py-2 border-b text-lg font-semibold text-gray-700">作业</th>
+            <th class="px-4 py-2 border-b text-lg font-semibold text-gray-700">评语</th>
+          </tr>
+        </thead>
+        <tbody id="commentTable">
+          <!-- 动态生成的评语表格行 -->
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -279,13 +308,13 @@
   </div>
 
   <!-- 底部版权信息 -->
-<footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+  <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
     <p class="font-normal">
-        &copy; 2025 TarochLee | 
-        <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
-        <button onclick="openModal()" class="text-blue-400">打赏</button>
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:underline">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:underline">打赏</button>
     </p>
-</footer>
+  </footer>
 
   <!-- 打赏弹窗 -->
   <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
@@ -308,21 +337,21 @@
     /* 评语展示功能 */
     const comments = {
       "贺天熙": {
-        "作业一": "B - 图片保存路径问题，头文件缺失，命名规范建议改为 test.launch.py。",
+        "作业一": "B - 1.图片保存路径有问题，2.虽然比较简单但是建议写头文件，3.launch文件的命名规范建议改为 test.launch.py。",
         "作业二": "A",
         "作业三": "A",
         "作业四": "A"
       },
       "黄霆振": {
-        "作业一": "B - 编译路径问题，src 文件夹中有 install 文件夹，头文件缺失。",
+        "作业一": "B - 1.编译路径问题，src 文件夹中有编译后的install 文件夹，2.虽然比较简单但是建议写头文件。",
         "作业二": "A",
         "作业三": "A",
-        "作业四": "B - 输出颜色问题，图片命名错误。"
+        "作业四": "B - 1.输出颜色有问题，2.图片命名错误。"
       },
       "徐一博": {
-        "作业一": "A - 效果不错，建议添加头文件。",
+        "作业一": "A - 效果不错，但是建议添加头文件。",
         "作业二": "A",
-        "作业三": "C - 视频流传输方式有误，应该使用 HTTP 协议。",
+        "作业三": "C - 视频流展示方式有误，使用的是浏览器输入地址查看视频而不是弹窗，所以应该使用 HTTP 协议。",
         "作业四": "A"
       }
     };
@@ -330,14 +359,29 @@
     function showComment() {
       const studentName = document.getElementById("studentName").value.trim();
       const resultDiv = document.getElementById("result");
+      const commentTable = document.getElementById("commentTable");
+
+      // 清空之前的内容
+      commentTable.innerHTML = "";
 
       if (comments[studentName]) {
-        let commentText = "";
-        for (const [key, value] of Object.entries(comments[studentName])) {
-          commentText += `<strong>${key}：</strong> ${value}<br>`;
-        }
-        resultDiv.innerHTML = commentText;
         resultDiv.style.display = "block";
+        for (const [key, value] of Object.entries(comments[studentName])) {
+          const row = document.createElement("tr");
+          row.classList.add("border-b");
+
+          const taskCell = document.createElement("td");
+          taskCell.classList.add("px-4", "py-2", "text-gray-800");
+          taskCell.textContent = key;
+
+          const commentCell = document.createElement("td");
+          commentCell.classList.add("px-4", "py-2", "text-gray-600");
+          commentCell.textContent = value;
+
+          row.appendChild(taskCell);
+          row.appendChild(commentCell);
+          commentTable.appendChild(row);
+        }
       } else {
         resultDiv.innerHTML = "<p>未找到该学生的评语，请检查姓名输入是否正确。</p>";
         resultDiv.style.display = "block";
