@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>东北大学2025年竞速组招新——视觉组</title>
-  <meta name="description" content="作业评语查询系统">
-  <meta name="keywords" content="作业, 评语, 查询, 学生">
+  <meta name="description" content="实时性别检测工具">
+  <meta name="keywords" content="实时检测, 摄像头, 性别检测, HTML5, TensorFlow.js">
   <script src="https://cdn.tailwindcss.com"></script>
   
   <style>
@@ -19,15 +19,32 @@
       --border-color: #e4e4e4;
     }
 
-    /* 基本字体设置 */
+    /* ========== 字体设置 ========== */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
     body {
-      font-family: "Arial", sans-serif;
+      font-family: "TimesNewRoman", "STZhongsong", serif;
       background: var(--body-bg);
       color: #333;
       margin: 0;
       padding: 0;
     }
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
 
+    /* ========== 页面容器 ========== */
     .container {
       width: 80%;
       max-width: 900px;
@@ -37,50 +54,6 @@
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
-    }
-    
-    /* 查询区域样式 */
-    .query-container {
-      text-align: center;
-    }
-    .query-container h1 {
-      font-size: 2.5rem;
-      font-weight: bold;
-      color: var(--primary-color);
-      margin-bottom: 20px;
-    }
-
-    .query-container input {
-      width: 100%;
-      max-width: 400px;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 1.2rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      outline: none;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-
-    .query-container input:focus {
-      border-color: var(--primary-color);
-    }
-
-    .query-container button {
-      padding: 12px 25px;
-      background-color: var(--primary-color);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .query-container button:hover {
-      background-color: var(--secondary-color);
-      transform: scale(1.05);
     }
 
     /* 评语展示区域 */
@@ -99,68 +72,20 @@
       color: #333;
     }
 
-    /* 打赏弹窗样式 */
-    #rewardModal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #rewardModal .modal-content {
-      background-color: white;
-      padding: 30px;
-      border-radius: 8px;
-      width: 400px;
-      text-align: center;
-      box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
-    }
-
-    #rewardModal .modal-content h2 {
-      font-size: 1.5rem;
-      margin-bottom: 20px;
-    }
-
-    #rewardModal .modal-content img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    #rewardModal .modal-content button {
-      background-color: var(--primary-color);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      border: none;
-      font-size: 1rem;
-      transition: background-color 0.3s ease;
-    }
-
-    #rewardModal .modal-content button:hover {
-      background-color: var(--secondary-color);
-    }
-
-    /* 悬浮卡片样式 */
+    /* 悬浮球样式 */
     .floating-ball {
       position: fixed;
       bottom: 60px;
       right: 50px;
-      width: 250px;
-      height: 150px;
+      width: 70px;
+      height: 70px;
       background: linear-gradient(145deg, var(--accent-color), var(--primary-color));
       color: white;
-      font-size: 18px;
+      font-size: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
+      border-radius: 50%;
       cursor: grab;
       user-select: none;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -168,10 +93,31 @@
                   inset 4px 4px 8px rgba(255, 255, 255, 0.2),
                   inset -4px -4px 8px rgba(0, 0, 0, 0.3);
     }
-
     .floating-ball:active {
       cursor: grabbing;
-      transform: scale(1.05);
+      transform: scale(1.15);
+      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.25),
+                  inset 2px 2px 4px rgba(255, 255, 255, 0.3),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .floating-ball::before {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(0, 0, 0, 0) 80%);
+      border-radius: 50%;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from {
+        transform: scale(1);
+        opacity: 0.6;
+      }
+      to {
+        transform: scale(1.2);
+        opacity: 0.9;
+      }
     }
 
     /* 底部信息样式 */
@@ -191,20 +137,11 @@
       color: #60a5fa;
       text-decoration: none;
     }
-
-    /* 额外的移动端优化 */
-    @media (max-width: 600px) {
-      .container {
-        width: 95%;
-      }
-      .query-container h1 {
-        font-size: 2rem;
-      }
-    }
+    
   </style>
 </head>
-<body>
-  <div class="container">
+<body class="min-h-screen flex flex-col">
+  <div class="container mx-auto p-6 flex-grow">
     <div class="query-container">
       <h1>东北大学2025年竞速组招新——视觉组</h1>
       <p class="mb-4 text-lg text-gray-600">请输入学生姓名来查看评语和成绩。</p>
@@ -218,17 +155,17 @@
   </div>
 
   <!-- 打赏弹窗 -->
-  <div id="rewardModal">
-    <div class="modal-content">
-      <h2>🎁 感谢您的支持！</h2>
-      <img src="/pictures/wechat.png" alt="微信打赏二维码">
-      <button onclick="closeModal()">关闭</button>
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg">关闭</button>
     </div>
   </div>
 
-  <!-- 悬浮卡片 -->
+  <!-- 悬浮球 -->
   <div id="floating-ball" class="floating-ball">
-    <p>如有问题请尽快联系食堂三楼洗碗阿姨</p>
+    💡
   </div>
 
   <!-- 底部版权信息 -->
@@ -288,30 +225,30 @@
       document.getElementById('rewardModal').style.display = 'none';
     }
 
-    /* 拖动悬浮卡片 */
-    const ball = document.getElementById('floating-ball');
-    let isDragging = false;
-    let offsetX, offsetY;
+    /* 悬浮球拖动功能 */
+    document.addEventListener("DOMContentLoaded", function () {
+      const ball = document.getElementById("floating-ball");
+      let isDragging = false, offsetX, offsetY;
 
-    ball.addEventListener('mousedown', function (e) {
-      isDragging = true;
-      offsetX = e.clientX - ball.getBoundingClientRect().left;
-      offsetY = e.clientY - ball.getBoundingClientRect().top;
-      ball.style.cursor = "grabbing";
-    });
+      ball.addEventListener("mousedown", function (e) {
+        isDragging = true;
+        offsetX = e.clientX - ball.getBoundingClientRect().left;
+        offsetY = e.clientY - ball.getBoundingClientRect().top;
+        ball.style.cursor = "grabbing";
+      });
 
-    document.addEventListener('mousemove', function (e) {
-      if (isDragging) {
+      document.addEventListener("mousemove", function (e) {
+        if (!isDragging) return;
         const x = e.clientX - offsetX;
         const y = e.clientY - offsetY;
         ball.style.left = `${x}px`;
         ball.style.top = `${y}px`;
-      }
-    });
+      });
 
-    document.addEventListener('mouseup', function () {
-      isDragging = false;
-      ball.style.cursor = "grab";
+      document.addEventListener("mouseup", function () {
+        isDragging = false;
+        ball.style.cursor = "grab";
+      });
     });
   </script>
 </body>
