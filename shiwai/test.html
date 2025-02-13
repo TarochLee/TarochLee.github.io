@@ -94,9 +94,19 @@
       transform: scale(1.1);
     }
 
+    /* ========== 搜索框卡片样式 ========== */
+    .search-card {
+      padding: 30px;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      margin-top: 30px;
+    }
+
     .query-container input {
       width: 100%;
-      max-width: 450px;
       padding: 16px;
       margin: 10px 0;
       font-size: 1.1rem;
@@ -246,12 +256,9 @@
       <a href="/index.html" class="home-btn">👨‍🎓</a>
       <h1>东北大学2025年竞速组招新——视觉组</h1>
     </div>
-    <div class="query-container">
-      <p class="mb-6 text-lg text-gray-700 text-center">请输入学生姓名来查看评语和成绩</p>
-      <div class="flex justify-center space-x-4">
-        <input type="text" id="studentName" placeholder="例如：帅帅侠" class="w-64 py-3 px-5 text-lg rounded-xl border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out" />
-        <button onclick="showComment()" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg font-semibold rounded-full shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">查看评语</button>
-      </div>
+    <div class="search-card flex flex-col items-center justify-center mt-10">
+      <input type="text" id="studentName" placeholder="例如：帅帅侠" class="w-64 py-3 px-5 text-lg rounded-xl border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out mb-4" />
+      <button onclick="showComment()" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg font-semibold rounded-full shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">查看评语</button>
     </div>
 
     <div id="result" class="result">
