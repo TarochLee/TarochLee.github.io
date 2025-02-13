@@ -96,35 +96,40 @@
 
     .query-container input {
       width: 100%;
-      max-width: 400px;
-      padding: 14px;
+      max-width: 450px;
+      padding: 16px;
       margin: 10px 0;
-      font-size: 1.2rem;
-      border-radius: 10px;
+      font-size: 1.1rem;
+      border-radius: 12px;
       border: 1px solid var(--border-color);
-      outline: none;
       box-sizing: border-box;
-      transition: border-color 0.3s ease;
+      transition: all 0.3s ease;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .query-container input:focus {
       border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
     }
 
     .query-container button {
-      padding: 14px 30px;
+      padding: 14px 32px;
       background-color: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 10px;
-      font-size: 1.2rem;
+      border-radius: 12px;
+      font-size: 1.1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     .query-container button:hover {
       background-color: var(--accent-color);
       transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
 
     .result {
@@ -242,10 +247,7 @@
       <h1>东北大学2025年竞速组招新——视觉组</h1>
     </div>
     <div class="query-container">
-      <p class="mb-6 text-lg text-gray-700 text-center">
-
-        
-      </p>
+      <p class="mb-6 text-lg text-gray-700 text-center">请输入学生姓名来查看评语和成绩</p>
       <div class="flex justify-center space-x-4">
         <input type="text" id="studentName" placeholder="例如：帅帅侠" class="w-64 py-3 px-5 text-lg rounded-xl border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out" />
         <button onclick="showComment()" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg font-semibold rounded-full shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">查看评语</button>
