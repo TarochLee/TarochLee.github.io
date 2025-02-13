@@ -17,6 +17,7 @@
       --body-bg: #f0f4f8;
       --container-bg: rgba(255, 255, 255, 0.98);
       --border-color: #e4e4e4;
+      --golden-ratio: 1.618;
     }
 
     /* ========== 字体定义 ========== */
@@ -39,6 +40,8 @@
       color: #333;
       margin: 0;
       padding: 0;
+      line-height: 1.618;
+      letter-spacing: 0.5px;
     }
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
@@ -68,7 +71,6 @@
     .header h1 {
       margin: 0;
       font-size: 2rem;
-      font-weight: bold;
     }
 
     .header a.home-btn {
@@ -126,7 +128,7 @@
     }
 
     .result {
-      margin-top: 30px;
+      margin-top: 40px;
       padding: 20px;
       background-color: #e9f0ff;
       border-radius: 12px;
@@ -240,7 +242,7 @@
       <h1>东北大学2025年竞速组招新——视觉组</h1>
     </div>
     <div class="query-container">
-      <p class="mb-6 text-lg text-gray-700 text-center font-semibold">请输入学生姓名来查看评语和成绩</p>
+      <p class="mb-6 text-lg text-gray-700 text-center">请输入学生姓名来查看评语和成绩</p>
       <div class="flex justify-center space-x-4">
         <input type="text" id="studentName" placeholder="例如：帅帅侠" class="w-64 py-3 px-5 text-lg rounded-xl border-2 border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 ease-in-out" />
         <button onclick="showComment()" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg font-semibold rounded-full shadow-lg hover:scale-105 transform transition duration-300 ease-in-out">查看评语</button>
