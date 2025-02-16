@@ -69,6 +69,16 @@
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(5px);
       flex-grow: 1;
+      transition: all 0.3s ease;
+    }
+    
+    /* 手机版样式 */
+    body.mobile-mode .container {
+      max-width: 100%;
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 15px;
     }
     
     .header {
@@ -107,6 +117,24 @@
       transform: scale(1.1);
     }
     
+    /* 切换手机版按钮 */
+    .mode-toggle {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 20px;
+      padding: 5px 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .mode-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
     /* ========== 聊天界面样式 ========== */
     .chat-container {
       margin-top: 20px;
@@ -116,6 +144,13 @@
       overflow-y: auto;
       padding: 20px;
       background-color: #fff;
+      transition: height 0.3s ease;
+    }
+    
+    /* 手机版调整 */
+    body.mobile-mode .chat-container {
+      height: 300px;
+      padding: 10px;
     }
     
     .chat-message {
@@ -368,6 +403,8 @@
     <div class="header">
       <a href="/index.html" class="home-btn">👨‍🎓</a>
       <h1>MY AI - 聊天助手</h1>
+      <!-- 切换手机版/电脑版按钮 -->
+      <button class="mode-toggle" onclick="toggleMode()">手机版</button>
     </div>
     
     <!-- 聊天界面 -->
@@ -434,6 +471,18 @@
     document.addEventListener('copy', function(e) {
       e.preventDefault();
     });
+    
+    /* 切换电脑版/手机版 */
+    function toggleMode() {
+      document.body.classList.toggle('mobile-mode');
+      // 修改按钮文本
+      var btn = document.querySelector('.mode-toggle');
+      if(document.body.classList.contains('mobile-mode')) {
+        btn.textContent = "电脑版";
+      } else {
+        btn.textContent = "手机版";
+      }
+    }
     
     /* 打赏弹窗功能 */
     function openModal() {
