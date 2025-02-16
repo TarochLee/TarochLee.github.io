@@ -264,6 +264,26 @@
     });
   </script>
 
+  <script>
+    // 打赏弹窗相关功能
+    function openModal() {
+      const modal = document.getElementById('rewardModal');
+      modal.classList.remove('hidden'); // 显示弹窗
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('rewardModal');
+      modal.classList.add('hidden'); // 隐藏弹窗
+    }
+
+    // 点击弹窗外部关闭弹窗
+    document.getElementById('rewardModal').addEventListener('click', function (event) {
+      if (event.target === this) {
+        closeModal(); // 如果点击的是弹窗背景，则关闭弹窗
+      }
+    });
+  </script>
+
   <!-- 其他脚本，包括悬浮球拖动与切换小卡片功能 -->
   <script>
     let panelOpen = false;
