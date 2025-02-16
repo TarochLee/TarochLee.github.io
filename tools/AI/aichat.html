@@ -10,6 +10,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   
   <style>
+    /* 全局禁止选中 */
+    * {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
     /* ========== CSS 变量 ========== */
     :root {
       --primary-color: #3B82F6;
@@ -46,7 +54,6 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      user-select: none; /* 禁止选中 */
     }
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
@@ -260,7 +267,6 @@
       justify-content: center;
       border-radius: 50%;
       cursor: grab;
-      user-select: none;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .floating-ball:active {
@@ -357,7 +363,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
   <div class="container mx-auto p-6 flex-grow">
     <div class="header">
       <a href="/index.html" class="home-btn">👨‍🎓</a>
