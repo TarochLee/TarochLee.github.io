@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 禁止放大缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>MY AI - 聊天助手</title>
   <meta name="description" content="MY AI 聊天助手">
   <meta name="keywords" content="AI, 聊天助手, HTML5, 模拟聊天">
@@ -45,6 +46,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      user-select: none; /* 禁止选中 */
     }
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
@@ -406,6 +408,27 @@
   </div>
   
   <script>
+    /* 禁止右键菜单、复制、查看源码及常用快捷键 */
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      // 禁止 Ctrl+U, Ctrl+S, Ctrl+C, Ctrl+X
+      if (e.ctrlKey && ['u','s','c','x'].includes(e.key.toLowerCase())) {
+        e.preventDefault();
+      }
+      // 禁止 F12（开发者工具）
+      if (e.keyCode === 123) {
+        e.preventDefault();
+      }
+    });
+    
+    // 禁止复制事件
+    document.addEventListener('copy', function(e) {
+      e.preventDefault();
+    });
+    
     /* 打赏弹窗功能 */
     function openModal() {
       document.getElementById('rewardModal').style.display = 'flex';
