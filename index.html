@@ -151,7 +151,7 @@
     <section class="bg-white shadow-lg rounded-xl p-6 mb-6">
       <!-- 灰色背景条内：标题和中英切换按钮 -->
       <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-normal m-0">关于我</h2>
+        <h2 id="about-title" class="text-2xl font-normal m-0">关于我</h2>
         <button id="toggleLang" class="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
           EN
         </button>
@@ -174,16 +174,19 @@
       const toggleBtn = document.getElementById('toggleLang');
       const aboutCn = document.getElementById('about-cn');
       const aboutEn = document.getElementById('about-en');
+      const aboutTitle = document.getElementById('about-title');
     
       toggleBtn.addEventListener('click', () => {
         if (aboutCn.classList.contains('hidden')) {
           aboutCn.classList.remove('hidden');
           aboutEn.classList.add('hidden');
           toggleBtn.textContent = 'EN';
+          aboutTitle.textContent = '关于我';
         } else {
           aboutCn.classList.add('hidden');
           aboutEn.classList.remove('hidden');
           toggleBtn.textContent = '中';
+          aboutTitle.textContent = 'About Me';
         }
       });
     </script>
