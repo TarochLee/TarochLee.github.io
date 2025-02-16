@@ -8,7 +8,6 @@
   <meta name="description" content="MY AI 聊天助手">
   <meta name="keywords" content="AI, 聊天助手, HTML5, 模拟聊天">
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <style>
     /* 全局禁止选中 */
     * {
@@ -82,46 +81,48 @@
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
       position: relative;
     }
-    
     .header h1 {
       margin: 0;
       font-size: 2rem;
     }
-    
-    /* 电脑版返回主页按钮及切换按钮 */
-    .home-btn,
-    .mode-toggle-desktop {
+    /* 电脑版左上返回主页按钮 */
+    .home-btn {
       position: absolute;
+      left: 20px;
       top: 20px;
-      background: rgba(255, 255, 255, 0.2);
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.2);
       border: none;
       border-radius: 50%;
       backdrop-filter: blur(5px);
       cursor: pointer;
-      transition: transform 0.2s, background 0.2s;
-    }
-    .home-btn {
-      left: 20px;
-      width: 48px;
-      height: 48px;
-      font-size: 1.75rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.75rem;
+      transition: transform 0.2s, background 0.2s;
     }
     .home-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.3);
       transform: scale(1.1);
     }
+    /* 电脑版右上切换按钮（可切换到强制手机版） */
     .mode-toggle-desktop {
+      position: absolute;
       right: 20px;
-      padding: 5px 10px;
-      font-size: 0.9rem;
-      color: white;
+      top: 20px;
+      background: rgba(255,255,255,0.2);
+      border: none;
       border-radius: 20px;
+      padding: 5px 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
     }
     .mode-toggle-desktop:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.3);
     }
     
     /* ========== Header（手机版） ========== */
@@ -166,7 +167,7 @@
         height: 100%;
         fill: white;
       }
-      /* 手机版右侧按钮：刷新和布局切换 */
+      /* 手机版右侧按钮：刷新与布局切换 */
       .mobile-btn-container {
         display: flex;
         gap: 10px;
@@ -177,7 +178,7 @@
         justify-content: center;
         width: 36px;
         height: 36px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255,255,255,0.2);
         border: none;
         border-radius: 50%;
         cursor: pointer;
@@ -222,7 +223,33 @@
       padding: 10px !important;
     }
     
-    /* ========== 聊天界面样式 ========== */
+    /* ========== 强制电脑版布局（无论设备宽度如何） ========== */
+    body.force-desktop .container {
+      max-width: 900px !important;
+      margin: 40px auto !important;
+      border-radius: 16px !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+      padding: 30px !important;
+    }
+    body.force-desktop .header {
+      display: block !important;
+      padding: 24px !important;
+      text-align: center;
+    }
+    body.force-desktop .home-btn,
+    body.force-desktop .mode-toggle-desktop {
+      display: flex !important;
+    }
+    body.force-desktop .home-btn-mobile,
+    body.force-desktop .mobile-btn-container {
+      display: none !important;
+    }
+    body.force-desktop .chat-container {
+      height: 500px !important;
+      padding: 20px !important;
+    }
+    
+    /* ========== 聊天界面 ========== */
     .chat-container {
       margin-top: 20px;
       height: 500px;
@@ -239,7 +266,6 @@
         padding: 10px;
       }
     }
-    
     .chat-message {
       margin-bottom: 15px;
       display: flex;
@@ -255,7 +281,6 @@
       max-width: 70%;
       padding: 12px 16px;
       border-radius: 12px;
-      position: relative;
       word-break: break-word;
     }
     .chat-bubble.user {
@@ -284,7 +309,7 @@
     }
     .chat-input:focus {
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+      box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
     }
     .chat-send-btn {
       padding: 12px 24px;
@@ -314,7 +339,7 @@
       height: 10px;
       border-radius: 50%;
       background: var(--primary-color);
-      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+      animation-timing-function: cubic-bezier(0,1,1,0);
     }
     .loading-dots div:nth-child(1) {
       left: 8px;
@@ -358,14 +383,14 @@
       text-decoration: none;
     }
     
-    /* 打赏弹窗 */
+    /* ========== 打赏弹窗 ========== */
     #rewardModal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(31, 41, 55, 0.8);
+      background: rgba(31,41,55,0.8);
       display: none;
       align-items: center;
       justify-content: center;
@@ -391,9 +416,9 @@
       </button>
       <!-- 标题 -->
       <h1>MY AI - 聊天助手</h1>
-      <!-- 电脑版模式切换按钮（隐藏于手机） -->
-      <button class="mode-toggle-desktop" onclick="toggleModeDesktop()">切换模式</button>
-      <!-- 手机版右侧按钮：刷新和布局切换 -->
+      <!-- 电脑版右上切换按钮（隐藏于手机） -->
+      <button class="mode-toggle-desktop" onclick="toggleLayout()">切换布局</button>
+      <!-- 手机版右侧按钮：刷新与布局切换 -->
       <div class="mobile-btn-container">
         <!-- 刷新按钮 -->
         <button class="mobile-btn" onclick="location.reload()">
@@ -442,7 +467,7 @@
   </div>
   
   <script>
-    /* 禁止右键菜单、复制、查看源码及常用快捷键 */
+    /* 禁止右键、复制、常用快捷键 */
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if (e.ctrlKey && ['u','s','c','x'].includes(e.key.toLowerCase())) e.preventDefault();
@@ -450,26 +475,34 @@
     });
     document.addEventListener('copy', e => e.preventDefault());
     
-    /* 电脑版模式切换函数（仅示例） */
-    function toggleModeDesktop() {
-      alert("电脑版模式切换功能示例");
-    }
-    
-    /* 切换布局：若 body 上存在 force-mobile 则移除（显示电脑版布局），否则添加（强制手机版布局） */
+    /* 切换布局函数
+       如果 body 已有 force-mobile，则切换为 force-desktop；
+       如果 body 已有 force-desktop，则移除强制布局（恢复默认响应式）；
+       如果没有，则根据当前屏幕宽度进行强制切换 */
     function toggleLayout() {
       const modeIcon = document.getElementById('modeIcon');
-      if(document.body.classList.contains('force-mobile')) {
+      if(document.body.classList.contains('force-mobile')){
         document.body.classList.remove('force-mobile');
-        // 更新为手机图标
+        document.body.classList.add('force-desktop');
+        // 更新为电脑图标（示例：简单的桌面图标）
+        modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
+      } else if(document.body.classList.contains('force-desktop')){
+        document.body.classList.remove('force-desktop');
+        // 无强制类则按默认响应式布局
         modeIcon.innerHTML = '<path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>';
       } else {
-        document.body.classList.add('force-mobile');
-        // 更新为电脑图标（示例：一个简单的桌面图标）
-        modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
+        // 没有强制类时，根据当前屏幕宽度切换：
+        if(window.innerWidth > 768){
+          document.body.classList.add('force-mobile');
+          modeIcon.innerHTML = '<path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>';
+        } else {
+          document.body.classList.add('force-desktop');
+          modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
+        }
       }
     }
     
-    /* 打赏弹窗功能 */
+    /* 打赏弹窗 */
     function openModal() {
       document.getElementById('rewardModal').style.display = 'flex';
     }
