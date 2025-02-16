@@ -71,6 +71,8 @@
     .header h1 {
       margin: 0;
       font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
     }
 
     .header a.home-btn {
@@ -92,40 +94,54 @@
     .header a.home-btn:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     /* ========== 公告卡片样式 ========== */
     .announcement-card {
       padding: 30px;
-      background-color: white;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
       border-radius: 16px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       width: 100%;
       max-width: 700px;
-      margin-top: 30px;
+      margin: 30px auto;
       text-align: center;
-      margin-left: auto;
-      margin-right: auto;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .announcement-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
     }
 
     .announcement-card h2 {
-      font-size: 1.5rem;
-      font-weight: bold;
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--secondary-color);
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
     }
 
     .announcement-card p {
-      font-size: 1rem;
+      font-size: 1.1rem;
       color: #555;
-      line-height: 1.6;
+      line-height: 1.8;
+      margin-bottom: 20px;
     }
 
     .announcement-card a {
-      color: #3B82F6;
+      color: var(--primary-color);
       text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
     }
 
     .announcement-card a:hover {
-      text-decoration: none;
+      color: var(--accent-color);
+      text-decoration: underline;
     }
 
     /* ========== 悬浮球样式 ========== */
@@ -142,81 +158,89 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      cursor: grab;
+      cursor: pointer;
       user-select: none;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: float 3s ease-in-out infinite;
     }
-    .floating-ball:active {
-      cursor: grabbing;
-      transform: scale(1.15);
+
+    .floating-ball:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
     }
-    .floating-ball::before {
-      content: "";
-      position: absolute;
-      width: 90px;
-      height: 90px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(0, 0, 0, 0) 80%);
-      border-radius: 50%;
-      animation: glow 2s infinite alternate;
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
     }
-    @keyframes glow {
+
+    /* ========== 打赏弹窗样式 ========== */
+    #rewardModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    #rewardModal div {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
       from {
-        transform: scale(1);
-        opacity: 0.6;
+        opacity: 0;
+        transform: translateY(-20px);
       }
       to {
-        transform: scale(1.2);
-        opacity: 0.9;
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
-    .tooltip {
-      position: absolute;
-      bottom: 85px;
-      right: -20px;
-      width: 260px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(10px);
-      color: #333;
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-      font-size: 14px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      transform: translateY(10px);
-      overflow: hidden;
+    #rewardModal h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--secondary-color);
     }
-    .tooltip-header {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+
+    #rewardModal img {
+      width: 200px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    #rewardModal button {
+      background: var(--primary-color);
       color: white;
-      padding: 10px;
-      font-size: 16px;
-    }
-    .tooltip-body {
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.9);
-      line-height: 1.5;
-      border-bottom-left-radius: 12px;
-      border-bottom-right-radius: 12px;
-    }
-    .floating-ball:hover .tooltip {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
     }
 
-    footer {
-      background: #1F2937;
-      color: #f0f0f0;
-      text-align: center;
-      padding: 16px 8px;
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #60a5fa;
-      text-decoration: none;
+    #rewardModal button:hover {
+      background: var(--accent-color);
     }
   </style>
 </head>
@@ -227,7 +251,7 @@
       <h1>东北大学2025年竞速组招新——视觉组</h1>
     </div>
     <div class="announcement-card">
-    <h2 style="font-weight: normal;">视觉组招新公告</h2>
+      <h2>视觉组招新公告</h2>
       <p>作业已评分，评分标准见
         <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>。
         可以点击此处
@@ -244,25 +268,25 @@
   </div>
 
   <!-- 悬浮球 -->
-  <div id="floating-ball" class="floating-ball" onclick="window.location.href='/shiwai/pdf/pdfreader.html';" style="cursor: pointer;">
+  <div id="floating-ball" class="floating-ball" onclick="window.location.href='/shiwai/pdf/pdfreader.html';">
     💡
   </div>
 
   <!-- 底部版权信息 -->
-<footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+  <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
     <p class="font-normal">
-        &copy; 2025 TarochLee | 
-        <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
-        <button onclick="openModal()" class="text-blue-400">打赏</button>
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400">打赏</button>
     </p>
-</footer>
+  </footer>
 
   <!-- 打赏弹窗 -->
-  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
-      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
-      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
+  <div id="rewardModal">
+    <div>
+      <h2>🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码">
+      <button onclick="closeModal()">关闭</button>
     </div>
   </div>
 
