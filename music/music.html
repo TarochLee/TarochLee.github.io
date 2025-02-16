@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LIKE THAT - 高保真音乐体验</title>
+  <title>LIKE THAT - 纯粹高保真音乐体验</title>
   <!-- 引入 Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -26,22 +26,30 @@
       background: #1f2937; /* 深灰背景 */
       letter-spacing: 0.05em;
       color: #e5e7eb;
+      margin: 0;
+      padding: 0;
     }
-    /* 播放器容器 */
+    /* 播放器容器背景 */
     .player-container {
       background: linear-gradient(135deg, #111827, #1f2937);
     }
-    /* 唱片图标 */
+    /* 唱片图标容器 */
     .disc {
       width: 250px;
       height: 250px;
       border-radius: 50%;
-      background: url('/pictures/disc.png') no-repeat center/cover;
       cursor: pointer;
-      /* 初始状态不旋转 */
+      /* 默认不旋转 */
       animation: none;
     }
-    /* 正在播放时添加旋转动画 */
+    /* 嵌入的 SVG 填满容器 */
+    .disc svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
+    }
+    /* 播放时旋转动画 */
     .rotating {
       animation: spin 3s linear infinite;
     }
@@ -56,10 +64,12 @@
     .quality-btn:hover {
       transform: scale(1.07);
     }
-    /* 提示文字 */
+    /* 播放提示文字 */
     .hint-text {
       font-size: 0.875rem;
       color: #9ca3af;
+      text-align: center;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -73,12 +83,23 @@
       </h1>
       <!-- 唱片图标区域 -->
       <div id="discContainer" class="mx-auto mb-8">
-        <!-- 唱片图标，点击切换播放/暂停 -->
-        <div id="disc" class="disc mx-auto"></div>
+        <!-- 使用嵌入的 SVG 唱片图标 -->
+        <div id="disc" class="disc mx-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <!-- 外圆：黑色唱片边缘 -->
+            <circle cx="256" cy="256" r="256" fill="#000"/>
+            <!-- 内圆：深灰色区域 -->
+            <circle cx="256" cy="256" r="200" fill="#2e2e2e"/>
+            <!-- 中心圆：白色唱针区域 -->
+            <circle cx="256" cy="256" r="50" fill="#fff"/>
+            <!-- 内部小圆：模拟唱针轴 -->
+            <circle cx="256" cy="256" r="20" fill="#2e2e2e"/>
+          </svg>
+        </div>
       </div>
-      <!-- 播放质量选择按钮 -->
+      <!-- 播放质量切换按钮 -->
       <div class="flex justify-center space-x-4 mb-4">
-        <button data-src="/music/【发行】LIKETHAT_original.wav" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
+        <button data-src="/music/LIKE THAT.flac" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
           原版（杜比）
         </button>
         <button data-src="/music/【发行】LIKETHAT_medium.wav" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
@@ -96,10 +117,9 @@
     </div>
   </main>
 
-  <!-- 隐藏的音频播放器 -->
+  <!-- 隐藏的音频播放器（不可见且禁止下载） -->
   <audio id="audioPlayer" preload="metadata" controlsList="nodownload" style="display: none;">
-    <!-- 默认加载原版音频 -->
-    <source src="/music/【发行】LIKETHAT_original.wav" type="audio/wav">
+    <source src="/music/LIKE THAT.flac" type="audio/flac">
     您的浏览器不支持音频播放。
   </audio>
 
@@ -128,10 +148,11 @@
     const qualityButtons = document.querySelectorAll('.quality-btn');
     const disc = document.getElementById('disc');
 
-    // 默认播放时启动旋转
+    // 当音频播放时启动唱片旋转
     audioPlayer.addEventListener('play', () => {
       disc.classList.add('rotating');
     });
+    // 暂停或结束时停止旋转
     audioPlayer.addEventListener('pause', () => {
       disc.classList.remove('rotating');
     });
@@ -145,14 +166,14 @@
         audioPlayer.src = src;
         audioPlayer.load();
         audioPlayer.play();
-        // 更新按钮状态
+        // 更新按钮状态：激活按钮背景色
         qualityButtons.forEach(b => b.classList.remove('bg-indigo-700'));
         btn.classList.add('bg-indigo-700');
       });
     });
   </script>
 
-  <!-- 唱片图标点击切换播放/暂停 -->
+  <!-- 唱片点击切换播放/暂停 -->
   <script>
     const discContainer = document.getElementById('disc');
     discContainer.addEventListener('click', () => {
@@ -179,7 +200,7 @@
     });
   </script>
 
-  <!-- 禁用右键下载音频 -->
+  <!-- 禁用右键下载音频（辅助措施） -->
   <script>
     document.addEventListener('contextmenu', function(e) {
       if (e.target.tagName === 'A' && e.target.href.includes(audioPlayer.src)) {
