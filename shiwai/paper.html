@@ -41,9 +41,20 @@
       padding: 0;
       line-height: 1.618;
       letter-spacing: 0.5px;
+      font-weight: normal;
     }
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
+      font-weight: normal;
+    }
+
+    /* 全局链接样式：无下划线，不加粗 */
+    a {
+      text-decoration: none;
+      font-weight: normal;
+    }
+    a:hover {
+      text-decoration: none;
     }
 
     /* ========== 页面容器 ========== */
@@ -70,7 +81,6 @@
     .header h1 {
       margin: 0;
       font-size: 2rem;
-      font-weight: 600;
       letter-spacing: 1px;
     }
 
@@ -118,7 +128,6 @@
 
     .announcement-card h2 {
       font-size: 1.9rem;
-      font-weight: 600;
       color: var(--secondary-color);
       margin-bottom: 25px;
       text-align: center;
@@ -131,16 +140,9 @@
       margin-bottom: 20px;
     }
 
-    .announcement-card a {
-      color: var(--primary-color);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s ease;
-    }
-
     .announcement-card a:hover {
       color: var(--accent-color);
-      text-decoration: underline;
+      text-decoration: none;
     }
 
     /* ========== 悬浮球样式 ========== */
@@ -199,9 +201,10 @@
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       text-align: center;
-      max-width: 350px;
+      max-width: 280px;
       width: 100%;
       animation: fadeIn 0.3s ease;
+      margin: 0 auto;
     }
 
     @keyframes fadeIn {
@@ -217,7 +220,6 @@
 
     #rewardModal h2 {
       font-size: 1.75rem;
-      font-weight: 600;
       margin-bottom: 20px;
       color: var(--secondary-color);
     }
@@ -225,7 +227,8 @@
     #rewardModal img {
       width: 200px;
       height: auto;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
+      display: block;
       border-radius: 8px;
     }
 
@@ -279,8 +282,8 @@
   <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
     <p class="font-normal">
       &copy; 2025 TarochLee | 
-      <a href="https://github.com/TarochLee" class="text-blue-400 no-underline">GitHub</a> | 
-      <button onclick="openModal()" class="text-blue-400 no-underline">打赏</button>
+      <a href="https://github.com/TarochLee" class="text-blue-400">GitHub</a> | 
+      <button onclick="openModal()" class="text-blue-400">打赏</button>
     </p>
   </footer>
 
