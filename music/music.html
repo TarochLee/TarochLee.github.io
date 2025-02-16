@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIKE THAT - 高保真音乐体验</title>
+  <!-- 引入 Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 字体定义，与之前一致 */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 全局字体设置 */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #1f2937; /* 深灰背景 */
+      letter-spacing: 0.05em;
+      color: #e5e7eb;
+    }
+    /* 播放器容器 */
+    .player-container {
+      background: linear-gradient(135deg, #111827, #1f2937);
+    }
+    /* 唱片图标 */
+    .disc {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: url('/pictures/disc.png') no-repeat center/cover;
+      cursor: pointer;
+      /* 初始状态不旋转 */
+      animation: none;
+    }
+    /* 正在播放时添加旋转动画 */
+    .rotating {
+      animation: spin 3s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* 播放质量按钮 */
+    .quality-btn {
+      transition: background 0.3s, transform 0.3s;
+    }
+    .quality-btn:hover {
+      transform: scale(1.07);
+    }
+    /* 提示文字 */
+    .hint-text {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  <!-- 主体内容 -->
+  <main class="flex-grow flex items-center justify-center p-8 player-container">
+    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl shadow-2xl p-10 max-w-lg w-full text-center">
+      <!-- 标题 -->
+      <h1 class="text-4xl font-bold mb-8 tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">
+        LIKE THAT
+      </h1>
+      <!-- 唱片图标区域 -->
+      <div id="discContainer" class="mx-auto mb-8">
+        <!-- 唱片图标，点击切换播放/暂停 -->
+        <div id="disc" class="disc mx-auto"></div>
+      </div>
+      <!-- 播放质量选择按钮 -->
+      <div class="flex justify-center space-x-4 mb-4">
+        <button data-src="/music/【发行】LIKETHAT_original.wav" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
+          原版（杜比）
+        </button>
+        <button data-src="/music/【发行】LIKETHAT_medium.wav" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
+          中等（立体）
+        </button>
+        <button data-src="/music/【发行】LIKETHAT_compressed.wav" class="quality-btn px-5 py-2 bg-indigo-500 rounded-full hover:bg-indigo-600 focus:outline-none">
+          压缩（mp3）
+        </button>
+      </div>
+      <!-- 播放提示 -->
+      <p class="hint-text">
+        当前音频格式：5.1 192kHz 32位浮点<br>
+        切换不同质量，体验音乐细节
+      </p>
+    </div>
+  </main>
+
+  <!-- 隐藏的音频播放器 -->
+  <audio id="audioPlayer" preload="metadata" controlsList="nodownload" style="display: none;">
+    <!-- 默认加载原版音频 -->
+    <source src="/music/【发行】LIKETHAT_original.wav" type="audio/wav">
+    您的浏览器不支持音频播放。
+  </audio>
+
+  <!-- 页脚（与之前一致） -->
+  <footer class="bg-gray-800 text-white text-center p-4">
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:no-underline">GitHub</a> | 
+      <a href="https://caleb.ink" class="text-blue-400 hover:no-underline">友链</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:no-underline">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗（与之前一致） -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
+    </div>
+  </div>
+
+  <!-- 播放质量切换脚本 -->
+  <script>
+    const audioPlayer = document.getElementById('audioPlayer');
+    const qualityButtons = document.querySelectorAll('.quality-btn');
+    const disc = document.getElementById('disc');
+
+    // 默认播放时启动旋转
+    audioPlayer.addEventListener('play', () => {
+      disc.classList.add('rotating');
+    });
+    audioPlayer.addEventListener('pause', () => {
+      disc.classList.remove('rotating');
+    });
+    audioPlayer.addEventListener('ended', () => {
+      disc.classList.remove('rotating');
+    });
+
+    qualityButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-src');
+        audioPlayer.src = src;
+        audioPlayer.load();
+        audioPlayer.play();
+        // 更新按钮状态
+        qualityButtons.forEach(b => b.classList.remove('bg-indigo-700'));
+        btn.classList.add('bg-indigo-700');
+      });
+    });
+  </script>
+
+  <!-- 唱片图标点击切换播放/暂停 -->
+  <script>
+    const discContainer = document.getElementById('disc');
+    discContainer.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+      } else {
+        audioPlayer.pause();
+      }
+    });
+  </script>
+
+  <!-- 打赏弹窗相关脚本 -->
+  <script>
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
+    document.getElementById('rewardModal').addEventListener('click', function (event) {
+      if (event.target === this) {
+        closeModal();
+      }
+    });
+  </script>
+
+  <!-- 禁用右键下载音频 -->
+  <script>
+    document.addEventListener('contextmenu', function(e) {
+      if (e.target.tagName === 'A' && e.target.href.includes(audioPlayer.src)) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
