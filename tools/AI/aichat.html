@@ -150,7 +150,7 @@
       .mode-toggle-desktop {
         display: none;
       }
-      /* 手机版左侧返回主页按钮（使用 SVG 图标） */
+      /* 手机版左侧返回主页按钮 */
       .home-btn-mobile {
         display: flex;
         align-items: center;
@@ -166,7 +166,7 @@
         height: 100%;
         fill: white;
       }
-      /* 手机版右侧两个按钮 */
+      /* 手机版右侧按钮：刷新和布局切换 */
       .mobile-btn-container {
         display: flex;
         gap: 10px;
@@ -189,31 +189,37 @@
       }
     }
     
-    /* ========== 电脑版与手机版切换（force-desktop）重写移动样式 ========== */
-    @media (max-width: 768px) {
-      body.force-desktop .container {
-        max-width: 900px;
-        margin: 40px auto;
-        border-radius: 16px;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        padding: 30px;
-      }
-      body.force-desktop .header {
-        display: block;
-        padding: 24px;
-      }
-      body.force-desktop .home-btn,
-      body.force-desktop .mode-toggle-desktop {
-        display: flex;
-      }
-      body.force-desktop .home-btn-mobile,
-      body.force-desktop .mobile-btn-container {
-        display: none;
-      }
-      body.force-desktop .chat-container {
-        height: 500px;
-        padding: 20px;
-      }
+    /* ========== 强制手机版布局（无论设备宽度如何） ========== */
+    body.force-mobile .container {
+      max-width: 100% !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 15px !important;
+    }
+    body.force-mobile .header {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      padding: 10px !important;
+    }
+    body.force-mobile .header h1 {
+      flex: 1;
+      text-align: center;
+      font-size: 1.5rem !important;
+      margin: 0 !important;
+    }
+    body.force-mobile .home-btn,
+    body.force-mobile .mode-toggle-desktop {
+      display: none !important;
+    }
+    body.force-mobile .home-btn-mobile,
+    body.force-mobile .mobile-btn-container {
+      display: flex !important;
+    }
+    body.force-mobile .chat-container {
+      height: 300px !important;
+      padding: 10px !important;
     }
     
     /* ========== 聊天界面样式 ========== */
@@ -379,7 +385,6 @@
       <a href="/index.html" class="home-btn">👨‍🎓</a>
       <!-- 手机版左侧返回主页按钮 -->
       <button class="home-btn-mobile" onclick="location.href='/index.html'">
-        <!-- Home SVG 图标 -->
         <svg viewBox="0 0 24 24">
           <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
         </svg>
@@ -388,20 +393,18 @@
       <h1>MY AI - 聊天助手</h1>
       <!-- 电脑版模式切换按钮（隐藏于手机） -->
       <button class="mode-toggle-desktop" onclick="toggleModeDesktop()">切换模式</button>
-      <!-- 手机版右侧按钮：刷新和版本切换 -->
+      <!-- 手机版右侧按钮：刷新和布局切换 -->
       <div class="mobile-btn-container">
         <!-- 刷新按钮 -->
         <button class="mobile-btn" onclick="location.reload()">
-          <!-- 刷新 SVG 图标 -->
           <svg viewBox="0 0 24 24">
             <path d="M17.65 6.35A7.95 7.95 0 0 0 12 4C7.58 4 4 7.58 4 12h2a6 6 0 0 1 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35zM6.35 17.65A7.95 7.95 0 0 0 12 20c4.42 0 8-3.58 8-8h-2a6 6 0 0 1-6 6c-1.66 0-3.14-.69-4.22-1.78L11 13H4v7l2.35-2.35z"/>
           </svg>
         </button>
-        <!-- 版本切换按钮 -->
-        <button class="mobile-btn" onclick="toggleDesktopMode()">
-          <!-- 切换 SVG 图标：初始显示“手机”图标 -->
+        <!-- 布局切换按钮 -->
+        <button class="mobile-btn" onclick="toggleLayout()">
           <svg id="modeIcon" viewBox="0 0 24 24">
-            <!-- 手机图标 -->
+            <!-- 初始显示手机图标 -->
             <path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>
           </svg>
         </button>
@@ -440,33 +443,29 @@
   
   <script>
     /* 禁止右键菜单、复制、查看源码及常用快捷键 */
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
       if (e.ctrlKey && ['u','s','c','x'].includes(e.key.toLowerCase())) e.preventDefault();
       if (e.keyCode === 123) e.preventDefault();
     });
-    document.addEventListener('copy', function(e) {
-      e.preventDefault();
-    });
+    document.addEventListener('copy', e => e.preventDefault());
     
-    /* 电脑版模式切换函数（仅在非手机端或在 force-desktop 下使用） */
+    /* 电脑版模式切换函数（仅示例） */
     function toggleModeDesktop() {
       alert("电脑版模式切换功能示例");
     }
     
-    /* 手机版切换到电脑版/手机版的函数，通过 toggling force-desktop 类 */
-    function toggleDesktopMode() {
-      document.body.classList.toggle('force-desktop');
-      // 切换图标：如果 force-desktop 存在则显示桌面图标，否则显示手机图标
-      var modeIcon = document.getElementById('modeIcon');
-      if(document.body.classList.contains('force-desktop')){
-        // 桌面版图标（例如电脑图标）
-        modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
-      } else {
-        // 手机版图标
+    /* 切换布局：若 body 上存在 force-mobile 则移除（显示电脑版布局），否则添加（强制手机版布局） */
+    function toggleLayout() {
+      const modeIcon = document.getElementById('modeIcon');
+      if(document.body.classList.contains('force-mobile')) {
+        document.body.classList.remove('force-mobile');
+        // 更新为手机图标
         modeIcon.innerHTML = '<path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>';
+      } else {
+        document.body.classList.add('force-mobile');
+        // 更新为电脑图标（示例：一个简单的桌面图标）
+        modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
       }
     }
     
@@ -524,7 +523,7 @@
       }
     });
     
-    chatInput.addEventListener("keypress", (e) => {
+    chatInput.addEventListener("keypress", e => {
       if (e.key === "Enter") sendBtn.click();
     });
   </script>
