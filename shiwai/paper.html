@@ -7,7 +7,6 @@
   <meta name="description" content="东北大学2025年竞速组招新——视觉组的公告栏">
   <meta name="keywords" content="东北大学, 竞速组, 招新, 视觉组, 公告栏">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     /* ========== CSS 变量 ========== */
     :root {
@@ -99,17 +98,17 @@
 
     /* ========== 公告卡片样式 ========== */
     .announcement-card {
-      padding: 30px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
+      padding: 40px 30px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.97), rgba(245, 245, 245, 0.97));
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 700px;
-      margin: 30px auto;
-      text-align: center;
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: left;
       border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(10px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      line-height: 1.8;
     }
 
     .announcement-card:hover {
@@ -118,17 +117,17 @@
     }
 
     .announcement-card h2 {
-      font-size: 1.75rem;
+      font-size: 1.9rem;
       font-weight: 600;
       color: var(--secondary-color);
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      text-align: center;
       letter-spacing: 0.5px;
     }
 
     .announcement-card p {
       font-size: 1.1rem;
       color: #555;
-      line-height: 1.8;
       margin-bottom: 20px;
     }
 
@@ -191,16 +190,17 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      padding: 20px;
     }
 
-    #rewardModal div {
+    #rewardModal .modal-content {
       background: white;
-      padding: 30px;
+      padding: 30px 20px;
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
       text-align: center;
-      max-width: 400px;
-      width: 90%;
+      max-width: 350px;
+      width: 100%;
       animation: fadeIn 0.3s ease;
     }
 
@@ -252,17 +252,20 @@
     </div>
     <div class="announcement-card">
       <h2>视觉组招新公告</h2>
-      <p>作业已评分，评分标准见
+      <p>
+        作业已评分，评分标准见
         <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>。
         可以点击此处
         <a href="/shiwai/test.html" target="_blank">查询作业评分</a>。
       </p>
-      <p>本次招新考核视觉组还有最终考核，请自行阅读或下载
+      <p>
+        本次招新考核视觉组还有最终考核，请自行阅读或下载
         <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf" target="_blank">最终考核的题目</a>，
         有能力者可以尝试
         <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf" target="_blank">附加题</a>，
         请在2月25日之前完成最终考核题目并提交至
-        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>，感谢支持与理解。</p>
+        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>，感谢支持与理解。
+      </p>
       <p>提醒诸位阅读招新评分标准，完成题目要求并修改作业，准备“面试与展示”部分。</p>
     </div>
   </div>
@@ -283,7 +286,7 @@
 
   <!-- 打赏弹窗 -->
   <div id="rewardModal">
-    <div>
+    <div class="modal-content">
       <h2>🎁 感谢您的支持！</h2>
       <img src="/pictures/wechat.png" alt="微信打赏二维码">
       <button onclick="closeModal()">关闭</button>
