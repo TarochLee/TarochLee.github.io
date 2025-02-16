@@ -88,40 +88,37 @@
       font-size: 2rem;
     }
     
-    /* 电脑版返回主页按钮（原样式） */
-    .home-btn {
+    /* 电脑版返回主页按钮及切换按钮 */
+    .home-btn,
+    .mode-toggle-desktop {
       position: absolute;
-      left: 20px;
       top: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      backdrop-filter: blur(5px);
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .home-btn {
+      left: 20px;
+      width: 48px;
+      height: 48px;
+      font-size: 1.75rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      backdrop-filter: blur(5px);
-      font-size: 1.75rem;
-      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
     }
     .home-btn:hover {
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.1);
     }
-    
-    /* 电脑版模式切换按钮 */
     .mode-toggle-desktop {
-      position: absolute;
       right: 20px;
-      top: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      border-radius: 20px;
       padding: 5px 10px;
-      color: white;
-      cursor: pointer;
       font-size: 0.9rem;
-      transition: background 0.2s;
+      color: white;
+      border-radius: 20px;
     }
     .mode-toggle-desktop:hover {
       background: rgba(255, 255, 255, 0.3);
@@ -148,12 +145,12 @@
         font-size: 1.5rem;
         margin: 0;
       }
-      /* 隐藏电脑版返回主页及切换按钮 */
+      /* 隐藏电脑版按钮 */
       .home-btn,
       .mode-toggle-desktop {
         display: none;
       }
-      /* 手机版：左侧显示主页 SVG 按钮 */
+      /* 手机版左侧返回主页按钮（使用 SVG 图标） */
       .home-btn-mobile {
         display: flex;
         align-items: center;
@@ -169,12 +166,12 @@
         height: 100%;
         fill: white;
       }
-      /* 手机版：右侧显示两个调节开关 SVG 按钮 */
-      .toggle-container-mobile {
+      /* 手机版右侧两个按钮 */
+      .mobile-btn-container {
         display: flex;
         gap: 10px;
       }
-      .toggle-btn-mobile {
+      .mobile-btn {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -185,10 +182,37 @@
         border-radius: 50%;
         cursor: pointer;
       }
-      .toggle-btn-mobile svg {
+      .mobile-btn svg {
         width: 20px;
         height: 20px;
         fill: white;
+      }
+    }
+    
+    /* ========== 电脑版与手机版切换（force-desktop）重写移动样式 ========== */
+    @media (max-width: 768px) {
+      body.force-desktop .container {
+        max-width: 900px;
+        margin: 40px auto;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        padding: 30px;
+      }
+      body.force-desktop .header {
+        display: block;
+        padding: 24px;
+      }
+      body.force-desktop .home-btn,
+      body.force-desktop .mode-toggle-desktop {
+        display: flex;
+      }
+      body.force-desktop .home-btn-mobile,
+      body.force-desktop .mobile-btn-container {
+        display: none;
+      }
+      body.force-desktop .chat-container {
+        height: 500px;
+        padding: 20px;
       }
     }
     
@@ -353,9 +377,9 @@
     <div class="header">
       <!-- 电脑版返回主页按钮（隐藏于手机） -->
       <a href="/index.html" class="home-btn">👨‍🎓</a>
-      <!-- 手机版：左侧返回主页按钮（使用 SVG 图标） -->
+      <!-- 手机版左侧返回主页按钮 -->
       <button class="home-btn-mobile" onclick="location.href='/index.html'">
-        <!-- 简单的 Home SVG 图标 -->
+        <!-- Home SVG 图标 -->
         <svg viewBox="0 0 24 24">
           <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
         </svg>
@@ -363,19 +387,22 @@
       <!-- 标题 -->
       <h1>MY AI - 聊天助手</h1>
       <!-- 电脑版模式切换按钮（隐藏于手机） -->
-      <button class="mode-toggle-desktop" onclick="toggleMode()">切换模式</button>
-      <!-- 手机版：右侧两个调节按钮 -->
-      <div class="toggle-container-mobile">
-        <button class="toggle-btn-mobile" onclick="toggleSetting1()">
-          <!-- 第一个开关 SVG（示例图标，可自行替换） -->
+      <button class="mode-toggle-desktop" onclick="toggleModeDesktop()">切换模式</button>
+      <!-- 手机版右侧按钮：刷新和版本切换 -->
+      <div class="mobile-btn-container">
+        <!-- 刷新按钮 -->
+        <button class="mobile-btn" onclick="location.reload()">
+          <!-- 刷新 SVG 图标 -->
           <svg viewBox="0 0 24 24">
-            <path d="M12 4.5a7.5 7.5 0 107.5 7.5A7.508 7.508 0 0012 4.5zm0 13a5.5 5.5 0 115.5-5.5A5.507 5.507 0 0112 17.5z"/>
+            <path d="M17.65 6.35A7.95 7.95 0 0 0 12 4C7.58 4 4 7.58 4 12h2a6 6 0 0 1 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35zM6.35 17.65A7.95 7.95 0 0 0 12 20c4.42 0 8-3.58 8-8h-2a6 6 0 0 1-6 6c-1.66 0-3.14-.69-4.22-1.78L11 13H4v7l2.35-2.35z"/>
           </svg>
         </button>
-        <button class="toggle-btn-mobile" onclick="toggleSetting2()">
-          <!-- 第二个开关 SVG（示例图标，可自行替换） -->
-          <svg viewBox="0 0 24 24">
-            <path d="M3 12h18M12 3v18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <!-- 版本切换按钮 -->
+        <button class="mobile-btn" onclick="toggleDesktopMode()">
+          <!-- 切换 SVG 图标：初始显示“手机”图标 -->
+          <svg id="modeIcon" viewBox="0 0 24 24">
+            <!-- 手机图标 -->
+            <path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>
           </svg>
         </button>
       </div>
@@ -424,16 +451,23 @@
       e.preventDefault();
     });
     
-    /* 电脑版切换模式示例函数 */
-    function toggleMode() {
+    /* 电脑版模式切换函数（仅在非手机端或在 force-desktop 下使用） */
+    function toggleModeDesktop() {
       alert("电脑版模式切换功能示例");
     }
-    /* 手机版调节按钮示例函数 */
-    function toggleSetting1() {
-      alert("设置1 切换");
-    }
-    function toggleSetting2() {
-      alert("设置2 切换");
+    
+    /* 手机版切换到电脑版/手机版的函数，通过 toggling force-desktop 类 */
+    function toggleDesktopMode() {
+      document.body.classList.toggle('force-desktop');
+      // 切换图标：如果 force-desktop 存在则显示桌面图标，否则显示手机图标
+      var modeIcon = document.getElementById('modeIcon');
+      if(document.body.classList.contains('force-desktop')){
+        // 桌面版图标（例如电脑图标）
+        modeIcon.innerHTML = '<path d="M20 18v-1H4v1H2v-3h20v3h-2zM22 7H2V5h20v2zM2 19h20v2H2v-2z"/>';
+      } else {
+        // 手机版图标
+        modeIcon.innerHTML = '<path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/>';
+      }
     }
     
     /* 打赏弹窗功能 */
