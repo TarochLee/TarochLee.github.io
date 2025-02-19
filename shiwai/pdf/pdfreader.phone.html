@@ -43,7 +43,7 @@
       font-family: Consolas, "Courier New", monospace !important;
     }
 
-    /* ========== [固定头部导航：左箭头+标题] ========== */
+    /* ========== [整体布局] ========== */
     html, body {
       height: 100%;
       display: flex;
@@ -53,7 +53,7 @@
       flex: 1; /* 撑开中间区域，底部footer固定 */
     }
 
-    /* 顶部栏（绿色渐变），左上角返回按钮 + 中间标题 */
+    /* ========== [顶部导航栏：左箭头 + 标题] ========== */
     .phone-header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -62,38 +62,38 @@
       align-items: center;
       background: linear-gradient(to right, #16a34a, #22c55e); /* 绿色渐变 */
       color: #fff;
-      padding: 0.75rem 1rem;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      padding: 1rem; /* 内边距 */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .phone-header a.back-btn {
       display: inline-flex;
-      width: 2.25rem;
-      height: 2.25rem;
+      width: 2rem;
+      height: 2rem;
       align-items: center;
       justify-content: center;
-      margin-right: 0.5rem;
+      margin-right: 0.75rem;
     }
     .phone-header h1 {
       flex: 1; /* 占据剩余空间 */
-      font-size: 1rem;
-      font-weight: normal;
+      font-size: 1.125rem;
       text-align: center;
       margin: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 1.5;
     }
 
     /* 占位，避免正文被顶部栏遮挡 */
     .pt-16 {
-      padding-top: 4rem; /* 16 * 4 = 64px */
+      padding-top: 4rem; /* 64px */
     }
 
-    /* 浅绿色渐变标题区 */
+    /* ========== [标题区：浅绿色渐变] ========== */
     .title-section {
       background: linear-gradient(to right, #bbf7d0, #dcfce7);
       text-align: center;
-      min-height: 100px;
+      min-height: 80px; /* 降低一点高度，保留一定的空间 */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -102,26 +102,28 @@
     }
     .title-section h2 {
       color: #166534;
-      font-size: 1.125rem;
+      font-size: 1.25rem; /* 稍微增大标题 */
       font-weight: normal;
       margin: 0;
+      line-height: 1.4;
     }
 
-    /* PDF 按钮容器 */
+    /* ========== [PDF 切换按钮组] ========== */
     .pdf-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 0.75rem;
       margin-bottom: 1rem;
+      margin-top: 1rem;
     }
     .pdf-buttons button {
       background-color: #16a34a; /* 绿色 */
       color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1rem;
       border-radius: 0.375rem;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       transition: background-color 0.2s, transform 0.2s;
     }
     .pdf-buttons button:hover {
@@ -129,47 +131,53 @@
       transform: translateY(-2px);
     }
 
-    /* PDF 导航(上一页 / 下一页) */
+    /* ========== [PDF 导航 (上一页 / 下一页)] ========== */
     .pdf-nav {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap; /* 换行适配移动端 */
+      gap: 1.5rem; /* 更宽松 */
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap; 
     }
     .pdf-nav button {
       background-color: #3B82F6; /* 蓝色 */
       color: #fff;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1rem;
       border-radius: 0.375rem;
-      font-size: 0.875rem;
+      font-size: 0.95rem;
       transition: background-color 0.2s, transform 0.2s;
     }
     .pdf-nav button:hover {
       background-color: #2563EB; /* 深蓝 */
       transform: translateY(-2px);
     }
+    .pdf-page-info {
+      font-size: 0.95rem;
+      color: #444;
+    }
 
-    /* PDF canvas 容器 */
+    /* ========== [PDF canvas 容器] ========== */
     #pdfContainer {
       text-align: center;
       margin: 0 auto;
       border: 1px solid #ddd;
       border-radius: 0.375rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      max-width: 600px;   /* 控制最大宽度，可根据需要调整 */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 720px;  /* 调高为 720px，适配中等屏幕 */
       position: relative;
       background: #fff;
+      padding-bottom: 1rem; /* 让底部留点余地 */
     }
     #pdfCanvas {
       width: 100%;
       height: auto;
       display: block;
+      margin: 0 auto;
     }
 
-    /* ========== 底部footer ========== */
+    /* ========== [底部footer] ========== */
     footer {
       background: #1F2937;
       color: #f0f0f0;
@@ -182,7 +190,7 @@
       text-decoration: none;
     }
 
-    /* 打赏弹窗 */
+    /* ========== [打赏弹窗] ========== */
     #rewardModal {
       position: fixed; 
       top: 0; left: 0; 
@@ -229,7 +237,7 @@
 
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
   <!-- 顶部手机端栏 -->
   <header class="phone-header">
@@ -254,8 +262,9 @@
 
   <!-- 主体内容 -->
   <main class="px-4 py-4">
+
     <!-- PDF 切换按钮 -->
-    <div class="pdf-buttons mb-4">
+    <div class="pdf-buttons">
       <button onclick="loadPDF('/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf')">附加题</button>
       <button onclick="loadPDF('/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf')">评分标准</button>
       <button onclick="loadPDF('/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf')">试卷</button>
@@ -265,7 +274,7 @@
     <!-- PDF 导航(上一页 / 下一页) -->
     <div class="pdf-nav">
       <button onclick="prevPage()">上一页</button>
-      <div>
+      <div class="pdf-page-info">
         第 <span id="pageNum">1</span> 页 / 共 <span id="pageCount">1</span> 页
       </div>
       <button onclick="nextPage()">下一页</button>
@@ -278,13 +287,14 @@
   </main>
 
   <!-- 底部页脚 -->
-  <footer class="mt-auto">
-    <p>
-      &copy; 2025 TarochLee | 
-      <a href="https://github.com/TarochLee" class="hover:underline">GitHub</a> | 
-      <button onclick="openModal()" class="text-blue-300 hover:underline">打赏</button>
-    </p>
-  </footer>
+    <footer>
+        <p>
+            &copy; 2025 TarochLee | 
+            <a href="https://github.com/TarochLee">GitHub</a> | 
+            <a href="/shiwai/all.html" class="text-blue-300">阅读全文</a> | 
+            <button onclick="openModal()" class="text-blue-300">打赏</button>
+        </p>
+    </footer>
 
   <!-- 打赏弹窗 -->
   <div id="rewardModal">
@@ -337,21 +347,28 @@
       try {
         const page = await pdfDoc.getPage(num);
 
-        // 获取默认viewport
+        // 获取PDF默认viewport
         const viewport = page.getViewport({ scale: 1 });
-        // 计算让整页适应容器宽度的scale
+        // 让 PDF 适应容器宽度
         const container = document.getElementById('pdfContainer');
         const containerWidth = container.clientWidth;
+        let scaleFactor = containerWidth / viewport.width;
 
-        // 根据默认宽度，计算出要缩放的比例，使PDF宽度等于容器宽度
-        const scale = containerWidth / viewport.width;
-        const scaledViewport = page.getViewport({ scale: scale });
+        // 如果想稍微放大或缩小，可在这里调整：
+        // scaleFactor *= 1.1;  // 例如放大 1.1 倍（可根据喜好）
+        
+        // 限制最小/最大倍数（可选）
+        const minScale = 0.5;
+        const maxScale = 2.0;
+        scaleFactor = Math.min(Math.max(scaleFactor, minScale), maxScale);
 
-        // 设置canvas大小
+        const scaledViewport = page.getViewport({ scale: scaleFactor });
+
+        // 设置 canvas 的尺寸
         pdfCanvas.width = scaledViewport.width;
         pdfCanvas.height = scaledViewport.height;
 
-        // 渲染到canvas上
+        // 渲染到 canvas 上
         const renderContext = {
           canvasContext: ctx,
           viewport: scaledViewport
@@ -380,7 +397,7 @@
       renderPage(++pageNum);
     }
 
-    // ========== 默认先加载“附加题”PDF（可自行修改） ==========
+    // 默认先加载“附加题”PDF（可根据需要切换）
     loadPDF('/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf');
   </script>
 </body>
