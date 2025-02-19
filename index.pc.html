@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BAATER 的个人主页</title>
+  <!-- 引入 Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 定义中文字体（华文中宋） */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 定义英文字体（Times New Roman） */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
+      letter-spacing: 0.05em; /* 增加字体间距 */
+    }
+    /* 保持代码块等宽字体（覆盖全局设置） */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+    /* 页面全屏布局，footer 固定在底部 */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+    /* 彩虹文字效果 */
+    .rainbow-dark-text {
+      background: linear-gradient(
+        90deg,
+        hsl(0, 0%, 100%) 0%,    
+        hsl(0, 100%, 90%) 20%,  
+        hsl(0, 100%, 70%) 40%,  
+        hsl(0, 100%, 55%) 60%,  
+        hsl(0, 100%, 45%) 80%,  
+        hsl(0, 100%, 35%) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% auto;
+      animation: dark-rainbow 5s linear infinite;
+    }
+    @keyframes dark-rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* 禁止用户选择文本（便于拖动） */
+    .no-select {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900 no-select">
+  <!-- 左侧“卡片”式个人信息面板 -->
+  <div 
+    id="infoPanel"
+    class="fixed top-4 left-4 w-80 h-[calc(100% - 2rem)] bg-white shadow-lg transform -translate-x-72 rotate-[-1deg] transition-transform duration-300 z-40 rounded-2xl overflow-hidden cursor-pointer"
+    onclick="openPanel()"
+  >
+    <!-- 面板顶部：灰色背景 + 左箭头（点击收起） -->
+    <div class="bg-gray-200 p-2 flex items-center rounded-t-2xl">
+      <button 
+        id="closePanelBtn"
+        class="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow focus:outline-none ml-2 hover:scale-105 transition-transform"
+        onclick="closePanel(event)"
+      >
+        <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M12.293 4.293a1 1 0 010 1.414L8.414 9.586l3.879 3.879a1 1 0 11-1.414 1.414l-4.586-4.586a1 1 0 010-1.414l4.586-4.586a1 1 0 011.414 0z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+    </div>
+    <!-- 面板主体内容 -->
+    <div class="p-6 flex flex-col items-center h-full">
+      <a href="/music/music.html">
+        <img src="/pictures/avatar.png" alt="头像" class="w-24 h-24 rounded-full mb-4 shadow-lg" />
+      </a>
+      <h2 class="text-xl font-normal mb-2 text-blue-800">Baater</h2>
+      <p class="text-sm font-normal text-gray-600 mb-4">
+        你没有被邀请。
+      </p>
+      <p class="text-base font-normal text-gray-800 mb-4">
+        邮箱：wlantuya@outlook.com
+      </p>
+    </div>
+  </div>
+
+  <!-- 右上角悬浮球（可拖动） -->
+  <div id="floatingBall" class="fixed z-50 no-select" style="left: calc(100% - 80px); top: 16px;">
+    <div class="relative">
+      <!-- 悬浮按钮：尺寸变小，采用现代渐变配色和全新图标 -->
+      <button id="floatingBallBtn" class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:from-indigo-600 hover:to-purple-700 focus:outline-none transition-colors duration-300">
+        <!-- 使用三点垂直图标 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 14a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+        </svg>
+      </button>
+      <!-- 改进后的小卡片：采用边框、圆角和内部分组布局 -->
+      <div id="floatingCard" class="absolute right-0 mt-2 w-48 p-3 bg-white border border-gray-200 rounded-lg shadow-lg hidden transition transform duration-300">
+        <div class="space-y-2">
+          <a href="/games/pacman/index.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">🎮</span>
+            <span class="text-sm font-medium text-gray-700">吃豆人小游戏</span>
+          </a>
+          <a href="/video/index.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">📹</span>
+            <span class="text-sm font-medium text-gray-700">SHOWCASE</span>
+          </a>
+          <a href="/tools/face_detect/index.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">🤡</span>
+            <span class="text-sm font-medium text-gray-700">人脸检测</span>
+          </a>
+          <a href="/shiwai/paper.html" class="flex items-center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">🫥</span>
+            <span class="text-sm font-medium text-gray-700">招新公告</span>
+          </a>
+          <!-- 添加AI对话功能，/tools/AI/aichat.html -->
+          <a href="/tools/AI/aichat.html" class="flex items
+          -center p-2 rounded hover:bg-gray-100 transition">
+            <span class="text-xl mr-2">🤖</span>
+            <span class="text-sm font-medium text-gray-700">AI对话</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页眉 -->
+  <header class="bg-blue-600 text-center min-h-[200px] flex flex-col justify-center p-4">
+    <h1 class="mx-auto text-4xl font-bold rainbow-dark-text">
+      📣 BAATER's HOME
+    </h1>
+    <p class="mt-4 text-xl rainbow-dark-text">
+      欢迎来到我的 GitHub Pages 站点！
+    </p>
+  </header>
+  
+  <!-- 主体内容 -->
+  <main class="container mx-auto p-8">
+    <section class="bg-white shadow-lg rounded-xl p-6 mb-6">
+      <!-- 灰色背景条内：标题和中英切换按钮 -->
+      <div class="bg-gray-100 p-3 rounded-lg flex items-center justify-between mb-4">
+      <h2 id="about-title" class="text-2xl font-normal m-0">About Me</h2>
+      <button id="toggleLang" class="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+        中
+      </button>
+      </div>
+      <!-- 中文内容，默认隐藏 -->
+      <div id="about-cn" class="hidden">
+      <p class="mt-2 font-normal text-gray-700">
+        您好，我是 Baater，来自中国东北大学的一名本科生，主修机器人工程。在这里，我将分享我的项目实践与技术见解，期待与您共同探讨与交流。
+      </p>
+      </div>
+      <!-- 英文内容 -->
+      <div id="about-en">
+      <p class="mt-2 font-normal text-gray-700">
+        Hello, I'm Baater, an undergraduate from Northeastern University in China, majoring in Robotics Engineering. Here, I share my project experiences and technical insights, and I look forward to engaging in thoughtful discussions with you.
+      </p>
+      </div>
+    </section>
+    
+    <script>
+      const toggleBtn = document.getElementById('toggleLang');
+      const aboutCn = document.getElementById('about-cn');
+      const aboutEn = document.getElementById('about-en');
+      const aboutTitle = document.getElementById('about-title');
+    
+      toggleBtn.addEventListener('click', () => {
+      if (aboutCn.classList.contains('hidden')) {
+        aboutCn.classList.remove('hidden');
+        aboutEn.classList.add('hidden');
+        toggleBtn.textContent = 'EN';
+        aboutTitle.textContent = '关于我';
+      } else {
+        aboutCn.classList.add('hidden');
+        aboutEn.classList.remove('hidden');
+        toggleBtn.textContent = '中';
+        aboutTitle.textContent = 'About Me';
+      }
+      });
+    </script>
+
+    <section class="bg-white shadow-lg rounded-xl p-6">
+      <h2 class="text-2xl font-normal">我的项目</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+        <!-- 项目 1 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🥰 系统中各种源的使用</h3>
+          <p class="mt-2 font-normal">
+          Ubuntu系统中的pip和软件源的讲解。
+          </p>
+          <a href="/essay/p1.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 2 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🚀 Macos本地部署Deepseek模型</h3>
+          <p class="mt-2 font-normal">
+            在Macos本地部署Deepseek模型的详细指南。
+          </p>
+          <a href="/essay/p2.html" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 3 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">📦 Docker 基础入门</h3>
+          <p class="mt-2 font-normal">
+            快速掌握 Docker 的核心概念和基本使用方法。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 4 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">📊 Python 数据可视化</h3>
+          <p class="mt-2 font-normal">
+            使用 Matplotlib 和 Seaborn 进行数据可视化分析。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 5 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">💡 机器学习基础</h3>
+          <p class="mt-2 font-normal">
+            学习机器学习的基本概念和常见算法。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+        <!-- 项目 6 -->
+        <div class="bg-gray-100 p-4 rounded-xl transform hover:scale-105 transition-transform duration-200">
+          <h3 class="text-xl font-normal">🌐 Web 开发实战</h3>
+          <p class="mt-2 font-normal">
+            学习 HTML、CSS 和 JavaScript 构建现代网站。
+          </p>
+          <a href="#" class="text-blue-500 mt-2 inline-block">查看详情</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-gray-800 text-white text-center p-4 mt-auto">
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-blue-400 hover:no-underline">GitHub</a> | 
+      <a href="https://caleb.ink" class="text-blue-400 hover:no-underline">友链</a> | 
+      <button onclick="openModal()" class="text-blue-400 hover:no-underline">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+      <h2 class="text-2xl font-normal mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-48 mx-auto mb-4">
+      <button onclick="closeModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">关闭</button>
+    </div>
+  </div>
+
+  <!-- 禁止操作的脚本 -->
+  <script>
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.innerText = message;
+      toast.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded';
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 2000);
+    }
+    // 禁用右键菜单
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      showToast('右键已禁用');
+    });
+    // 禁用复制操作
+    document.addEventListener('copy', function(event) {
+      event.preventDefault();
+      showToast('复制已禁用');
+    });
+    // 禁用特定键盘快捷键
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U')
+      ) {
+        event.preventDefault();
+        showToast('此操作已禁用');
+      }
+    });
+  </script>
+
+  <script>
+    // 打赏弹窗相关功能
+    function openModal() {
+      const modal = document.getElementById('rewardModal');
+      modal.classList.remove('hidden'); // 显示弹窗
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('rewardModal');
+      modal.classList.add('hidden'); // 隐藏弹窗
+    }
+
+    // 点击弹窗外部关闭弹窗
+    document.getElementById('rewardModal').addEventListener('click', function (event) {
+      if (event.target === this) {
+        closeModal(); // 如果点击的是弹窗背景，则关闭弹窗
+      }
+    });
+  </script>
+
+  <!-- 其他脚本，包括悬浮球拖动与切换小卡片功能 -->
+  <script>
+    let panelOpen = false;
+    /* 点击左侧面板展开：移除平移和旋转效果 */
+    function openPanel() {
+      if (!panelOpen) {
+        const panel = document.getElementById('infoPanel');
+        panel.classList.remove('-translate-x-72', 'rotate-[-1deg]');
+        panel.classList.add('translate-x-0', 'rotate-[1deg]');
+        panelOpen = true;
+      }
+    }
+    /* 点击箭头收起面板 */
+    function closePanel(e) {
+      e.stopPropagation();
+      if (panelOpen) {
+        const panel = document.getElementById('infoPanel');
+        panel.classList.remove('translate-x-0', 'rotate-[1deg]');
+        panel.classList.add('-translate-x-72', 'rotate-[-1deg]');
+        panelOpen = false;
+      }
+    }
+
+    // 悬浮球拖动与点击切换小卡片功能（支持鼠标和触摸事件）
+    (function() {
+      const floatingBall = document.getElementById('floatingBall');
+      const floatingBallBtn = document.getElementById('floatingBallBtn');
+      const floatingCard = document.getElementById('floatingCard');
+      let isDragging = false;
+      let dragged = false;
+      let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
+      
+      // 鼠标事件
+      floatingBall.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        dragged = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        floatingBall.style.transition = 'none';
+        const rect = floatingBall.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+      });
+      
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          if (Math.abs(e.clientX - startX) > 5 || Math.abs(e.clientY - startY) > 5) {
+            dragged = true;
+          }
+          e.preventDefault();
+          floatingBall.style.left = (e.clientX - offsetX) + 'px';
+          floatingBall.style.top = (e.clientY - offsetY) + 'px';
+        }
+      });
+      
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          floatingBall.style.transition = 'left 0.3s, top 0.3s';
+        }
+      });
+      
+      // 触摸事件支持
+      floatingBall.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        dragged = false;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        floatingBall.style.transition = 'none';
+        const rect = floatingBall.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+      });
+      
+      document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+          const touch = e.touches[0];
+          if (Math.abs(touch.clientX - startX) > 5 || Math.abs(touch.clientY - startY) > 5) {
+            dragged = true;
+          }
+          floatingBall.style.left = (touch.clientX - offsetX) + 'px';
+          floatingBall.style.top = (touch.clientY - offsetY) + 'px';
+        }
+      });
+      
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          floatingBall.style.transition = 'left 0.3s, top 0.3s';
+        }
+      });
+      
+      // 点击悬浮球按钮切换显示/隐藏小卡片（仅在未拖拽时触发）
+      floatingBallBtn.addEventListener('click', (e) => {
+        if (!dragged) {
+          floatingCard.classList.toggle('hidden');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

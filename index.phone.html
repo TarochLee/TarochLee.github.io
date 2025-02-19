@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <!-- 禁止放大缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BAATER 的个人主页</title>
+  <!-- 引入 Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 定义中文字体（华文中宋） */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 定义英文字体（Times New Roman） */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
+      letter-spacing: 0.05em;
+      font-size: 14px;
+    }
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+    /* 标题渐变效果（但颜色加深） */
+    .rainbow-dark-text {
+      background: linear-gradient(
+        90deg,
+        hsl(120, 40%, 70%) 0%,
+        hsl(120, 40%, 60%) 50%,
+        hsl(120, 40%, 70%) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      background-size: 200% auto;
+      animation: dark-rainbow 5s linear infinite;
+    }
+    @keyframes dark-rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <!-- 顶部导航栏（深绿色渐变背景，个人信息入口放在左上角） -->
+  <header class="fixed top-0 left-0 right-0 flex items-center justify-start px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 shadow z-50">
+    <div class="flex items-center space-x-3 cursor-pointer" id="openProfile">
+      <img src="/pictures/avatar.png" alt="头像" class="w-10 h-10 rounded-full shadow-md border border-green-300" />
+      <span class="text-sm font-medium text-white">Baater</span>
+    </div>
+  </header>
+
+  <!-- 为避免顶部栏遮挡内容，预留顶部内边距 -->
+  <div class="pt-20"></div>
+
+  <!-- 页眉（淡绿色渐变背景，标题颜色更深） -->
+  <section class="bg-gradient-to-r from-green-100 to-green-200 text-center min-h-[150px] flex flex-col justify-center px-4 py-6">
+    <h1 class="mx-auto text-2xl font-bold text-green-900">
+      📣 BAATER's HOME
+    </h1>
+    <p class="mt-2 text-base text-green-900">
+      欢迎来到我的 GitHub Pages 站点！
+    </p>
+  </section>
+  
+  <!-- 主体内容 -->
+  <main class="container mx-auto px-4 py-6 space-y-6">
+    <!-- 关于我 -->
+    <section class="bg-white shadow rounded-lg p-4">
+      <div class="bg-green-50 p-2 rounded flex items-center justify-between mb-3">
+        <h2 id="about-title" class="text-lg font-normal m-0 text-green-800">About Me</h2>
+        <button id="toggleLang" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors text-xs">
+          中
+        </button>
+      </div>
+      <div id="about-cn" class="hidden">
+        <p class="mt-2 font-normal text-gray-700 text-xs">
+          您好，我是 Baater，来自中国东北大学的一名本科生，主修机器人工程。在这里，我将分享我的项目实践与技术见解，期待与您共同探讨与交流。
+        </p>
+      </div>
+      <div id="about-en">
+        <p class="mt-2 font-normal text-gray-700 text-xs">
+          Hello, I'm Baater, an undergraduate from Northeastern University in China, majoring in Robotics Engineering. Here, I share my project experiences and technical insights, and I look forward to engaging in thoughtful discussions with you.
+        </p>
+      </div>
+    </section>
+
+    <!-- 我的项目 -->
+    <section class="bg-white shadow rounded-lg p-4">
+      <h2 class="text-lg font-normal text-green-800">我的项目</h2>
+      <div class="grid grid-cols-1 gap-4 mt-3">
+        <!-- 项目 1 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">🥰 系统中各种源的使用</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            Ubuntu系统中的pip和软件源的讲解。
+          </p>
+          <a href="/essay/p1.html" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+        <!-- 项目 2 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">🚀 Macos本地部署Deepseek模型</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            在Macos本地部署Deepseek模型的详细指南。
+          </p>
+          <a href="/essay/p2.html" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+        <!-- 项目 3 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">📦 Docker 基础入门</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            快速掌握 Docker 的核心概念和基本使用方法。
+          </p>
+          <a href="#" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+        <!-- 项目 4 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">📊 Python 数据可视化</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            使用 Matplotlib 和 Seaborn 进行数据可视化分析。
+          </p>
+          <a href="#" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+        <!-- 项目 5 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">💡 机器学习基础</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            学习机器学习的基本概念和常见算法。
+          </p>
+          <a href="#" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+        <!-- 项目 6 -->
+        <div class="bg-green-50 p-3 rounded transform hover:scale-105 transition">
+          <h3 class="text-base font-normal text-green-800">🌐 Web 开发实战</h3>
+          <p class="mt-1 font-normal text-gray-700">
+            学习 HTML、CSS 和 JavaScript 构建现代网站。
+          </p>
+          <a href="#" class="text-green-600 mt-1 inline-block text-xs">查看详情</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚（包含打赏按钮） -->
+  <footer class="bg-gray-800 text-white text-center py-3">
+    <p class="font-normal text-xs">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee" class="text-green-300 hover:no-underline">GitHub</a> | 
+      <a href="https://caleb.ink" class="text-green-300 hover:no-underline">友链</a> | 
+      <button id="rewardBtn" class="text-green-300 hover:no-underline focus:outline-none">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 个人信息弹窗（保留原先信息，并将功能入口放入其中，去掉“功能入口”字样） -->
+  <div id="profileModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white rounded-xl shadow-lg p-6 w-11/12 max-w-sm relative">
+      <button id="closeProfile" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none">
+        <!-- Heroicons X Mark -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <!-- 个人信息 -->
+      <div class="flex flex-col items-center">
+        <a href="/music/music.html">
+          <img src="/pictures/avatar.png" alt="头像" class="w-24 h-24 rounded-full mb-4 shadow-lg border border-gray-200" />
+        </a>
+        <h2 class="text-xl font-medium text-green-800 mb-2">Baater</h2>
+        <p class="text-sm text-gray-600 mb-4">
+          你没有被邀请。
+        </p>
+        <p class="text-base text-gray-800 mb-4">
+          邮箱：wlantuya@outlook.com
+        </p>
+      </div>
+      <!-- 将功能入口直接列出（去掉“功能入口”字样） -->
+      <div class="mt-4 space-y-2">
+          <!-- <a href="/games/pacman/index.html" class="flex items-center p-2 rounded hover:bg-green-50"> -->
+            <!-- 使用 Heroicons Controller 图标 -->
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"> -->
+              <!-- <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" /> -->
+            <!-- </svg> -->
+            <!-- <span class="text-xs font-medium text-green-800">吃豆人小游戏</span> -->
+          <!-- </a> -->
+          <a href="/video/index.html" class="flex items-center p-2 rounded hover:bg-green-50">
+            <!-- 使用 Heroicons Video Camera 图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M4 6h8a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2z"/>
+            </svg>
+            <span class="text-xs font-medium text-green-800">SHOWCASE</span>
+          </a>
+          <a href="/tools/face_detect/index.html" class="flex items-center p-2 rounded hover:bg-green-50">
+            <!-- 使用 Heroicons Identification 图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A12 12 0 1118.87 4.146M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="text-xs font-medium text-green-800">人脸检测</span>
+          </a>
+          <a href="/shiwai/paper.html" class="flex items-center p-2 rounded hover:bg-green-50">
+            <!-- 使用 Heroicons Newspaper 图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 7H5m14 0a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2m14 0V5a2 2 0 00-2-2H7a2 2 0 00-2 2v2"/>
+            </svg>
+            <span class="text-xs font-medium text-green-800">招新公告</span>
+          </a>
+          <a href="/tools/AI/aichat.html" class="flex items-center p-2 rounded hover:bg-green-50">
+            <!-- 使用 Heroicons Chat Bubble Left 图标 -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span class="text-xs font-medium text-green-800">AI对话</span>
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg text-center w-11/12 max-w-xs relative">
+      <button id="closeReward" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none">
+        <!-- Heroicons X Mark -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 class="text-xl font-medium mb-4">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-40 mx-auto mb-4" />
+      <button id="closeRewardBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors text-sm focus:outline-none">关闭</button>
+    </div>
+  </div>
+
+  <!-- 脚本部分 -->
+  <script>
+    // 中英文切换
+    const toggleBtn = document.getElementById('toggleLang');
+    const aboutCn = document.getElementById('about-cn');
+    const aboutEn = document.getElementById('about-en');
+    const aboutTitle = document.getElementById('about-title');
+
+    toggleBtn.addEventListener('click', () => {
+      if (aboutCn.classList.contains('hidden')) {
+        aboutCn.classList.remove('hidden');
+        aboutEn.classList.add('hidden');
+        toggleBtn.textContent = 'EN';
+        aboutTitle.textContent = '关于我';
+      } else {
+        aboutCn.classList.add('hidden');
+        aboutEn.classList.remove('hidden');
+        toggleBtn.textContent = '中';
+        aboutTitle.textContent = 'About Me';
+      }
+    });
+
+    // 个人信息弹窗控制
+    const profileModal = document.getElementById('profileModal');
+    document.getElementById('openProfile').addEventListener('click', () => {
+      profileModal.classList.remove('hidden');
+    });
+    document.getElementById('closeProfile').addEventListener('click', () => {
+      profileModal.classList.add('hidden');
+    });
+    profileModal.addEventListener('click', (e) => {
+      if(e.target === profileModal) profileModal.classList.add('hidden');
+    });
+
+    // 打赏弹窗控制
+    const rewardModal = document.getElementById('rewardModal');
+    document.getElementById('rewardBtn').addEventListener('click', () => {
+      rewardModal.classList.remove('hidden');
+    });
+    document.getElementById('closeReward').addEventListener('click', () => {
+      rewardModal.classList.add('hidden');
+    });
+    document.getElementById('closeRewardBtn').addEventListener('click', () => {
+      rewardModal.classList.add('hidden');
+    });
+    rewardModal.addEventListener('click', (e) => {
+      if(e.target === rewardModal) rewardModal.classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
