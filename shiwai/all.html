@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <!-- 禁止放大缩小（手机端） -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>东北大学2025年竞速组招新——作业要求</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ========== 定义中英文字体 ========== */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 全局字体设置（英文：TimesNewRoman，中文：STZhongsong） */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
+      margin: 0;
+    }
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+
+    /* 页面整体布局（头部、主体、底部） */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* 链接样式 */
+    a {
+      text-decoration: none;
+      color: #0284c7;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+
+    /* 顶部固定栏 */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(to right, #16a34a, #22c55e);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    .header-bar a.back-btn {
+      display: inline-flex;
+      width: 2.25rem;
+      height: 2.25rem;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+    }
+    .header-bar h1 {
+      font-size: 1rem;
+      font-weight: normal;
+      flex: 1;
+      text-align: center;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-bar .online-btn {
+      color: #fff;
+      font-size: 0.875rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 0.375rem;
+      padding: 0.25rem 0.5rem;
+      margin-left: 0.5rem;
+      transition: background 0.2s;
+    }
+    .header-bar .online-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* 为避免头部遮挡内容 */
+    .pt-20 {
+      padding-top: 5rem;
+    }
+
+    /* 标题区（渐变背景） */
+    .title-section {
+      background: linear-gradient(to right, #bbf7d0, #dcfce7);
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .title-section h1 {
+      color: #166534;
+      font-size: 1.5rem;
+      font-weight: normal;
+      margin: 0;
+    }
+
+    /* 公告区 */
+    .announcement {
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem auto;
+      max-width: 960px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .announcement h2 {
+      color: #0369a1;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+    .announcement p {
+      color: #075985;
+      margin: 0;
+    }
+
+    /* 各组卡片样式 */
+    .card {
+      background: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .card-header h2 {
+      font-size: 1.25rem;
+      color: #1e293b;
+      margin: 0;
+    }
+    .toggle-btn {
+      background: #3b82f6;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .toggle-btn:hover {
+      background: #2563eb;
+    }
+
+    /* 底部页脚 */
+    footer {
+      background: #1e293b;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* 打赏弹窗 */
+    #rewardModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #rewardModal .modal-inner {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      max-width: 280px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    #rewardModal h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.125rem;
+      color: #16a34a;
+    }
+    #rewardModal img {
+      width: 180px;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+    #rewardModal button {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    #rewardModal button:hover {
+      background: #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部固定栏 -->
+  <header class="header-bar">
+    <a href="/index.phone.html" class="back-btn" aria-label="返回">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1>东北大学2025年竞速组招新</h1>
+    <a href="/shiwai/pdf/pdfreader.phone.html" class="online-btn">在线查看</a>
+  </header>
+
+  <!-- 为避免头部遮挡 -->
+  <div class="pt-20"></div>
+
+  <!-- 标题区 -->
+  <section class="title-section">
+    <h1>室外竞速组招新2025 — 作业要求</h1>
+  </section>
+
+  <!-- 公告区 -->
+  <section class="announcement">
+    <h2>公告</h2>
+    <p>请各组仔细阅读作业要求及验收标准，按时提交各项材料，确保演示视频、文档与代码同步更新！</p>
+  </section>
+
+  <!-- 各组任务卡片 -->
+  <main class="px-4 py-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+      <!-- 通用任务卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2>通用任务</h2>
+          <button onclick="toggleSection('commonTaskContent', this)" class="toggle-btn">收起</button>
+        </div>
+        <div id="commonTaskContent">
+          <ol class="list-decimal list-inside space-y-3">
+            <li>
+              <strong>ROS2 Action和Lifecycle节点开发（C++）（1权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>
+                  编写Action服务器并实现 <code>ros2 action</code> 命令控制：
+                  <pre><code class="language-cpp">
+// 示例代码结构
+class CustomActionServer : public rclcpp::Node
+{
+public:
+    using CustomAction = custom_interfaces::action::CustomGoal;
+    explicit CustomActionServer(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+    
+private:
+    rclcpp_action::Server<CustomAction>::SharedPtr action_server_;
+    rclcpp_action::GoalResponse handle_goal(
+        const rclcpp_action::GoalUUID & uuid,
+        std::shared_ptr<const CustomAction::Goal> goal
+    );
+    rclcpp_action::CancelResponse handle_cancel(
+        const std::shared_ptr<rclcpp_action::ServerGoalHandle<CustomAction>> goal_handle
+    );
+    void handle_accepted(
+        const std::shared_ptr<rclcpp_action::ServerGoalHandle<CustomAction>> goal_handle
+    );
+    void execute(
+        const std::shared_ptr<rclcpp_action::ServerGoalHandle<CustomAction>> goal_handle
+    );
+};
+                  </code></pre>
+                  <ul class="list-disc list-inside ml-4">
+                    <li>Action的Goal至少包含两个输入参数和一个输出结果</li>
+                    <li>实现反馈机制，周期性发布任务进度</li>
+                  </ul>
+                </li>
+                <li>
+                  编写Lifecycle节点并实现 <code>ros2 lifecycle</code> 命令控制：
+                  <ul class="list-disc list-inside ml-4">
+                    <li>configure</li>
+                    <li>activate</li>
+                    <li>deactivate</li>
+                    <li>cleanup</li>
+                    <li>shutdown</li>
+                  </ul>
+                  <strong>补充要求：</strong>
+                  <ul class="list-disc list-inside ml-4">
+                    <li>实现状态转换错误处理</li>
+                    <li>使用 <code>rclcpp_lifecycle</code> 库</li>
+                    <li>编写 <code>launch</code> 文件控制节点状态</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>遥控节点开发（Python）（1权重）</strong>
+              <pre><code class="language-python">
+class TeleopNode(Node):
+    def __init__(self):
+        super().__init__('teleop_node')
+        self.publisher_ = self.create_publisher(Twist, 'cmd_vel', 10)
+        self.timer_ = self.create_timer(0.1, self.timer_callback)
+        self.get_logger().info('Teleop node initialized')
+
+    def timer_callback(self):
+        # 获取遥控指令
+        twist_msg = Twist()
+        twist_msg.linear.x = linear_speed
+        twist_msg.angular.z = angular_speed
+        self.publisher_.publish(twist_msg)
+              </code></pre>
+              <p class="mt-1">安装依赖：<code>sudo apt-get install ros-humble-joy</code></p>
+              <ul class="list-disc list-inside ml-4">
+                <li>支持键盘与手柄控制</li>
+                <li>编写 <code>launch</code> 文件配置节点</li>
+                <li>键盘控制时打印提示</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 决策组卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2>决策组</h2>
+          <button onclick="toggleSection('decisionGroupContent', this)" class="toggle-btn">收起</button>
+        </div>
+        <div id="decisionGroupContent">
+          <ol class="list-decimal list-inside space-y-3">
+            <li>
+              <strong>路径规划服务器（1.5权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>在 <code>rviz2</code> 上显示路径</li>
+                <li>可选算法：
+                  <ul class="list-disc ml-6">
+                    <li>A* 算法</li>
+                    <li>RRT 算法</li>
+                    <li>Dijkstra 算法</li>
+                  </ul>
+                </li>
+                <li>评分：路径平滑度，参数配置在参数服务器中</li>
+              </ul>
+            </li>
+            <li>
+              <strong>控制服务器（阿克曼模型，1.5权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>实现阿克曼小车控制方案</li>
+                <li>核心参数：轴距、最小转弯半径、最大转向角</li>
+                <li>实现轨迹跟踪控制器，参数需配置在参数服务器中</li>
+                <li>建议算法：
+                  <ul class="list-disc ml-6">
+                    <li>Pure Pursuit</li>
+                    <li>MPC预测控制</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 硬件组卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2>硬件组</h2>
+          <button onclick="toggleSection('hardwareGroupContent', this)" class="toggle-btn">收起</button>
+        </div>
+        <div id="hardwareGroupContent">
+          <ol class="list-decimal list-inside space-y-3">
+            <li>
+              <strong>工业摄像头支架（1权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>使用SolidWorks设计，3D打印实物</li>
+                <li>发挥创意；参考摄像头示意图</li>
+                <li>
+                  <a href="https://e.tb.cn/h.TILQLkSX26jdqgC?tk=aP2JeiEc6Bd" target="_blank" rel="noopener noreferrer" class="text-green-600 underline">
+                    【淘宝】退货运费险 MF278
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>机器人定位（2权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>使用提供的bag包实现精确定位</li>
+                <li>launch文件调参需人性化（协方差、tf坐标）</li>
+                <li><strong>关键技术：</strong>
+                  <ul class="list-disc ml-6">
+                    <li>imu_tool</li>
+                    <li>laser_filter</li>
+                    <li>rf2o</li>
+                    <li>里程计imu积分</li>
+                    <li>ekf</li>
+                    <li>协方差调参</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 雷达组卡片 -->
+      <div class="card">
+        <div class="card-header">
+          <h2>雷达组</h2>
+          <button onclick="toggleSection('radarGroupContent', this)" class="toggle-btn">收起</button>
+        </div>
+        <div id="radarGroupContent">
+          <ol class="list-decimal list-inside space-y-3">
+            <li>
+              <strong>机器学习建图（1.5权重）</strong>
+              <ul class="list-disc list-inside ml-4 space-y-1">
+                <li>使用提供的bag包，实现雷达数据聚类</li>
+                <li>自主编写建图节点</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Costmap2D插件开发（1.5权重）</strong>
+              <ul class="list-disc list-inside ml-4">
+                <li>实现聚类点赛道连接（需简单定位）</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 底部页脚 -->
+  <footer class="mt-8">
+    <p class="text-xs">
+      &copy; 2025 TarochLee |
+      <a href="https://github.com/TarochLee" class="text-green-300 hover:text-green-200">GitHub</a> |
+      <button onclick="openModal()" class="text-green-300 focus:outline-none">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="modal-inner">
+      <h2>🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码">
+      <button onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+
+  <script>
+    // 切换各卡片内容显示
+    function toggleSection(id, btn) {
+      var content = document.getElementById(id);
+      if(content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        btn.innerText = '收起';
+      } else {
+        content.classList.add('hidden');
+        btn.innerText = '展开';
+      }
+    }
+
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
+
+    // 禁用右键、F12、Ctrl+Shift+I、Ctrl+U 等
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+      if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.key === 'U')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>

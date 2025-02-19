@@ -2,156 +2,309 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PDF.js 在线查看</title>
+  <!-- 禁止放大缩小（手机端） -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>东北大学2025年竞速组招新——视觉组</title>
 
-  <!-- Tailwind CSS（可选） -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- PDF.js 核心脚本 + worker -->
-  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.6.172/build/pdf.min.js"></script>
-  <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.6.172/build/pdf.worker.min.js';
-  </script>
-
   <style>
+    /* ========== 定义中英文字体 ========== */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 全局字体设置（英文 -> TimesNewRoman，中文 -> 华文中宋） */
     body {
-      margin: 0;
-      padding: 0;
+      font-family: "TimesNewRoman", "STZhongsong", serif;
       background: #f5f7fa;
-      font-family: sans-serif;
+      margin: 0;
     }
-    .pdf-container {
-      max-width: 600px; /* 控制最大宽度，超出后居中 */
-      margin: 0 auto;
-      background: #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border-radius: 4px;
-      text-align: center;
-      padding-bottom: 1rem;
+    /* 保持代码块等宽字体 */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
     }
-    canvas {
-      display: block;
-      margin: 0 auto;
-      width: 100%; /* 让 canvas 宽度自适应容器 */
-      height: auto;
-    }
-    .nav-buttons {
+
+    /* 页面全屏布局，footer 固定在底部 */
+    html, body {
+      height: 100%;
       display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin: 1rem 0;
+      flex-direction: column;
     }
-    button {
-      padding: 0.5rem 1rem;
+    main {
+      flex: 1;
+    }
+
+    /* 去掉链接默认下划线 */
+    a {
+      text-decoration: none;
+      color: #0284c7; /* 默认链接颜色 */
+    }
+    a:hover {
+      text-decoration: none;
+    }
+
+    /* 头部固定栏：左上角返回按钮 + 标题 + 右上“在线查看”按钮 */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(to right, #16a34a, #22c55e); /* 绿色渐变 */
+      color: #fff;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    .header-bar a.back-btn {
+      display: inline-flex;
+      width: 2.25rem;
+      height: 2.25rem;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+    }
+    .header-bar h1 {
+      font-size: 1rem;
+      font-weight: normal; /* 不加粗 */
+      flex: 1; /* 占据剩余空间，使右侧按钮对齐右边 */
+      text-align: center;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .header-bar .online-btn {
+      color: #fff;
+      font-size: 0.875rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 0.375rem;
+      padding: 0.25rem 0.5rem;
+      text-align: center;
+      margin-left: 0.5rem;
+      transition: background 0.2s;
+    }
+    .header-bar .online-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* 避免正文被头部遮挡 */
+    .pt-16 {
+      padding-top: 4rem;
+    }
+
+    /* 浅绿色渐变标题区 */
+    .title-section {
+      background: linear-gradient(to right, #bbf7d0, #dcfce7); /* 浅绿色渐变 */
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .title-section h1 {
+      color: #166534; /* 深一点的绿色 */
+      font-size: 1.25rem;
+      font-weight: normal; /* 不加粗 */
+      margin: 0;
+    }
+
+    /* 正文容器 */
+    .content-container {
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* 打赏弹窗 */
+    #rewardModal {
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #rewardModal .modal-inner {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      max-width: 240px;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    #rewardModal h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.125rem;
+      color: #16a34a;
+      font-weight: normal; /* 不加粗 */
+    }
+    #rewardModal img {
+      width: 180px;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+    #rewardModal button {
       background: #16a34a;
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
     }
-    button:hover {
+    #rewardModal button:hover {
       background: #22c55e;
-    }
-    .page-info {
-      margin-top: 0.5rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="pdf-container">
-    <div class="nav-buttons">
-      <button onclick="prevPage()">上一页</button>
-      <button onclick="nextPage()">下一页</button>
+  <!-- 顶部：左上角返回按钮 + 中间标题 + 右上“在线查看”按钮 -->
+  <header class="header-bar">
+    <!-- 返回按钮（可改为 /index.phone.html 或其他链接） -->
+    <a href="/index.phone.html" class="back-btn">
+      <!-- 左箭头图标 -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1>东北大学2025年竞速组招新——视觉组</h1>
+    <!-- 在线查看按钮 -->
+    <a href="/shiwai/pdf/pdfreader.phone.html" class="online-btn">在线查看</a>
+  </header>
+
+  <!-- 占位，避免被头部遮挡 -->
+  <div class="pt-16"></div>
+
+  <!-- 浅绿色渐变标题区 -->
+  <section class="title-section">
+    <h1>视觉组招新公告</h1>
+  </section>
+
+  <!-- 主体内容 -->
+  <main class="container mx-auto px-4 py-4">
+    <article class="content-container text-base leading-relaxed text-gray-700">
+      <!-- 公告文字 + 链接按钮（带 SVG 图标） -->
+      <p class="mb-4">
+        本次视觉组招新的评分标准见
+        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M13 16h-1v-4h-1m2 4v-4m-2 0H7m10 0h-3v4h3m-3 0v-4m0 0V7l5 5-5 5" />
+          </svg>
+          评分标准
+        </a>
+        ，可点击
+        <a href="/shiwai/test.html"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M9.75 17L7.5 14.75l2.25-2.25M14.25 7l2.25 2.25-2.25 2.25" />
+          </svg>
+          作业评分
+        </a>
+        查询。参加本次招新考核请自行阅读或下载
+        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 10l4.553 2.276A2 2 0 0120 14.053V15.5a2.5 2.5 0 01-5 0V12m-4.553-1.724A2 2 0 0010 9.947V8.5a2.5 2.5 0 015 0v3" />
+          </svg>
+          最终考核题目
+        </a>
+        ；有能力的同学可尝试
+        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16 7a4 4 0 01-8 0m0 0H3m5 0h3m4 0h3m-2 4a2 2 0 11-4 0 2 2 0 014 0zm-6 4h6" />
+          </svg>
+          附加题
+        </a>
+        ，并于 2 月 25 日前完成后提交至
+        <a href="mailto:liyongcheng_2005@outlook.com"
+           class="text-green-600 hover:underline">
+          liyongcheng_2005@outlook.com
+        </a>
+        。请大家仔细阅读评分标准，按要求完成并修改作业，做好后续“面试与展示”环节的准备（2月28日）。
+      </p>
+    </article>
+  </main>
+
+  <!-- 底部页脚固定 -->
+  <footer class="bg-gray-800 text-white text-center py-3 mt-auto">
+    <p class="text-xs">
+      &copy; 2025 TarochLee |
+      <a href="https://github.com/TarochLee" class="text-green-300 hover:text-green-200">GitHub</a> |
+      <button onclick="openModal()" class="text-green-300 focus:outline-none">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal">
+    <div class="modal-inner">
+      <h2>🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码">
+      <button onclick="closeModal()">关闭</button>
     </div>
-    <!-- 页码信息 -->
-    <div class="page-info">
-      第 <span id="pageNum">1</span> 页 / 共 <span id="pageCount">1</span> 页
-    </div>
-    <!-- 用于显示 PDF 内容的 canvas -->
-    <canvas id="pdfCanvas"></canvas>
   </div>
 
   <script>
-    let pdfDoc = null;       // PDF Document
-    let pageNum = 1;         // 当前页码
-    let totalPages = 1;      // 总页数
-    const canvas = document.getElementById('pdfCanvas');
-    const ctx = canvas.getContext('2d');
-
-    // ====== 关键：让 PDF 在高 DPI (Retina) 屏幕上更清晰 ======
-    // 通过乘以 window.devicePixelRatio 来放大实际渲染分辨率
-    function getRenderViewport(page, containerWidth) {
-      // 获取 PDF 原始宽度
-      const viewport = page.getViewport({ scale: 1 });
-      // 根据容器宽度计算基本缩放比
-      let scale = containerWidth / viewport.width;
-      // 乘以设备像素比
-      const dpr = window.devicePixelRatio || 1;
-      scale = scale * dpr;
-
-      return page.getViewport({ scale: scale });
+    // 打赏弹窗
+    function openModal() {
+      document.getElementById('rewardModal').style.display = 'flex';
+      document.getElementById('rewardModal').style.alignItems = 'center';
+      document.getElementById('rewardModal').style.justifyContent = 'center';
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').style.display = 'none';
     }
 
-    // 加载 PDF
-    async function loadPDF(url) {
-      try {
-        pdfDoc = await pdfjsLib.getDocument(url).promise;
-        totalPages = pdfDoc.numPages;
-        document.getElementById('pageCount').textContent = totalPages;
-        pageNum = 1;
-        renderPage(pageNum);
-      } catch (e) {
-        console.error('PDF 加载失败：', e);
+    // 如果需要禁用右键或 F12:
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.key === 'U')
+      ) {
+        e.preventDefault();
       }
-    }
-
-    // 渲染指定页
-    async function renderPage(num) {
-      if (!pdfDoc) return;
-      const page = await pdfDoc.getPage(num);
-
-      // 计算容器宽度（此处容器就是 pdf-container）
-      const containerWidth = document.querySelector('.pdf-container').clientWidth;
-      // 获取适应屏幕并乘以 devicePixelRatio 的 viewport
-      const viewport = getRenderViewport(page, containerWidth);
-
-      // 按实际渲染尺寸设置 canvas 大小
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-
-      // 但要注意：CSS 宽度我们依然让 canvas 100% 撑满容器
-      // 这样视觉上不会变形
-      canvas.style.width = (viewport.width / (window.devicePixelRatio || 1)) + 'px';
-      canvas.style.height = (viewport.height / (window.devicePixelRatio || 1)) + 'px';
-
-      // 渲染到 canvas
-      await page.render({
-        canvasContext: ctx,
-        viewport: viewport
-      }).promise;
-
-      // 更新页码显示
-      pageNum = num;
-      document.getElementById('pageNum').textContent = num;
-    }
-
-    // 上一页
-    function prevPage() {
-      if (!pdfDoc || pageNum <= 1) return;
-      renderPage(--pageNum);
-    }
-    // 下一页
-    function nextPage() {
-      if (!pdfDoc || pageNum >= totalPages) return;
-      renderPage(++pageNum);
-    }
-
-    // ========== 示例：初始化时加载某个 PDF 文件 ==========
-    // 你可以在外部通过 URL 带参 或者改成你想要的 PDF 路径
-    loadPDF('/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf');
+    });
   </script>
 </body>
 </html>
