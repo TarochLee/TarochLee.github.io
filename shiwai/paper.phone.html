@@ -1,24 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <!-- 禁止放大缩小 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="utf-8" />
+  <!-- 禁止放大缩小（手机端） -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>东北大学2025年竞速组招新——视觉组</title>
-  <meta name="description" content="东北大学2025年竞速组招新——视觉组的公告栏">
-  <meta name="keywords" content="东北大学, 竞速组, 招新, 视觉组, 公告栏">
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    /* ========== 绿色主题变量 ========== */
-    :root {
-      --primary-color: #10B981; /* 绿色 */
-      --secondary-color: #059669; /* 深绿色 */
-      --accent-color: #047857; /* 更深绿色 */
-      --body-bg: #f5f7fa;
-      --container-bg: rgba(255,255,255,0.98);
-    }
-    
-    /* ========== 字体定义 ========== */
+    /* ========== 定义中英文字体 ========== */
     @font-face {
       font-family: "STZhongsong";
       src: url("/fonts/STZhongsong.ttf") format("truetype");
@@ -31,202 +23,273 @@
       font-weight: normal;
       font-style: normal;
     }
-    
+
+    /* 全局字体设置（英文 -> TimesNewRoman，中文 -> 华文中宋） */
     body {
       font-family: "TimesNewRoman", "STZhongsong", serif;
-      background: var(--body-bg);
-      color: #333;
+      background: #f5f7fa;
       margin: 0;
-      padding: 0;
-      line-height: 1.618;
-      letter-spacing: 0.5px;
     }
+    /* 保持代码块等宽字体 */
     pre, code {
       font-family: Consolas, "Courier New", monospace !important;
     }
+
+    /* 页面全屏布局，footer 固定在底部 */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* 去掉链接默认下划线 */
     a {
       text-decoration: none;
-      font-weight: normal;
+      color: #0284c7; /* 链接文字颜色，可根据喜好调 */
     }
     a:hover {
-      text-decoration: underline;
+      text-decoration: none;
     }
-    
-    /* ========== 页面容器 ========== */
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 30px;
-      background-color: var(--container-bg);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(5px);
+
+    /* 头部固定栏：左上角返回按钮 + 标题 + 右上“在线查看”按钮 */
+    .header-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(to right, #16a34a, #22c55e); /* 绿色渐变 */
+      color: #fff;
+      padding: 0.75rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
-    
-    .header {
-      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 24px;
+    .header-bar a.back-btn {
+      display: inline-flex;
+      width: 2.25rem;
+      height: 2.25rem;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+    }
+    .header-bar h1 {
+      font-size: 1rem;
+      font-weight: normal; /* 不加粗 */
+      flex: 1; /* 占据剩余空间，使右侧按钮对齐右边 */
       text-align: center;
-      border-radius: 12px 12px 0 0;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-    }
-    .header h1 {
       margin: 0;
-      font-size: 2rem;
-      letter-spacing: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .header a.home-btn {
+    .header-bar .online-btn {
+      color: #fff;
+      font-size: 0.875rem;
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 0.375rem;
+      padding: 0.25rem 0.5rem;
+      text-align: center;
+      margin-left: 0.5rem;
+      transition: background 0.2s;
+    }
+    .header-bar .online-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    /* 避免正文被头部遮挡 */
+    .pt-16 {
+      padding-top: 4rem;
+    }
+
+    /* 浅绿色渐变标题区 */
+    .title-section {
+      background: linear-gradient(to right, #bbf7d0, #dcfce7); /* 浅绿色渐变 */
+      text-align: center;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .title-section h1 {
+      color: #166534; /* 深一点的绿色 */
+      font-size: 1.25rem;
+      font-weight: normal; /* 不加粗 */
+      margin: 0;
+    }
+
+    /* 正文容器 */
+    .content-container {
+      background: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* 打赏弹窗 */
+    #rewardModal {
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    #rewardModal .modal-inner {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      text-align: center;
+      max-width: 240px;
+      margin: 0 auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      position: relative; /* 让关闭按钮绝对定位 */
+    }
+    #rewardModal h2 {
+      margin-bottom: 0.75rem;
+      font-size: 1.125rem;
+      color: #16a34a;
+      font-weight: normal; /* 不加粗 */
+    }
+    #rewardModal img {
+      width: 180px;
+      border-radius: 0.25rem;
+      margin-bottom: 0.75rem;
+    }
+    #rewardModal button {
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+    #rewardModal button:hover {
+      background: #22c55e;
+    }
+    #rewardModal .close-btn {
       position: absolute;
-      left: 20px;
-      top: 20px;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 24px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      backdrop-filter: blur(5px);
-      font-size: 1.75rem;
-      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      color: #666;
+      cursor: pointer;
     }
-    .header a.home-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    /* ========== 公告卡片样式 ========== */
-    .announcement-card {
-      padding: 40px 30px;
-      background: linear-gradient(145deg, rgba(255,255,255,0.97), rgba(245,245,245,0.97));
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      max-width: 800px;
-      margin: 40px auto;
-      text-align: left;
-      border: 1px solid rgba(255,255,255,0.3);
-      backdrop-filter: blur(10px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      line-height: 1.8;
-    }
-    .announcement-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
-    }
-    .announcement-card h2 {
-      font-size: 1.9rem;
-      color: var(--primary-color);
-      margin-bottom: 25px;
-      text-align: center;
-      letter-spacing: 0.5px;
-    }
-    .announcement-card p {
-      font-size: 1.1rem;
-      color: #555;
-      margin-bottom: 20px;
-    }
-    .announcement-card a:hover {
-      color: var(--accent-color);
-      text-decoration: underline;
-    }
-    
-    /* ========== 底部 ========== */
-    footer {
-      background: var(--secondary-color);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-    footer a, footer button {
-      color: #A7F3D0;
-    }
-    
-    /* ========== 响应式调整 ========== */
-    @media (max-width: 600px) {
-      .container {
-        margin: 20px 10px;
-        padding: 20px;
-      }
-      .header {
-        padding: 16px;
-      }
-      .header h1 {
-        font-size: 1.5rem;
-      }
-      .header a.home-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
-        left: 10px;
-        top: 10px;
-      }
-      .announcement-card {
-        padding: 20px 15px;
-        margin: 20px auto;
-      }
-      .announcement-card h2 {
-        font-size: 1.5rem;
-      }
-      .announcement-card p {
-        font-size: 1rem;
-      }
+    #rewardModal .close-btn:hover {
+      color: #333;
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
-  <div class="container mx-auto p-6 flex-grow">
-    <div class="header">
-      <a href="/index.html" class="home-btn">👨‍🎓</a>
-      <h1>东北大学2025年竞速组招新——视觉组</h1>
-    </div>
-    <div class="announcement-card">
-      <h2>视觉组招新公告</h2>
-      <p>
-        作业已评分，评分标准见
-        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>。
-        可以点击此处
-        <a href="/shiwai/test.html" target="_blank">查询作业评分</a>。
+<body>
+
+  <!-- 顶部：左上角返回按钮 + 中间标题 + 右上“在线查看”按钮 -->
+  <header class="header-bar">
+    <!-- 返回按钮（可改为 /index.phone.html 或其他链接） -->
+    <a href="/index.phone.html" class="back-btn">
+      <!-- 左箭头图标 -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+    <h1>东北大学2025年竞速组招新——视觉组</h1>
+    <!-- 在线查看按钮 -->
+    <a href="/shiwai/pdf/pdfreader.html" class="online-btn">在线查看</a>
+  </header>
+
+  <!-- 占位，避免被头部遮挡 -->
+  <div class="pt-16"></div>
+
+  <!-- 浅绿色渐变标题区 -->
+  <section class="title-section">
+    <h1>视觉组招新公告</h1>
+  </section>
+
+  <!-- 主体内容 -->
+  <main class="container mx-auto px-4 py-4">
+    <article class="content-container text-base leading-relaxed">
+      <!-- 新的公告文字（不加粗、无下划线） -->
+      <p class="mb-4 text-gray-700">
+        本次视觉组招新的评分标准见
+        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>
+        ，可点击
+        <a href="/shiwai/test.html" target="_blank">此处</a>
+        查询作业评分。参加本次招新考核请自行阅读或下载
+        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf" target="_blank">最终考核题目</a>
+        ；有能力的同学可尝试
+        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf" target="_blank">附加题</a>
+        ，并于 2 月 25 日前完成后提交至
+        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>
+        。请大家仔细阅读评分标准，按要求完成并修改作业，做好后续“面试与展示”环节的准备（2月28日）。
       </p>
-      <p>
-        本次招新考核视觉组还有最终考核，请自行阅读或下载
-        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf" target="_blank">最终考核的题目</a>，
-        有能力者可以尝试
-        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf" target="_blank">附加题</a>，
-        请在2月25日之前完成最终考核题目并提交至
-        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>，感谢支持与理解。
-      </p>
-      <p>提醒诸位阅读招新评分标准，完成题目要求并修改作业，准备“面试与展示”部分。</p>
-    </div>
-  </div>
-  
-  <footer>
-    <p class="font-normal">
-      &copy; 2025 TarochLee | 
-      <a href="https://github.com/TarochLee">GitHub</a> | 
-      <button onclick="openModal()">打赏</button>
+    </article>
+  </main>
+
+  <!-- 底部页脚固定 -->
+  <footer class="bg-gray-800 text-white text-center py-3 mt-auto">
+    <p class="text-xs">
+      &copy; 2025 TarochLee |
+      <a href="https://github.com/TarochLee" class="text-green-300 hover:text-green-200">GitHub</a> |
+      <button onclick="openModal()" class="text-green-300 focus:outline-none">打赏</button>
     </p>
   </footer>
-  
+
   <!-- 打赏弹窗 -->
-  <div id="rewardModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); align-items: center; justify-content: center; z-index: 1000;">
-    <div class="modal-content" style="background: white; padding: 30px 20px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); text-align: center; max-width: 280px; width: 100%;">
-      <h2 style="font-size: 1.75rem; margin-bottom: 20px; color: var(--primary-color);">🎁 感谢您的支持！</h2>
-      <img src="/pictures/wechat.png" alt="微信打赏二维码" style="width: 200px; height: auto; margin: 0 auto 20px; display: block; border-radius: 8px;">
-      <button onclick="closeModal()" style="background: var(--primary-color); color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">关闭</button>
+  <div id="rewardModal">
+    <div class="modal-inner">
+      <!-- 右上角 X 关闭按钮 -->
+      <div class="close-btn" onclick="closeModal()">
+        <!-- X 图标 -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </div>
+      <h2>🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码">
+      <button onclick="closeModal()">关闭</button>
     </div>
   </div>
-  
+
   <script>
+    // 打赏弹窗
     function openModal() {
       document.getElementById('rewardModal').style.display = 'flex';
+      document.getElementById('rewardModal').style.alignItems = 'center';
+      document.getElementById('rewardModal').style.justifyContent = 'center';
     }
     function closeModal() {
       document.getElementById('rewardModal').style.display = 'none';
     }
+
+    // 如果需要禁用右键或 F12:
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.key === 'U')
+      ) {
+        e.preventDefault();
+      }
+    });
   </script>
 </body>
 </html>
