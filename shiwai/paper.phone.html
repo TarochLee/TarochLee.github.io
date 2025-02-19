@@ -48,7 +48,7 @@
     /* 去掉链接默认下划线 */
     a {
       text-decoration: none;
-      color: #0284c7; /* 链接文字颜色，可根据喜好调 */
+      color: #0284c7; /* 默认链接颜色 */
     }
     a:hover {
       text-decoration: none;
@@ -151,7 +151,7 @@
       max-width: 240px;
       margin: 0 auto;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      position: relative; /* 让关闭按钮绝对定位 */
+      position: relative;
     }
     #rewardModal h2 {
       margin-bottom: 0.75rem;
@@ -175,21 +175,6 @@
     }
     #rewardModal button:hover {
       background: #22c55e;
-    }
-    #rewardModal .close-btn {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-      cursor: pointer;
-    }
-    #rewardModal .close-btn:hover {
-      color: #333;
     }
   </style>
 </head>
@@ -221,19 +206,58 @@
 
   <!-- 主体内容 -->
   <main class="container mx-auto px-4 py-4">
-    <article class="content-container text-base leading-relaxed">
-      <!-- 新的公告文字（不加粗、无下划线） -->
-      <p class="mb-4 text-gray-700">
+    <article class="content-container text-base leading-relaxed text-gray-700">
+      <!-- 公告文字 + 链接按钮（带 SVG 图标） -->
+      <p class="mb-4">
         本次视觉组招新的评分标准见
-        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>
+        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M13 16h-1v-4h-1m2 4v-4m-2 0H7m10 0h-3v4h3m-3 0v-4m0 0V7l5 5-5 5" />
+          </svg>
+          评分标准
+        </a>
         ，可点击
-        <a href="/shiwai/test.html" target="_blank">此处</a>
-        查询作业评分。参加本次招新考核请自行阅读或下载
-        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf" target="_blank">最终考核题目</a>
+        <a href="/shiwai/test.html"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M9.75 17L7.5 14.75l2.25-2.25M14.25 7l2.25 2.25-2.25 2.25" />
+          </svg>
+          作业评分
+        </a>
+        查询。参加本次招新考核请自行阅读或下载
+        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 10l4.553 2.276A2 2 0 0120 14.053V15.5a2.5 2.5 0 01-5 0V12m-4.553-1.724A2 2 0 0010 9.947V8.5a2.5 2.5 0 015 0v3" />
+          </svg>
+          最终考核题目
+        </a>
         ；有能力的同学可尝试
-        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf" target="_blank">附加题</a>
+        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf"
+           target="_blank"
+           class="inline-flex items-center px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-sm ml-1 mr-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" 
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M16 7a4 4 0 01-8 0m0 0H3m5 0h3m4 0h3m-2 4a2 2 0 11-4 0 2 2 0 014 0zm-6 4h6" />
+          </svg>
+          附加题
+        </a>
         ，并于 2 月 25 日前完成后提交至
-        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>
+        <a href="mailto:liyongcheng_2005@outlook.com"
+           class="text-green-600 hover:underline">
+          liyongcheng_2005@outlook.com
+        </a>
         。请大家仔细阅读评分标准，按要求完成并修改作业，做好后续“面试与展示”环节的准备（2月28日）。
       </p>
     </article>
@@ -251,15 +275,6 @@
   <!-- 打赏弹窗 -->
   <div id="rewardModal">
     <div class="modal-inner">
-      <!-- 右上角 X 关闭按钮 -->
-      <div class="close-btn" onclick="closeModal()">
-        <!-- X 图标 -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" 
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </div>
       <h2>🎁 感谢您的支持！</h2>
       <img src="/pictures/wechat.png" alt="微信打赏二维码">
       <button onclick="closeModal()">关闭</button>
