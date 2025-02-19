@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <!-- 禁止放大缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>东北大学2025年竞速组招新——视觉组</title>
+  <meta name="description" content="东北大学2025年竞速组招新——视觉组的公告栏">
+  <meta name="keywords" content="东北大学, 竞速组, 招新, 视觉组, 公告栏">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ========== 绿色主题变量 ========== */
+    :root {
+      --primary-color: #10B981; /* 绿色 */
+      --secondary-color: #059669; /* 深绿色 */
+      --accent-color: #047857; /* 更深绿色 */
+      --body-bg: #f5f7fa;
+      --container-bg: rgba(255,255,255,0.98);
+    }
+    
+    /* ========== 字体定义 ========== */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: var(--body-bg);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      line-height: 1.618;
+      letter-spacing: 0.5px;
+    }
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+    a {
+      text-decoration: none;
+      font-weight: normal;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    /* ========== 页面容器 ========== */
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+    }
+    
+    .header {
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 24px;
+      text-align: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 2rem;
+      letter-spacing: 1px;
+    }
+    .header a.home-btn {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      backdrop-filter: blur(5px);
+      font-size: 1.75rem;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .header a.home-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* ========== 公告卡片样式 ========== */
+    .announcement-card {
+      padding: 40px 30px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.97), rgba(245,245,245,0.97));
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 40px auto;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      line-height: 1.8;
+    }
+    .announcement-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+    .announcement-card h2 {
+      font-size: 1.9rem;
+      color: var(--primary-color);
+      margin-bottom: 25px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+    .announcement-card p {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    .announcement-card a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+    
+    /* ========== 底部 ========== */
+    footer {
+      background: var(--secondary-color);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    footer a, footer button {
+      color: #A7F3D0;
+    }
+    
+    /* ========== 响应式调整 ========== */
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px 10px;
+        padding: 20px;
+      }
+      .header {
+        padding: 16px;
+      }
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      .header a.home-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+        left: 10px;
+        top: 10px;
+      }
+      .announcement-card {
+        padding: 20px 15px;
+        margin: 20px auto;
+      }
+      .announcement-card h2 {
+        font-size: 1.5rem;
+      }
+      .announcement-card p {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+  <div class="container mx-auto p-6 flex-grow">
+    <div class="header">
+      <a href="/index.html" class="home-btn">👨‍🎓</a>
+      <h1>东北大学2025年竞速组招新——视觉组</h1>
+    </div>
+    <div class="announcement-card">
+      <h2>视觉组招新公告</h2>
+      <p>
+        作业已评分，评分标准见
+        <a href="/shiwai/pdf/评分-浑南智能车实验室竞速组招新考核评分标准（视觉组）.pdf" target="_blank">评分标准</a>。
+        可以点击此处
+        <a href="/shiwai/test.html" target="_blank">查询作业评分</a>。
+      </p>
+      <p>
+        本次招新考核视觉组还有最终考核，请自行阅读或下载
+        <a href="/shiwai/pdf/试卷-浑南智能车实验室竞速组招新考试（视觉组）.pdf" target="_blank">最终考核的题目</a>，
+        有能力者可以尝试
+        <a href="/shiwai/pdf/附加题-浑南智能车实验室竞速组招新考核附加题.pdf" target="_blank">附加题</a>，
+        请在2月25日之前完成最终考核题目并提交至
+        <a href="mailto:liyongcheng_2005@outlook.com">liyongcheng_2005@outlook.com</a>，感谢支持与理解。
+      </p>
+      <p>提醒诸位阅读招新评分标准，完成题目要求并修改作业，准备“面试与展示”部分。</p>
+    </div>
+  </div>
+  
+  <footer>
+    <p class="font-normal">
+      &copy; 2025 TarochLee | 
+      <a href="https://github.com/TarochLee">GitHub</a> | 
+      <button onclick="openModal()">打赏</button>
+    </p>
+  </footer>
+  
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); align-items: center; justify-content: center; z-index: 1000;">
+    <div class="modal-content" style="background: white; padding: 30px 20px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); text-align: center; max-width: 280px; width: 100%;">
+      <h2 style="font-size: 1.75rem; margin-bottom: 20px; color: var(--primary-color);">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" style="width: 200px; height: auto; margin: 0 auto 20px; display: block; border-radius: 8px;">
+      <button onclick="closeModal()" style="background: var(--primary-color); color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;">关闭</button>
+    </div>
+  </div>
+  
+  <script>
+    function openModal() {
+      document.getElementById('rewardModal').style.display = 'flex';
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <!-- 禁止放大缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Macos本地部署Deepseek模型 - Baater 的个人主页</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* ========== [第一篇文章的手机端全局样式] ========== */
+
+    /* 定义中文字体（华文中宋） */
+    @font-face {
+      font-family: "STZhongsong";
+      src: url("/fonts/STZhongsong.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* 定义英文字体（Times New Roman） */
+    @font-face {
+      font-family: "TimesNewRoman";
+      src: url("/fonts/TimesNewRoman.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* 全局字体设置：英文优先 TimesNewRoman，中文回退 STZhongsong */
+    body {
+      font-family: "TimesNewRoman", "STZhongsong", serif;
+      background: #f5f7fa;
+      margin: 0;
+    }
+    /* 为段落添加首行缩进 */
+    p {
+      text-indent: 2em;
+    }
+    /* 保持代码块等宽字体 */
+    pre, code {
+      font-family: Consolas, "Courier New", monospace !important;
+    }
+    /* 页面全屏布局，footer固定在底部 */
+    html, body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* ========== [第二篇文章中的博客正文所需样式] ========== */
+
+    /* 深色终端卡片 + 复制按钮(仅Hover时出现) */
+    .terminal-card {
+      position: relative;
+      background: #1e1e1e;
+      color: #c7c7c7;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      font-family: Consolas, "Courier New", monospace;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .terminal-card pre {
+      white-space: pre-wrap;
+      margin: 0;
+    }
+    .copy-btn {
+      position: absolute;
+      right: 0.75rem;
+      top: 0.75rem;
+      background: #3f3f46;
+      color: #f9f9f9;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: none;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .terminal-card:hover .copy-btn {
+      display: flex;
+    }
+    .copy-btn:hover {
+      background: #52525b;
+    }
+
+    /* Toast 提示 */
+    #toast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #333;
+      color: #f0f0f0;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 表格基本样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #f3f4f6;
+      text-align: center;
+    }
+    td {
+      text-align: center;
+    }
+    .overflow-x-auto {
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body class="text-gray-900">
+  <!-- 固定在左上角的返回按钮（仅图标） -->
+  <header class="fixed top-0 left-0 right-0 flex items-center justify-start px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 shadow z-50">
+    <a href="/index.phone.html" class="flex items-center justify-center w-10 h-10 text-white hover:text-green-200 focus:outline-none">
+      <!-- 左箭头图标 -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+           viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+  </header>
+
+  <!-- 占位，避免顶部固定栏遮挡内容 -->
+  <div class="pt-16"></div>
+
+  <!-- 手机端的标题区域（绿色渐变） -->
+  <section class="bg-gradient-to-r from-green-100 to-green-200 text-center min-h-[120px] flex flex-col justify-center px-4 py-4 shadow-lg">
+    <h1 class="text-xl font-bold text-green-900">📱 Macos本地部署Deepseek模型（手机端）</h1>
+  </section>
+
+  <!-- 提示同步信息（与第一篇风格一致） -->
+  <p class="bg-gray-200 text-gray-700 text-center py-2 text-sm">
+    本文章已经同步至本人
+    <a href="https://blog.csdn.net/Sea_wind0_/article/details/145392973" class="text-blue-600 no-underline hover:underline">
+      CSDN 账号
+    </a>，感谢阅读！
+  </p>
+
+  <!-- 主体内容容器 -->
+  <main class="container mx-auto px-4 py-4">
+    <article class="bg-white shadow rounded-xl p-4 mb-6 text-base leading-relaxed">
+
+      <!-- ========== 下面是第二篇文章的教程正文“博客内容”，无删减地插入 ========== -->
+      
+      <!-- 发布信息（自定义） -->
+      <div class="mb-4 text-center">
+        <p class="text-gray-600 text-sm">
+          作者：Baater | 发布时间：2025-01-29 14:07:32
+        </p>
+      </div>
+
+      <p>
+        　　随着大语言模型（LLM）的发展，越来越多的开源模型如 DeepSeek 可用于本地推理。本文将详细介绍如何在 MacOS 上部署 DeepSeek 大模型，并结合 Ollama 和 Open WebUI，打造一个类似 ChatGPT 的离线 AI 助手。
+      </p>
+
+      <!-- 目录卡片 -->
+      <div class="my-6 p-4 bg-blue-50 border-l-4 border-blue-300 rounded-lg">
+        <h2 class="text-lg text-blue-700 mb-2">目录</h2>
+        <ul class="list-inside list-disc text-base text-gray-700">
+          <li><a href="#prep" class="text-blue-600 hover:underline">🛠️ （一）准备工作</a></li>
+          <li><a href="#download" class="text-blue-600 hover:underline">🚀 （二）下载并运行 DeepSeek 模型</a></li>
+          <li><a href="#openwebui" class="text-blue-600 hover:underline">🌐 （三）配置 Web 界面（Open WebUI）</a></li>
+          <li><a href="#summary" class="text-blue-600 hover:underline">总结</a></li>
+        </ul>
+      </div>
+
+      <h3 id="prep" class="text-xl font-bold mt-6" style="color: #3b82f6;">🛠️ （一）准备工作</h3>
+      <p>
+        　　工欲善其事，必先利其器，一些基本的系统配置不在此赘述，我们只介绍与我们的内容相关的软件的安装与配置。我们首先需要在本地安装 Docker 和 Ollama，然后检查这些软件是否可以正常使用：
+      </p>
+
+      <!-- 终端卡片：docker version / ollama --version -->
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('cmd1')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4"/>
+          </svg>
+        </button>
+        <pre id="cmd1">docker version
+ollama --version</pre>
+      </div>
+
+      <img src="/pictures/essay2/1.png" alt="DeepSeek 模型部署示意图" class="w-full rounded-lg shadow my-4">
+      <p>
+        　　然后我们可以使用 ollama 来部署我们的 Deepseek 模型了。
+      </p>
+
+      <h3 id="download" class="text-xl font-bold mt-6" style="color: #3b82f6;">🚀 （二）下载并运行 DeepSeek 模型</h3>
+      <p>
+        　　我们可以在 <a href="https://www.ollama.com/library/deepseek-r1" class="text-blue-600 hover:underline">ollama 的网站</a> 中查询到关于一些 DeepSeek-R1 的相关信息：
+      </p>
+
+      <blockquote class="border-l-4 border-blue-300 pl-4 bg-blue-50 p-2 my-4 rounded text-gray-700">
+        DeepSeek's first-generation of reasoning models with comparable performance to OpenAI-o1, including six dense models distilled from DeepSeek-R1 based on Llama and Qwen.  
+        DeepSeek 的第一代推理模型，其性能可与 OpenAI-o1 相媲美，包括六个基于 Llama 和 Qwen 训练的稠密模型，这些模型均由 DeepSeek-R1 蒸馏而来。
+      </blockquote>
+
+      <p>
+        　　同时，网页中也展示了我们所需模型的选择方法，可以根据电脑配置进行选择。以下是官方给出的一个示例“DeepSeek-R1 模型选择指南”：
+      </p>
+
+      <!-- 深色提示卡：“DeepSeek-R1 模型选择指南” -->
+      <div class="my-6 p-6 bg-gray-50 border-l-4 border-red-400 rounded-lg">
+        <h3 class="text-xl text-red-600 text-center mb-4">💡 DeepSeek-R1 模型选择指南</h3>
+        <p>
+          　　DeepSeek-R1 系列包含多个大小不同的模型，适用于各种推理、数学、代码和语言任务。选择合适的模型需要综合考虑计算资源、任务需求和性能。
+        </p>
+
+        <h4 class="text-lg mt-4" style="color: #333;">1️⃣ DeepSeek-R1 模型概述</h4>
+        <p>DeepSeek 提供 6 种蒸馏（Distilled）版本 和 1 个超大模型（671B），主要分为：</p>
+        <ul class="list-disc list-inside my-2">
+          <li>小型模型（1.5B - 8B）：适用于轻量级任务，响应快，占用资源少。</li>
+          <li>中型模型（14B - 32B）：适用于平衡性能与计算资源需求的场景。</li>
+          <li>大型模型（70B - 671B）：高推理能力，但需要大量 GPU/TPU 资源。</li>
+        </ul>
+
+        <p class="mt-2 text-gray-800">📌 可用的模型示例：</p>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border mt-2 mb-4 text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th>模型名称</th>
+                <th>训练基础</th>
+                <th>规模</th>
+                <th>大小</th>
+                <th>适用场景</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td>DeepSeek-R1-Distill-Qwen-1.5B</td>
+                <td>Qwen-2.5</td>
+                <td>1.5B</td>
+                <td>1.1GB</td>
+                <td>适合移动设备、低算力，基本NLP任务</td>
+              </tr>
+              <tr class="border-b">
+                <td>DeepSeek-R1-Distill-Qwen-7B</td>
+                <td>Qwen-2.5</td>
+                <td>7B</td>
+                <td>4.7GB</td>
+                <td>本地推理，适用于代码推理聊天</td>
+              </tr>
+              <tr class="border-b">
+                <td>DeepSeek-R1-Distill-Llama-8B</td>
+                <td>Llama3.1</td>
+                <td>8B</td>
+                <td>4.9GB</td>
+                <td>适合 NLP、代码生成，支持复杂推理</td>
+              </tr>
+              <tr class="border-b">
+                <td>DeepSeek-R1-Distill-Qwen-14B</td>
+                <td>Qwen-2.5</td>
+                <td>14B</td>
+                <td>9GB</td>
+                <td>平衡性能和算力需求，适用复杂任务</td>
+              </tr>
+              <tr>
+                <td>DeepSeek-R1-Distill-Qwen-32B</td>
+                <td>Qwen-2.5</td>
+                <td>32B</td>
+                <td>20GB</td>
+                <td>强推理能力，适用于深度文本分析</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="text-lg mt-4" style="color: #333;">2️⃣ 如何选择合适的模型？</h4>
+        <p class="mt-2 text-gray-700">💻 本地部署（Mac/PC）</p>
+        <div class="overflow-x-auto mb-4">
+          <table class="min-w-full border text-center">
+            <thead class="border-b bg-gray-100">
+              <tr>
+                <th>设备配置</th>
+                <th>推荐模型</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b">
+                <td>8GB RAM, 无独显</td>
+                <td>1.5B（最轻量）</td>
+              </tr>
+              <tr class="border-b">
+                <td>16GB RAM, Apple M1/M2</td>
+                <td>7B, 8B（适合代码、对话）</td>
+              </tr>
+              <tr class="border-b">
+                <td>32GB RAM, 高性能 Mac</td>
+                <td>14B, 32B（高质量推理）</td>
+              </tr>
+              <tr>
+                <td>高端 PC，RTX 4090+</td>
+                <td>70B（强大推理能力）</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 class="text-lg mt-4" style="color: #333;">3️⃣ 如何运行模型？</h4>
+        <p class="mt-2">
+          在终端执行：
+        </p>
+
+        <!-- 终端卡片：ollama run deepseek-r1:7b -->
+        <div class="terminal-card">
+          <button class="copy-btn" onclick="copyCode('run7b')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4"/>
+            </svg>
+          </button>
+          <pre id="run7b">ollama run deepseek-r1:7b</pre>
+        </div>
+
+        <p>如果要换 14B：</p>
+        <div class="terminal-card">
+          <button class="copy-btn" onclick="copyCode('run14b')">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4"/>
+            </svg>
+          </button>
+          <pre id="run14b">ollama run deepseek-r1:14b</pre>
+        </div>
+      </div>
+
+      <p>
+        　　上面命令会自动拉取并加载对应模型。在这里我使用的是 7B 模型；也可通过 <code>ollama list</code> 查看本地已下载的模型：
+      </p>
+      <img src="/pictures/essay2/2.png" alt="DeepSeek 模型选择指南" class="w-full rounded-lg shadow my-4">
+      <p>
+        　　启动后，即可在终端与模型进行交互：
+      </p>
+      <img src="/pictures/essay2/3.png" alt="DeepSeek 模型运行示意图" class="w-full rounded-lg shadow my-4">
+
+      <h3 id="openwebui" class="text-xl font-bold mt-6" style="color: #3b82f6;">🌐 （三）配置 Web 界面（Open WebUI）</h3>
+      <p>
+        　　如果想要获得类似 ChatGPT 的网页聊天界面，可结合 <strong>Open WebUI</strong> 进行可视化管理、聊天、甚至文件上传解析等操作。
+      </p>
+
+      <h4 class="text-lg font-semibold mt-2" style="color: #6366f1;">1. 安装 Open WebUI</h4>
+      <p>在已安装 Docker 的环境中，执行：</p>
+
+      <div class="terminal-card">
+        <button class="copy-btn" onclick="copyCode('webui')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M8 16h8m-4-4h4m-2-2v8m0 0H4a2 2 0 01-2-2V8m2 0h4m4 0h4a2 2 0 012 2v8m-2 0h-4"/>
+          </svg>
+        </button>
+<pre id="webui">docker run -d -p 3000:8080 \
+  --add-host=host.docker.internal:host-gateway \
+  -v open-webui:/app/backend/data \
+  --name open-webui \
+  --restart always \
+  ghcr.io/open-webui/open-webui:main
+</pre>
+      </div>
+      <p>
+        这样即可在 <code>http://localhost:3000</code> 打开 Open WebUI 界面。
+      </p>
+
+      <!-- 常见操作命令 -->
+      <div class="my-6 p-4 bg-green-50 border-l-4 border-green-300 rounded-lg">
+        <h3 class="text-base font-bold text-green-700 mb-2 text-center">常见 Docker 操作</h3>
+        <p>启动：<code>docker start open-webui</code></p>
+        <p>停止：<code>docker stop open-webui</code></p>
+        <p>重启：<code>docker restart open-webui</code></p>
+        <p>删除：<code>docker stop open-webui &amp;&amp; docker rm open-webui</code></p>
+      </div>
+
+      <h4 class="text-lg font-semibold mt-2" style="color: #6366f1;">2. 使用流程简述</h4>
+      <ol class="list-decimal list-inside my-2 pl-4">
+        <li>先启动 Docker 与 Ollama：<code>ollama run deepseek-r1:7b</code></li>
+        <li>再启动 Open WebUI：<code>docker start open-webui</code></li>
+        <li>浏览器访问 <code>http://localhost:3000</code> 与模型交互</li>
+      </ol>
+      <img src="/pictures/essay2/4.png" alt="Open WebUI 界面示意图" class="w-full rounded-lg shadow my-4">
+
+      <h4 class="text-lg font-semibold mt-2" style="color: #6366f1;">3. 创建一个简单的 Mac App</h4>
+      <p>
+        　　如果想让这些命令更便捷，可以借助 macOS 自带的 Automator，将启动命令打包成一个 .app。简单示例：
+      </p>
+      <ul class="list-disc list-inside my-2">
+        <li>打开 Automator，选择“应用程序”</li>
+        <li>添加“运行 Shell 脚本”操作</li>
+        <li>将 Ollama / Docker 启动命令粘贴进去</li>
+        <li>保存并导出 .app</li>
+        <li>双击该 .app 即可自动启动相关进程</li>
+      </ul>
+      <img src="/pictures/essay2/5.png" alt="Automator 创建应用程序" class="w-full rounded-lg shadow my-4">
+      <p>
+        　　可使用类似的方法，让离线大模型变得更轻松易用。
+      </p>
+
+      <!-- 总结卡片 -->
+      <div id="summary" class="my-4 p-4 bg-yellow-50 border-l-4 border-yellow-300 rounded-lg shadow">
+        <h3 class="text-xl font-semibold mb-2 text-yellow-700">总结</h3>
+        <p>
+          　　通过安装并运行 DeepSeek 7B 模型的 Ollama CLI 工具，启动本地 Ollama 服务，并配置 Docker 容器启动 Open WebUI 后，即可在 Web 界面使用该模型。访问
+          <code>http://localhost:3000</code>
+          打开交互界面后，可以获得与 ChatGPT 类似的问答体验。若有需求，还可借助 Automator 或脚本实现一键启动，打造真正的本地离线 AI 助手。
+        </p>
+      </div>
+
+      <!-- ========== 第二篇文章“博客内容”到此结束 ========== -->
+    </article>
+  </main>
+
+  <!-- 固定底部页脚（来自第一篇手机端） -->
+  <footer class="bg-gray-800 text-white text-center py-3 mt-auto">
+    <p class="text-xs">
+      &copy; 2025 TarochLee | <a href="https://github.com/TarochLee" class="text-green-300 hover:text-green-200">GitHub</a> | 
+      <button onclick="openModal()" class="text-green-300 hover:text-green-200 focus:outline-none">打赏</button>
+    </p>
+  </footer>
+
+  <!-- 打赏弹窗 -->
+  <div id="rewardModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white p-4 rounded-lg shadow-lg text-center w-11/12 max-w-xs">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
+             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <h2 class="text-xl font-medium mb-2">🎁 感谢您的支持！</h2>
+      <img src="/pictures/wechat.png" alt="微信打赏二维码" class="w-32 mx-auto mb-2">
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-sm focus:outline-none">
+        关闭
+      </button>
+    </div>
+  </div>
+
+  <!-- 个人信息弹窗 -->
+  <div id="profileModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white rounded-xl shadow-lg p-4 w-11/12 max-w-sm relative">
+      <button id="closeProfile" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
+             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" 
+                d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+      <div class="flex flex-col items-center">
+        <a href="/music/music.html">
+          <img src="/pictures/avatar.png" alt="头像" 
+               class="w-20 h-20 rounded-full mb-3 shadow-lg border border-green-200">
+        </a>
+        <h2 class="text-lg font-medium text-green-800 mb-1">Baater</h2>
+        <p class="text-sm text-gray-600 mb-2">你没有被邀请。</p>
+        <p class="text-base text-gray-800 mb-3">邮箱：wlantuya@outlook.com</p>
+      </div>
+      <!-- 功能入口 -->
+      <div class="space-y-2">
+        <a href="/games/pacman/index.html" class="flex items-center p-2 rounded hover:bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-5 w-5 mr-2 text-green-700" fill="none" 
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8"/>
+          </svg>
+          <span class="text-xs font-medium text-green-800">吃豆人小游戏</span>
+        </a>
+        <a href="/video/index.html" class="flex items-center p-2 rounded hover:bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-5 w-5 mr-2 text-green-700" fill="none" 
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14"/>
+          </svg>
+          <span class="text-xs font-medium text-green-800">SHOWCASE</span>
+        </a>
+        <a href="/tools/face_detect/index.html" class="flex items-center p-2 rounded hover:bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-5 w-5 mr-2 text-green-700" fill="none" 
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M5.121 17.804A12 12 0 1118.87 4.146M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          <span class="text-xs font-medium text-green-800">人脸检测</span>
+        </a>
+        <a href="/shiwai/paper.html" class="flex items-center p-2 rounded hover:bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-5 w-5 mr-2 text-green-700" fill="none" 
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M19 7H5m14 0a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2m14 0V5a2 2 0 00-2-2H7a2 2 0 00-2 2v2"/>
+          </svg>
+          <span class="text-xs font-medium text-green-800">招新公告</span>
+        </a>
+        <a href="/tools/AI/aichat.html" class="flex items-center p-2 rounded hover:bg-green-50">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-5 w-5 mr-2 text-green-700" fill="none" 
+               stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" 
+                  d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span class="text-xs font-medium text-green-800">AI对话</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 提示 -->
+  <div id="toast" class="fixed top-4 right-4 bg-gray-800 text-white px-4 py-2 rounded shadow opacity-0 transition-opacity duration-300"></div>
+
+  <!-- JS 脚本：复制代码、Toast、禁用右键等 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    // 复制代码功能
+    function copyCode(id) {
+      const codeText = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        showToast('复制成功！');
+      }, () => {
+        showToast('复制失败，请手动复制');
+      });
+    }
+    // Toast 提示
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.innerText = msg;
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+      }, 2000);
+    }
+    // 打赏弹窗
+    function openModal() {
+      document.getElementById('rewardModal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('rewardModal').classList.add('hidden');
+    }
+    // 个人信息弹窗
+    document.getElementById('openProfile')?.addEventListener('click', () => {
+      document.getElementById('profileModal').classList.remove('hidden');
+    });
+    document.getElementById('closeProfile')?.addEventListener('click', () => {
+      document.getElementById('profileModal').classList.add('hidden');
+    });
+    document.getElementById('profileModal')?.addEventListener('click', (e) => {
+      if(e.target === document.getElementById('profileModal')) {
+        document.getElementById('profileModal').classList.add('hidden');
+      }
+    });
+    // 禁用右键及快捷键
+    document.addEventListener('contextmenu', function(event) {
+      event.preventDefault();
+      showToast('右键已禁用');
+    });
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' || 
+        (event.ctrlKey && event.shiftKey && event.key === 'I') || 
+        (event.ctrlKey && event.key === 'U')
+      ) {
+        event.preventDefault();
+        showToast('此操作已禁用');
+      }
+    });
+  </script>
+</body>
+</html>
